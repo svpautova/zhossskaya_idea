@@ -6,13 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <Button
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/OK_button"
+            app:layout_constraintEnd_toStartOf="@id/Decline_button"
+            android:text="OK"
+            android:background="@drawable/roundedbutton"
+            android:layout_marginRight="40dp"
+            tools:ignore="MissingConstraints" />
+
+    <Button
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background = "@drawable/roundedbutton"
+            android:id="@+id/Decline_button"
+            app:layout_constraintStart_toStartOf="@id/OK_button"
+            android:text="Decline"
+            tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
