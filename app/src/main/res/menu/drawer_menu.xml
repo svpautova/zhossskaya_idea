@@ -3,7 +3,8 @@
 
     <item
             android:title="@string/mainscreen"
-            android:id="@+id/mainscreen" />
+            android:id="@+id/mainscreen"
+            android:gravity="center"/>
     <item
             android:title="@string/favorites"
             android:id="@+id/favorites" />

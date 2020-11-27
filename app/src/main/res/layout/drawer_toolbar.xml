@@ -6,7 +6,7 @@
     <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/yellow"
+            android:background="@color/blue1"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
             android:id="@+id/toolbar"/>
 

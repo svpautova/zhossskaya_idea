@@ -33,9 +33,9 @@
             android:id="@+id/navigationView"
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
+            android:background="@color/blue1"
             app:itemTextColor="@color/white"
-            android:background="@color/yellow"
-            app:itemIconSize="14sp"/>
+            app:itemTextAppearance="@style/MenuItemStyle"/>
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -70,16 +70,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             e.printStackTrace();
         }
 
-        // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
         assert fragment != null;
         fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
-        // Highlight the selected item has been done by NavigationView
-        menuItem.setChecked(true);
-        // Set action bar title
-        setTitle(menuItem.getTitle());
-        // Close the navigation drawer
         drawerLayout.closeDrawers();
 
 

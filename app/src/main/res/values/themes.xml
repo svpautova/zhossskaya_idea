@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.MyApplication" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/yellow</item>
-        <item name="colorPrimaryVariant">@color/yellow2</item>
+        <item name="colorPrimary">@color/blue1</item>
+        <item name="colorPrimaryVariant">@color/blue2</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -13,5 +13,11 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="android:textColor">#ff000f</item>
+    </style>
+
+    <style name="MenuItemStyle">
+        <item name="android:fontFamily">@font/rubik_mono_one</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
     </style>
 </resources>
