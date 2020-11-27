@@ -16,8 +16,6 @@ import com.google.android.material.navigation.NavigationView;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
 
-    protected static final String MainScreenFragmentTAG = "MainScreenFragmentTAG";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_container, new MainScreenFragment(), MainScreenFragmentTAG)
+                    .add(R.id.fragment_container, new MainScreenFragment())
                     .commit();
         }
     }
