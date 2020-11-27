@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="@string/mainscreen" />
-    <item android:title="@string/favorites" />
-    <item android:title="@string/add_photo" />
-    <item android:title="@string/settings" />
+    <item
+            android:title="@string/mainscreen"
+            android:id="@+id/mainscreen" />
+    <item
+            android:title="@string/favorites"
+            android:id="@+id/favorites" />
+    <item
+            android:title="@string/add_photo"
+            android:id="@+id/add_photo" />
+    <item
+            android:title="@string/settings"
+            android:id="@+id/settings" />
 
 </menu>

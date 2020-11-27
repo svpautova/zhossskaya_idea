@@ -1,44 +1,88 @@
 package com.example.myapplication;
 
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-import android.os.Bundle;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.Objects;
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private DrawerLayout drawerLayout;
 
-public class MainActivity extends AppCompatActivity {
-    DrawerLayout drawerLayout;
-    Toolbar toolbar;
-    ActionBarDrawerToggle actionBarDrawerToggle;
-    NavigationView navigationView;
     protected static final String MainScreenFragmentTAG = "MainScreenFragmentTAG";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar=findViewById(R.id.toolbar);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
 
-        drawerLayout=findViewById(R.id.drawer_layout);
-        navigationView=findViewById(R.id.navigationView);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        navigationView.setNavigationItemSelectedListener(this);
 
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         actionBarDrawerToggle.syncState();
 
-        if (savedInstanceState==null){
+        if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, new MainScreenFragment(), MainScreenFragmentTAG)
+                    .add(R.id.fragment_container, new MainScreenFragment(), MainScreenFragmentTAG)
                     .commit();
         }
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        Fragment fragment = null;
+        Class fragmentClass;
+        switch(menuItem.getItemId()) {
+            case R.id.settings:
+                fragmentClass = SettingsFragment.class;
+                break;
+            case R.id.add_photo:
+                fragmentClass = AddPhotoFragment.class;
+                break;
+            case R.id.favorites:
+                fragmentClass = FavoritesFragment.class;
+                break;
+            default:
+                fragmentClass = MainScreenFragment.class;
+        }
+
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Insert the fragment by replacing any existing fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        assert fragment != null;
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
+        // Highlight the selected item has been done by NavigationView
+        menuItem.setChecked(true);
+        // Set action bar title
+        setTitle(menuItem.getTitle());
+        // Close the navigation drawer
+        drawerLayout.closeDrawers();
+
+
+        return true;
     }
 }
