@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">Themeder</string>
+    <string name="app_name" translatable="false">Themeder</string>
+    <string name="toolbar_header" translatable="false">THEMEDER</string>
+    <string name="open" translatable="false">open</string>
+    <string name="close" translatable="false">close</string>
+    <string name="mainscreen">MAIN SCREEN</string>
+    <string name="favorites">FAVORITES</string>
+    <string name="add_photo">UPLOAD PHOTO</string>
+    <string name="settings">SETTINGS</string>
 </resources>
