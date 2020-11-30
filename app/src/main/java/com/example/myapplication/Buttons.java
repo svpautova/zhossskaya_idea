@@ -1,6 +1,5 @@
 package com.example.myapplication;
-import android.view.View;
-import android.widget.ImageView;
+
 public final class Buttons extends MainScreenFragment{
 
 

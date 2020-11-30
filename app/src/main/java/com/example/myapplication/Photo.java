@@ -35,8 +35,8 @@ public class Photo {
   //      return large2x;
    // }
 
-  //  public String getMedium() {
-  //      return medium;
-  //  }
+    public String getMedium() {
+        return medium;
+    }
 
 }

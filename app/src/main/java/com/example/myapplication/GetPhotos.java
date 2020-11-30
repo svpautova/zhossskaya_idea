@@ -2,11 +2,9 @@ package com.example.myapplication;
 
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
