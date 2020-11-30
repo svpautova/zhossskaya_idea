@@ -1,6 +1,6 @@
 package com.example.myapplication;
 
-public class Buttons {
+public final class Buttons {
 
     static void Like_button() {
 
