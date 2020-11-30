@@ -6,15 +6,36 @@
         android:layout_height="match_parent"
         tools:context=".SettingsFragment">
 
-    <TextView
-            android:text="SettingsFragment"
+    <com.google.android.material.switchmaterial.SwitchMaterial
+            android:text="@string/periodic_switch_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView"
+            android:id="@+id/switch_periodic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:textColor="@color/black"/>
 
+    <TextView
+            android:text="@string/settings_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/settingsTextView"
+            app:layout_constraintBottom_toTopOf="@+id/switch_periodic"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/black"/>
+
+    <Button
+            android:text="@string/change_wallpaper_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/change_wallpaper_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switch_periodic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
