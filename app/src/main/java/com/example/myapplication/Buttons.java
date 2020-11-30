@@ -1,17 +1,18 @@
 package com.example.myapplication;
 
-public final class Buttons {
+public final class Buttons extends MainScreenFragment{
+
 
     private Buttons(){
         throw new AssertionError("Instantiating utility class.");
     }
 
     static void Like_button() {
-
+        GetPhotos.ImageGlide();
     }
 
     static void Dislike_button(){
-
+        GetPhotos.ImageGlide();
     }
 
     static void Change_Wallpaper() {
