@@ -49,12 +49,16 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.like_button) {
-
-            Log.d("!!!!!!", "click OK");
+         //   n++;
+            imageView.setImageDrawable(null);
+        //    ImageGlide(v);
+            Log.d("!!!!!!", String.valueOf(n));
         }
         if (v.getId() == R.id.dislike_button) {
-
-            Log.d("!!!!!!", "click decline");
+         //   n++;
+            imageView.setImageDrawable(null);
+        //    ImageGlide(v);
+            Log.d("!!!!!!", String.valueOf(n));
         }
 
     }
@@ -64,11 +68,7 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
         photosApi = new RetrofitClient().createService(PexelApi.class);
         Call<List<Photo>> callPhotos;
 
-        //if(queryString != null) {
-        //      callFotos = photosApi.getSearch(queryString, 15, 1);
-        //  } else {
         callPhotos = photosApi.getCurated(15, 1);
-        //   }
 
         callPhotos.enqueue(new Callback<List<Photo>>() {
             @Override
@@ -94,6 +94,7 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
         Glide.with(this)
                 .load(photoList.get(n).getMedium())
                 .into(imageView);
+        n++;
     }
 
 }
