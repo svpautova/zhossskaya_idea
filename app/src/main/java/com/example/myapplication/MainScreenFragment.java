@@ -27,10 +27,10 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
 
     Button likeButton;
     Button dislikeButton;
-    private List<Photo> photoList = new ArrayList<>();
-    private PexelApi photosApi;
-    ImageView imageView;
-    int n = 0;
+    static List<Photo> photoList = new ArrayList<>();
+    static PexelApi photosApi;
+    static ImageView imageView;
+    static int n = 0;
 
     @Nullable
     @Override
@@ -41,7 +41,7 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
         likeButton.setOnClickListener(this);
         dislikeButton = (Button) v.findViewById(R.id.dislike_button);
         dislikeButton.setOnClickListener(this);
-        getPhotos(v);
+        GetPhotos.getPhotos(v);
         return v;
 
     }
@@ -50,51 +50,12 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.like_button) {
-            ImageGlide();
+            Buttons.Like_button();
         }
         if (v.getId() == R.id.dislike_button) {
-            ImageGlide();
+            Buttons.Dislike_button();
         }
 
-    }
-
-
-    public void getPhotos(View v) {
-        photosApi = new RetrofitClient().createService(PexelApi.class);
-        Call<List<Photo>> callPhotos;
-
-        callPhotos = photosApi.getCurated(15, 1);
-
-        callPhotos.enqueue(new Callback<List<Photo>>() {
-            @Override
-            public void onResponse(Call<List<Photo>> call, Response<List<Photo>> response) {
-                if (response.isSuccessful()) {
-                    photoList.addAll(response.body());
-                    Log.d("!!!!!!", "yes");
-                    ImageGlide();
-                } else {
-                    Log.d("!!!!!!", "ne yes");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Photo>> call, Throwable t) {
-                Log.d("!!!!!!", "no");
-            }
-        });
-    }
-
-    public void ImageGlide(){
-        if(n==0) {
-            Glide.with(this)
-                    .load(photoList.get(n).getMedium())
-                    .into(imageView);
-        }else{
-            Glide.with(this)
-                    .load(photoList.get(n).getMedium())
-                    .into(imageView);
-       }
-        n++;
     }
 
 }
