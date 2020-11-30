@@ -7,4 +7,7 @@
     <string name="favorites">FAVORITES</string>
     <string name="add_photo">UPLOAD PHOTO</string>
     <string name="settings">SETTINGS</string>
+    <string name="periodic_switch_text">Periodic wallpaper change</string>
+    <string name="settings_text">Settings</string>
+    <string name="change_wallpaper_button">Change wallpaper now!</string>
 </resources>
