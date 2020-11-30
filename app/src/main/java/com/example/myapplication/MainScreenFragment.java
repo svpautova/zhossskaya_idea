@@ -51,14 +51,15 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
         if (v.getId() == R.id.like_button) {
          //   n++;
             imageView.setImageDrawable(null);
-        //    ImageGlide(v);
-            Log.d("!!!!!!", String.valueOf(n));
+        //    Log.d("!!!!!!", String.valueOf(imageView));
+            ImageGlide(v);
+        //    Log.d("!!!!!!", String.valueOf(n));
         }
         if (v.getId() == R.id.dislike_button) {
          //   n++;
             imageView.setImageDrawable(null);
-        //    ImageGlide(v);
-            Log.d("!!!!!!", String.valueOf(n));
+            ImageGlide(v);
+         //   Log.d("!!!!!!", String.valueOf(n));
         }
 
     }
@@ -91,10 +92,17 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
 
     public void ImageGlide(View v){
         imageView = v.findViewById(R.id.image_View);
-        Glide.with(this)
-                .load(photoList.get(n).getMedium())
-                .into(imageView);
-        n++;
+    //    Log.d("!!!!!!", String.valueOf(imageView));
+     //   if(imageView==null) {
+            Glide.with(this)
+                    .load(photoList.get(n).getMedium())
+                    .into(imageView);
+             n++;
+      //  }else{
+      //      Glide.with(this)
+      //              .load(R.drawable.cat)
+      //              .into(imageView);
+      //  }
     }
 
 }
