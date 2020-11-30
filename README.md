@@ -8,6 +8,6 @@
 - [Максим Овсянников](https://github.com/OvsyannikovMaksim)
 - [Василий Алексухин](https://github.com/valeksukhin)
 - [София Паутова](https://github.com/svpautova)
-
+- [Алишер Юлдашов](https://github.com/fuckinrobotics)
 ```
 
