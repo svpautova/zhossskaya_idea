@@ -37,10 +37,13 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_mainscreen, container, false);
         imageView = v.findViewById(R.id.image_View);
-        likeButton = (Button) v.findViewById(R.id.like_button);
+      
+        likeButton = v.findViewById(R.id.like_button);
         likeButton.setOnClickListener(this);
-        dislikeButton = (Button) v.findViewById(R.id.dislike_button);
+      
+        dislikeButton = v.findViewById(R.id.dislike_button);
         dislikeButton.setOnClickListener(this);
+      
         GetPhotos.getPhotos(v);
         return v;
 
@@ -49,11 +52,16 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.like_button) {
+        
+        if (v.getId()==R.id.like_button){
+
             Buttons.Like_button();
+            Log.d("!!!!!!", "click OK");
         }
-        if (v.getId() == R.id.dislike_button) {
+        if (v.getId()==R.id.dislike_button){
+
             Buttons.Dislike_button();
+            Log.d("!!!!!!", "click decline");
         }
 
     }
