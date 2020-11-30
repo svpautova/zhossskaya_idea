@@ -36,6 +36,7 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_mainscreen, container, false);
+        imageView = v.findViewById(R.id.image_View);
         likeButton = (Button) v.findViewById(R.id.like_button);
         likeButton.setOnClickListener(this);
         dislikeButton = (Button) v.findViewById(R.id.dislike_button);
@@ -49,17 +50,10 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.like_button) {
-         //   n++;
-            imageView.setImageDrawable(null);
-        //    Log.d("!!!!!!", String.valueOf(imageView));
-            ImageGlide(v);
-        //    Log.d("!!!!!!", String.valueOf(n));
+            ImageGlide();
         }
         if (v.getId() == R.id.dislike_button) {
-         //   n++;
-            imageView.setImageDrawable(null);
-            ImageGlide(v);
-         //   Log.d("!!!!!!", String.valueOf(n));
+            ImageGlide();
         }
 
     }
@@ -77,7 +71,7 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
                 if (response.isSuccessful()) {
                     photoList.addAll(response.body());
                     Log.d("!!!!!!", "yes");
-                    ImageGlide(v);
+                    ImageGlide();
                 } else {
                     Log.d("!!!!!!", "ne yes");
                 }
@@ -90,19 +84,17 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
         });
     }
 
-    public void ImageGlide(View v){
-        imageView = v.findViewById(R.id.image_View);
-    //    Log.d("!!!!!!", String.valueOf(imageView));
-     //   if(imageView==null) {
+    public void ImageGlide(){
+        if(n==0) {
             Glide.with(this)
                     .load(photoList.get(n).getMedium())
                     .into(imageView);
-             n++;
-      //  }else{
-      //      Glide.with(this)
-      //              .load(R.drawable.cat)
-      //              .into(imageView);
-      //  }
+        }else{
+            Glide.with(this)
+                    .load(photoList.get(n).getMedium())
+                    .into(imageView);
+       }
+        n++;
     }
 
 }
