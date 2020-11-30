@@ -23,20 +23,12 @@ public class Photo {
         this.id = id;
     }
 
-  //  public String getUrl() {
-  //      return url;
-  //  }
+    public String getUrl() { return url; }
 
-  //  public String getLarge() {
-  //      return large;
-  //  }
+    public String getLarge() {return large; }
 
-  //  public String getLarge2x() {
-  //      return large2x;
-   // }
+    public String getLarge2x() { return large2x; }
 
-  //  public String getMedium() {
-  //      return medium;
-  //  }
+    public String getMedium() { return medium; }
 
 }
