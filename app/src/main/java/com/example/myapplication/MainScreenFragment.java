@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,8 +22,10 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
     Button dislikeButton;
     static List<Photo> photoList = new ArrayList<>();
     static PexelApi photosApi;
+    @SuppressLint("StaticFieldLeak")
     static ImageView imageView;
     static int n = 0;
+
 
     @Nullable
     @Override
@@ -33,7 +36,7 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
         likeButton.setOnClickListener(this);
         dislikeButton = v.findViewById(R.id.dislike_button);
         dislikeButton.setOnClickListener(this);
-        GetPhotos.getPhotos(v);
+        GetPhotos.getPhotos();
         return v;
     }
 
