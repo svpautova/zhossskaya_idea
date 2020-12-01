@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GsonDeserialiser implements JsonDeserializer<List<Photo>> {
-    List<Photo> photos = new ArrayList<Photo>();
+    List<Photo> photos = new ArrayList<>();
     @Override
     public List<Photo> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonArray photosJ = json.getAsJsonObject().get("photos").getAsJsonArray();
@@ -23,7 +23,7 @@ public class GsonDeserialiser implements JsonDeserializer<List<Photo>> {
             String large2x = photosJ.get(i).getAsJsonObject().get("src").getAsJsonObject().get("large2x").getAsString();
             String medium = photosJ.get(i).getAsJsonObject().get("src").getAsJsonObject().get("medium").getAsString();
 
-            Photo currentPhoto = new Photo(id, url, large, large2x, medium);
+            Photo currentPhoto = new Photo(id, medium);
 
             if(!photos.contains(currentPhoto))
                 photos.add(currentPhoto);

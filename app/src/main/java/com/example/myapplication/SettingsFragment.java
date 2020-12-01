@@ -29,6 +29,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         if (changeWallpaperSwitch != null) {
             changeWallpaperSwitch.setOnCheckedChangeListener(this);
         }
+        PersistantStorage.init(getContext());
+        PersistantStorage.setPropertyBoolean(getString(R.string.switch_check), false);
         return v;
 
     }
@@ -42,14 +44,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(isChecked){
-
-            Buttons.Switch_on();
-            Log.d("!!!!!!", "switch on");
-        }
-        if(!isChecked){
-            Log.d("!!!!!!", "switch off");
-        }
-
+            PersistantStorage.setPropertyBoolean(getString(R.string.switch_check), isChecked);
+            Log.d("!!!!!!", "switch "+ isChecked);
     }
 }

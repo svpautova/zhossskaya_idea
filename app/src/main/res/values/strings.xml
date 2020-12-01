@@ -10,4 +10,5 @@
     <string name="periodic_switch_text">Periodic wallpaper change</string>
     <string name="settings_text">Settings</string>
     <string name="change_wallpaper_button">Change wallpaper now!</string>
+    <string name="switch_check" translatable="false">switch_check</string>
 </resources>
