@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public final class PersistantStorage {
+public class PersistantStorage {
     public static final String STORAGE_NAME = "MyStorage";
 
     private PersistantStorage(){

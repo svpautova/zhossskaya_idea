@@ -11,8 +11,15 @@ import android.widget.CompoundButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class SettingsFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
 
@@ -37,8 +44,21 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onClick(View v) {
-
-        Buttons.Change_Wallpaper();
+        //Buttons b = new Buttons(getActivity());
+        //Buttons.Change_Wallpaper();
+        WorkManager workManager = WorkManager.getInstance();
+        ImageLoadSave ils = new ImageLoadSave();
+        List<String> files = ils.getNamesImages();
+        Log.d("!!!!!!", files.get(0));
+        int a = (int) ( Math.random() * files.size());
+        String picture_name = files.get(a);
+        Data myData = new Data.Builder()
+                .putString("keyA", picture_name)
+                .build();
+        OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
+                .setInputData(myData)
+                .build();
+        workManager.enqueue(myWorkRequest);
         Log.d("!!!!!!", "click change");
     }
 
@@ -46,5 +66,23 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             PersistantStorage.setPropertyBoolean(getString(R.string.switch_check), isChecked);
             Log.d("!!!!!!", "switch "+ isChecked);
+            if (isChecked == true){
+                WorkManager workManager = WorkManager.getInstance();
+                ImageLoadSave ils = new ImageLoadSave();
+                List<String> files = ils.getNamesImages();
+                int a = (int) ( Math.random() * files.size());
+                String picture_name = files.get(a);
+                Data myData = new Data.Builder()
+                        .putString("keyA", picture_name)
+                        .build();
+                PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(PeriodicSetWallpaper.class, 15, TimeUnit.MINUTES, 13, TimeUnit.MINUTES)
+                        .addTag("pwr")
+                        .setInputData(myData)
+                        .build();
+                workManager.enqueue(myWorkRequest);
+            }
+            else {
+                WorkManager.getInstance().cancelAllWorkByTag("pwr");
+            }
     }
 }

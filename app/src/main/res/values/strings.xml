@@ -11,4 +11,5 @@
     <string name="settings_text">Settings</string>
     <string name="change_wallpaper_button">Change wallpaper now!</string>
     <string name="switch_check" translatable="false">switch_check</string>
+    <string name="favorites_folder" translatable="false">FavoritesThemder</string>
 </resources>

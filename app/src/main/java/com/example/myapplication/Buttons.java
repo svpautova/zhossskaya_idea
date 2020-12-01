@@ -1,14 +1,47 @@
 package com.example.myapplication;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.provider.MediaStore;
+
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 public final class Buttons extends MainScreenFragment{
+    static Context context; // возможно это не нужно
 
 
-    private Buttons(){
+    public Buttons(Context context){
+        this.context = context;
         throw new AssertionError("Instantiating utility class.");
+
     }
 
-    static void Like_button() {
-        GetPhotos.ImageGlide();
+    static void Like_button() throws IOException { // зеленая кнопка
+        ImageLoadSave ils = new ImageLoadSave();
+        String name = "kkjj";
+        Bitmap picture = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        ExecutorService executorservice = Executors.newSingleThreadExecutor();
+        Runnable runnable =() -> {
+            try {
+                ils.saveBitmap(context, picture, Bitmap.CompressFormat.JPEG, "image/jpeg", name);
+                imageView.setImageBitmap(ils.getImageFromName(name));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
+        executorservice.submit(runnable);
+        GetPhotos.ImageGlide(); // показать следующее фото
     }
 
     static void Dislike_button(){
@@ -16,10 +49,35 @@ public final class Buttons extends MainScreenFragment{
     }
 
     static void Change_Wallpaper() {
+        WorkManager workManager = WorkManager.getInstance();
+        ImageLoadSave ils = new ImageLoadSave();
+        List<String> files = ils.getNamesImages();
+        int a = (int) ( Math.random() * files.size());
+        String picture_name = files.get(a);
+        Data myData = new Data.Builder()
+                .putString("keyA", picture_name)
+                .build();
+        OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
+                .setInputData(myData)
+                .build();
+        workManager.enqueue(myWorkRequest);
 
     }
 
     static void Switch_on() {
+        WorkManager workManager = WorkManager.getInstance();
+        ImageLoadSave ils = new ImageLoadSave();
+        List<String> files = ils.getNamesImages();
+        int a = (int) ( Math.random() * files.size());
+        String picture_name = files.get(a);
+        Data myData = new Data.Builder()
+                .putString("keyA", picture_name)
+                .build();
+        PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(PeriodicSetWallpaper.class, 15, TimeUnit.MINUTES, 13, TimeUnit.MINUTES)
+                .addTag("pwr")
+                .setInputData(myData)
+                .build();
+        workManager.enqueue(myWorkRequest);
 
     }
 }
