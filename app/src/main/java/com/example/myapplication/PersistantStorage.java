@@ -7,12 +7,16 @@ import android.content.SharedPreferences;
 public class PersistantStorage {
     public static final String STORAGE_NAME = "MyStorage";
 
+    private PersistantStorage(){
+        throw new AssertionError("Instantiating utility class.");
+    }
+
     private static SharedPreferences settings = null;
     private static SharedPreferences.Editor editor = null;
     @SuppressLint("StaticFieldLeak")
     private static Context context = null;
 
-    public static void init( Context cntxt ){
+    public static void init(Context cntxt){
         context = cntxt;
     }
 
@@ -22,18 +26,18 @@ public class PersistantStorage {
         editor = settings.edit();
     }
 
-    public static void setPropertyBoolean( String name, Boolean value ){
-        if( settings == null ){
+    public static void setPropertyBoolean(String name, Boolean value){
+        if(settings == null){
             init();
         }
-        editor.putBoolean( name, value );
+        editor.putBoolean(name, value);
         editor.apply();
     }
 
-    public static Boolean getPropertyBoolean( String name ){
-        if( settings == null ){
+    public static Boolean getPropertyBoolean(String name){
+        if(settings == null){
             init();
         }
-        return settings.getBoolean( name, false );
+        return settings.getBoolean(name, false);
     }
 }
