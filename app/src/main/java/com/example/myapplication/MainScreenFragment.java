@@ -52,18 +52,30 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
         if (v.getId()==R.id.like_button){
 
 
-            String name = "kkjj";
+            String name = "kkjj1.jpg";
             Bitmap picture = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-            ExecutorService executorservice = Executors.newSingleThreadExecutor();
-            Runnable runnable =() -> {
-                try {
-                MainActivity.getInstance().saveBitmap(getActivity(), picture, Bitmap.CompressFormat.JPEG, "image/jpeg", name);
-                    imageView.setImageBitmap(   MainActivity.getInstance().getImageFromName(name));
-                } catch (IOException e) {
-                    e.printStackTrace();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+
+LoadSavePhoto ls = new LoadSavePhoto();
+
+                    try {
+                        ls.saveBitmap(getContext(), picture, Bitmap.CompressFormat.JPEG, "image/jpeg", name);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                  //  try {
+                       // imageView.setImageBitmap(ls.getImageFromName(name, getContext()));
+                  //  } catch (IOException e) {
+                  //      e.printStackTrace();
+                  //  }
+
                 }
-            };
-            executorservice.submit(runnable);
+            }).start();
             GetPhotos.ImageGlide();
             //Buttons b = new Buttons(getActivity());
             //b.Like_button();

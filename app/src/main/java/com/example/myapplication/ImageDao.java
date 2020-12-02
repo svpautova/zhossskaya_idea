@@ -12,9 +12,10 @@ import java.util.List;
  */
 @Dao
 public interface ImageDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(ImageFile... imagefile);
-
     @Query("SELECT * FROM imagefile")
     List<ImageFile> getAllImageName();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(ImageFile... imagefile);
+
 }

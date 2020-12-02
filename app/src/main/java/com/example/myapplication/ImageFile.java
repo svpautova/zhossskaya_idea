@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 public class ImageFile {
     @PrimaryKey
     @NotNull
+    public long id;
+
     String name;
 }
 

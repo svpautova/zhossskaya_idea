@@ -42,11 +42,12 @@ public class PeriodicSetWallpaper extends Worker {
             @Override
             public void run() {
                 try {
-                    Bitmap bitmap = MainActivity.getInstance().getImageFromName(valueA);
-                    WallpaperManager manager = WallpaperManager.getInstance(applicationContext);
+                    LoadSavePhoto ls = new LoadSavePhoto();
+                    Bitmap bitmap =ls.getImageFromName(ls.getNamesImages(applicationContext).get(0), applicationContext);
+System.out.println(ls.getNamesImages(applicationContext).get(0));
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         public void run() {
-
+                            WallpaperManager manager = WallpaperManager.getInstance(applicationContext);
 
                             try {
                                 manager.setBitmap(bitmap);
@@ -62,7 +63,7 @@ public class PeriodicSetWallpaper extends Worker {
                 }
             }
         };
-
+thread.start();
                     try {
 
                         final Result success = Result.success();
