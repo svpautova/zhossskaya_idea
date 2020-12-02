@@ -51,14 +51,14 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         if (v.getId()==R.id.like_button){
 
-            ImageLoadSave ils = new ImageLoadSave();
+
             String name = "kkjj";
             Bitmap picture = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
             ExecutorService executorservice = Executors.newSingleThreadExecutor();
             Runnable runnable =() -> {
                 try {
-                    ils.saveBitmap(getActivity(), picture, Bitmap.CompressFormat.JPEG, "image/jpeg", name);
-                    imageView.setImageBitmap(ils.getImageFromName(name));
+                MainActivity.getInstance().saveBitmap(getActivity(), picture, Bitmap.CompressFormat.JPEG, "image/jpeg", name);
+                    imageView.setImageBitmap(   MainActivity.getInstance().getImageFromName(name));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

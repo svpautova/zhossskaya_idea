@@ -4,6 +4,8 @@ import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,6 +14,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -33,25 +36,43 @@ public class PeriodicSetWallpaper extends Worker {
     public Result doWork() {
         String valueA = getInputData().getString("keyA"); // путь к картинке
         Context applicationContext = getApplicationContext();
-        ImageLoadSave ils = new ImageLoadSave();
         //int a = (int) ( Math.random() * images.length );
-        Bitmap bitmap = null;
-        try {
-            bitmap = ils.getImageFromName(valueA);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        WallpaperManager manager = WallpaperManager.getInstance(applicationContext);
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    Bitmap bitmap = MainActivity.getInstance().getImageFromName(valueA);
+                    WallpaperManager manager = WallpaperManager.getInstance(applicationContext);
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        public void run() {
 
-        try {
-            manager.setBitmap(bitmap);
-            final Result success = Result.success();
-            return success;
-        } catch (Throwable throwable) {
-            Log.e(TAG, "Error set periodic wallpaper", throwable);
-            return Result.failure();
-        }
+
+                            try {
+                                manager.setBitmap(bitmap);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                    });
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+        };
+
+                    try {
+
+                        final Result success = Result.success();
+                        return success;
+                    } catch (Throwable throwable) {
+                        Log.e(TAG, "Error set periodic wallpaper", throwable);
+                        return Result.failure();
+                    }
+
+
     }
 
 }

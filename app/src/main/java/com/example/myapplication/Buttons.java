@@ -28,14 +28,14 @@ public final class Buttons extends MainScreenFragment{
     }
 
     static void Like_button() throws IOException { // зеленая кнопка
-        ImageLoadSave ils = new ImageLoadSave();
+
         String name = "kkjj";
         Bitmap picture = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
         ExecutorService executorservice = Executors.newSingleThreadExecutor();
         Runnable runnable =() -> {
             try {
-                ils.saveBitmap(context, picture, Bitmap.CompressFormat.JPEG, "image/jpeg", name);
-                imageView.setImageBitmap(ils.getImageFromName(name));
+            MainActivity.getInstance().saveBitmap(context, picture, Bitmap.CompressFormat.JPEG, "image/jpeg", name);
+                imageView.setImageBitmap( MainActivity.getInstance().getImageFromName(name));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -50,8 +50,8 @@ public final class Buttons extends MainScreenFragment{
 
     static void Change_Wallpaper() {
         WorkManager workManager = WorkManager.getInstance();
-        ImageLoadSave ils = new ImageLoadSave();
-        List<String> files = ils.getNamesImages();
+
+        List<String> files = MainActivity.getInstance().getNamesImages();
         int a = (int) ( Math.random() * files.size());
         String picture_name = files.get(a);
         Data myData = new Data.Builder()
@@ -66,8 +66,8 @@ public final class Buttons extends MainScreenFragment{
 
     static void Switch_on() {
         WorkManager workManager = WorkManager.getInstance();
-        ImageLoadSave ils = new ImageLoadSave();
-        List<String> files = ils.getNamesImages();
+
+        List<String> files = MainActivity.getInstance().getNamesImages();
         int a = (int) ( Math.random() * files.size());
         String picture_name = files.get(a);
         Data myData = new Data.Builder()
