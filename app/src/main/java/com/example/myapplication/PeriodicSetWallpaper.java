@@ -43,8 +43,8 @@ public class PeriodicSetWallpaper extends Worker {
             public void run() {
                 try {
                     LoadSavePhoto ls = new LoadSavePhoto();
-                    Bitmap bitmap =ls.getImageFromName(ls.getNamesImages(applicationContext).get(0), applicationContext);
-System.out.println(ls.getNamesImages(applicationContext).get(0));
+                    Bitmap bitmap =ls.getImageFromName(ls.getNamesImages(applicationContext).get(1), applicationContext);
+System.out.println(ls.getNamesImages(applicationContext).get(1));
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         public void run() {
                             WallpaperManager manager = WallpaperManager.getInstance(applicationContext);

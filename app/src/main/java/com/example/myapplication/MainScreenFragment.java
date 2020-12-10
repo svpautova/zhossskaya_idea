@@ -46,13 +46,13 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
         return v;
     }
 
-
+int  a = 0;
     @Override
     public void onClick(View v) {
         if (v.getId()==R.id.like_button){
 
-
-            String name = "kkjj1.jpg";
+            String name = "kkfjlkgvj" + a+ ".jpg";
+            a++;
             Bitmap picture = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
             new Thread(new Runnable() {
                 @Override

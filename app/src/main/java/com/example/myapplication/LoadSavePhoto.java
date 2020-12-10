@@ -20,9 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoadSavePhoto {
-
-
-
     public void saveBitmap(@NonNull final Context context, @NonNull final Bitmap bitmap,
                            @NonNull final Bitmap.CompressFormat format, @NonNull final String mimeType,
                            @NonNull final String displayName) throws IOException
@@ -82,26 +79,6 @@ public class LoadSavePhoto {
     }
 
     /*
-    Защищенный метод для доставания нашей картинки из галереии и присвоения её в битмап.
-     *//* @Override
-    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
-        //super.onActivityResult(reqCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            try {
-                final Uri imageUri = data.getData();
-                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                imageView.setImageBitmap(selectedImage);
-                saveBitmap(getApplicationContext(), selectedImage, Bitmap.CompressFormat.JPEG, "image/jpeg", "gh");
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }(/*/
-
-    /*
     Публичный метод получения картинки из директории приложения.
     nameFile - параметр названия файла, например "image.jpg"
     Возрващает Bitmap объект картинки.
@@ -136,12 +113,10 @@ public class LoadSavePhoto {
 
     // приватный метод сохранения имени файла в базу данных.
     // аргумент - имя фалйа как "image.jpg"
-    private void saveNameOfFile(String nameOfFIle, Context frContext){
+   public void saveNameOfFile(String nameOfFIle, Context frContext){
         AppDatabase db = Room.databaseBuilder(frContext, AppDatabase.class, "populus-database").build();
         ImageFile imageDefClass = new ImageFile();
         imageDefClass.name = nameOfFIle;
         db.getImageDao().insert(imageDefClass);
     }
-
 }
-
