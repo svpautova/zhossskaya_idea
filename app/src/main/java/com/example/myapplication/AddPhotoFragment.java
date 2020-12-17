@@ -45,7 +45,7 @@ public class AddPhotoFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            // ...
+            // ..
             new Thread(new Runnable() {
                 @Override
                 public void run() {

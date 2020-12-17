@@ -147,4 +147,9 @@ public class LoadSavePhoto {
         imageDefClass.name = nameOfFIle;
         db.getImageDao().insert(imageDefClass);
     }
+
+    @Override
+    protected void finalize() {
+        db.close();
+    }
 }
