@@ -1,8 +1,10 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.provider.MediaStore;
 
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
@@ -32,8 +34,9 @@ public final class Buttons extends MainScreenFragment{
         ExecutorService executorservice = Executors.newSingleThreadExecutor();
         Runnable runnable =() -> {
             try {
-                LoadSavePhoto ls = LoadSavePhoto.getInstance(context.getApplicationContext());
-                imageView.setImageBitmap(ls.getImageFromName(ls.saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg")));
+                LoadSavePhoto ls = new LoadSavePhoto(context);
+            ls.saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg", name);
+                imageView.setImageBitmap(ls.getImageFromName(name));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -48,14 +51,13 @@ public final class Buttons extends MainScreenFragment{
 
     static void Change_Wallpaper() {
         WorkManager workManager = WorkManager.getInstance();
-        LoadSavePhoto ls = LoadSavePhoto.getInstance(context.getApplicationContext());
-
+        LoadSavePhoto ls = new LoadSavePhoto(context);
 
         List<String> files = ls.getNamesImages();
-        int a = (int) (Math.random() * files.size());
-        String pictureName = files.get(a);
+        int a = (int) ( Math.random() * files.size());
+        String picture_name = files.get(a);
         Data myData = new Data.Builder()
-                .putString("keyA", pictureName)
+                .putString("keyA", picture_name)
                 .build();
         OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
                 .setInputData(myData)
@@ -66,12 +68,12 @@ public final class Buttons extends MainScreenFragment{
 
     static void Switch_on() {
         WorkManager workManager = WorkManager.getInstance();
-        LoadSavePhoto ls = LoadSavePhoto.getInstance(context.getApplicationContext());
+LoadSavePhoto ls = new LoadSavePhoto(context);
         List<String> files = ls.getNamesImages();
-        int a = (int) (Math.random() * files.size());
-        String pictureName = files.get(a);
+        int a = (int) ( Math.random() * files.size());
+        String picture_name = files.get(a);
         Data myData = new Data.Builder()
-                .putString("keyA", pictureName)
+                .putString("keyA", picture_name)
                 .build();
         PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(PeriodicSetWallpaper.class, 15, TimeUnit.MINUTES, 13, TimeUnit.MINUTES)
                 .addTag("pwr")

@@ -5,7 +5,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -37,12 +41,41 @@ public class AddPhotoFragment extends Fragment {
         buttonOpenGallery.setOnClickListener(mButtonClickListener);
         r = view.findViewById(R.id.picture_from_gallery);
     }
-
     private final View.OnClickListener mButtonClickListener = new View.OnClickListener() {
+
         @Override
         public void onClick(View v) {
-            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(i, RESULT_LOAD_IMAGE);
+            // ...
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Intent i = new Intent(Intent.ACTION_PICK,
+                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(i, RESULT_LOAD_IMAGE);
+                    } catch (Exception exp) {
+                        Log.i("Error", exp.toString());
+                    }
+                    Bitmap finalB = null;
+
+                    LoadSavePhoto t1 = new LoadSavePhoto(getContext());
+                    List<String> t  = t1.getNamesImages();
+                    try {
+                        finalB = t1.getImageFromName(t.get(t.size()-1));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Bitmap   finalC = finalB;
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        public void run() {
+                            r.setImageBitmap(finalC);
+                        }
+                    });
+
+                }
+
+
+            }).start();
         }
     };
 
@@ -55,23 +88,16 @@ public class AddPhotoFragment extends Fragment {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getContext().getApplicationContext().getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                LoadSavePhoto t = LoadSavePhoto.getInstance(getContext().getApplicationContext());
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            t.saveBitmap(selectedImage,Bitmap.CompressFormat.JPEG,"image/jpeg");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
-                r.setImageBitmap(selectedImage);
+
+              LoadSavePhoto t = new LoadSavePhoto(getContext());
+
+              t.saveBitmap(selectedImage, Bitmap.CompressFormat.JPEG, "image/jpeg", "ghvusgaj.jpg");
+
             } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-
-
 }

@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,8 @@ import androidx.fragment.app.Fragment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainScreenFragment extends Fragment implements View.OnClickListener {
 
@@ -47,23 +50,30 @@ int  a = 0;
     @Override
     public void onClick(View v) {
         if (v.getId()==R.id.like_button){
+
+            String name = "kkfjlkgvj" + a+ ".jpg";
             a++;
             Bitmap picture = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    LoadSavePhoto ls = LoadSavePhoto.getInstance(getContext().getApplicationContext());
+
+
+LoadSavePhoto ls = new LoadSavePhoto(getContext());
+
                     try {
-                        Log.d("names", String.valueOf(ls.getNamesImages().size()));
-                        ls.saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg");
+                        ls.saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg", name);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
+
                   //  try {
                        // imageView.setImageBitmap(ls.getImageFromName(name, getContext()));
                   //  } catch (IOException e) {
                   //      e.printStackTrace();
                   //  }
+
                 }
             }).start();
             GetPhotos.ImageGlide();
