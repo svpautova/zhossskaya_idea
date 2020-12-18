@@ -29,14 +29,13 @@ public final class Buttons extends MainScreenFragment{
 
     static void Like_button() throws IOException { // зеленая кнопка
 
-        String name = "kkjj";
+        String name = "kkjj.jpg";
         Bitmap picture = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
         ExecutorService executorservice = Executors.newSingleThreadExecutor();
         Runnable runnable =() -> {
             try {
-                LoadSavePhoto ls = new LoadSavePhoto();
-            ls.saveBitmap(context, picture, Bitmap.CompressFormat.JPEG, "image/jpeg", name);
-                imageView.setImageBitmap(ls.getImageFromName(name, context));
+                LoadSavePhoto ls = LoadSavePhoto.getInstance(context.getApplicationContext());
+                imageView.setImageBitmap(ls.getImageFromName(ls.saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg")));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -51,9 +50,10 @@ public final class Buttons extends MainScreenFragment{
 
     static void Change_Wallpaper() {
         WorkManager workManager = WorkManager.getInstance();
-        LoadSavePhoto ls = new LoadSavePhoto();
+        LoadSavePhoto ls = LoadSavePhoto.getInstance(context.getApplicationContext());
 
-        List<String> files = ls.getNamesImages(context);
+
+        List<String> files = ls.getNamesImages();
         int a = (int) ( Math.random() * files.size());
         String picture_name = files.get(a);
         Data myData = new Data.Builder()
@@ -68,8 +68,8 @@ public final class Buttons extends MainScreenFragment{
 
     static void Switch_on() {
         WorkManager workManager = WorkManager.getInstance();
-LoadSavePhoto ls = new LoadSavePhoto();
-        List<String> files = ls.getNamesImages(context);
+LoadSavePhoto ls = LoadSavePhoto.getInstance(context.getApplicationContext());
+        List<String> files = ls.getNamesImages();
         int a = (int) ( Math.random() * files.size());
         String picture_name = files.get(a);
         Data myData = new Data.Builder()

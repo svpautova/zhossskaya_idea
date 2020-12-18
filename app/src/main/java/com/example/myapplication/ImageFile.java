@@ -10,10 +10,11 @@ import org.jetbrains.annotations.NotNull;
  */
 @Entity
 public class ImageFile {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @NotNull
     public long id;
 
     String name;
+
 }
 

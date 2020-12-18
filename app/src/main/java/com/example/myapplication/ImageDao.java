@@ -17,5 +17,4 @@ public interface ImageDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(ImageFile... imagefile);
-
 }

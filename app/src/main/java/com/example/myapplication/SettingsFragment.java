@@ -2,6 +2,8 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,14 +51,12 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
     public void onClick(View v) {
         //Buttons b = new Buttons(getActivity());
         //Buttons.Change_Wallpaper();
-        Thread t = new Thread(new Runnable() {
-
+        WorkManager workManager = WorkManager.getInstance();
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                WorkManager workManager = WorkManager.getInstance();
-LoadSavePhoto ls = new LoadSavePhoto();
-                List<String> files = ls.getNamesImages(getContext());
-                Log.d("!!!!!!", files.get(0));
+                LoadSavePhoto ls = LoadSavePhoto.getInstance(getContext().getApplicationContext());
+                List<String> files = ls.getNamesImages();
                 int a = (int) (Math.random() * files.size());
                 String picture_name = files.get(a);
                 Data myData = new Data.Builder()
@@ -68,7 +68,9 @@ LoadSavePhoto ls = new LoadSavePhoto();
                 workManager.enqueue(myWorkRequest);
                 Log.d("!!!!!!", "click change");
             }
-        });
+        }).start();
+
+
     }
 
     @Override
@@ -81,11 +83,8 @@ LoadSavePhoto ls = new LoadSavePhoto();
 
             ExecutorService executorservice = Executors.newSingleThreadExecutor();
             Runnable runnable =() -> {
-                LoadSavePhoto ls = new LoadSavePhoto();
-                List<String> files = ls.getNamesImages(getContext());
-
-
-
+                LoadSavePhoto ls = LoadSavePhoto.getInstance(getContext().getApplicationContext());
+                List<String> files = ls.getNamesImages();
                 int a = (int) ( Math.random() * files.size());
                 String picture_name = files.get(a);
                 Data myData = new Data.Builder()
@@ -98,7 +97,6 @@ LoadSavePhoto ls = new LoadSavePhoto();
                 workManager.enqueue(myWorkRequest);
             };
             executorservice.submit(runnable);
-
 
 
             }

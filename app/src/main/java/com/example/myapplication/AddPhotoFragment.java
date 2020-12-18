@@ -41,41 +41,12 @@ public class AddPhotoFragment extends Fragment {
         buttonOpenGallery.setOnClickListener(mButtonClickListener);
         r = view.findViewById(R.id.picture_from_gallery);
     }
-    private View.OnClickListener mButtonClickListener = new View.OnClickListener() {
 
+    private final View.OnClickListener mButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            // ...
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Intent i = new Intent(Intent.ACTION_PICK,
-                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(i, RESULT_LOAD_IMAGE);
-                    } catch (Exception exp) {
-                        Log.i("Error", exp.toString());
-                    }
-                    Bitmap finalB = null;
-
-                    LoadSavePhoto t1 = new LoadSavePhoto();
-                    List<String> t  = t1.getNamesImages(getContext());
-                    try {
-                        finalB = t1.getImageFromName(t.get(t.size()-1), getContext());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                 Bitmap   finalC = finalB;
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        public void run() {
-                            r.setImageBitmap(finalC);
-                        }
-                    });
-
-                }
-
-
-            }).start();
+            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(i, RESULT_LOAD_IMAGE);
         }
     };
 
@@ -83,21 +54,28 @@ public class AddPhotoFragment extends Fragment {
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
-        if (resultCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+        if (reqCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             try {
                 final Uri imageUri = data.getData();
-                final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
+                final InputStream imageStream = getContext().getApplicationContext().getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-
-              LoadSavePhoto t = new LoadSavePhoto();
-
-              t.saveBitmap(getContext(), selectedImage, Bitmap.CompressFormat.JPEG, "image/jpeg", "ghvusgaj.jpg");
-
+                LoadSavePhoto t = LoadSavePhoto.getInstance(getContext().getApplicationContext());
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            t.saveBitmap(selectedImage,Bitmap.CompressFormat.JPEG,"image/jpeg");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+                r.setImageBitmap(selectedImage);
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+
+
 }

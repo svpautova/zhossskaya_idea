@@ -50,30 +50,23 @@ int  a = 0;
     @Override
     public void onClick(View v) {
         if (v.getId()==R.id.like_button){
-
-            String name = "kkfjlkgvj" + a+ ".jpg";
             a++;
             Bitmap picture = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-
-
-LoadSavePhoto ls = new LoadSavePhoto();
-
+                    LoadSavePhoto ls = LoadSavePhoto.getInstance(getContext().getApplicationContext());
                     try {
-                        ls.saveBitmap(getContext(), picture, Bitmap.CompressFormat.JPEG, "image/jpeg", name);
+                        Log.d("names", String.valueOf(ls.getNamesImages().size()));
+                        ls.saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-
                   //  try {
                        // imageView.setImageBitmap(ls.getImageFromName(name, getContext()));
                   //  } catch (IOException e) {
                   //      e.printStackTrace();
                   //  }
-
                 }
             }).start();
             GetPhotos.ImageGlide();
