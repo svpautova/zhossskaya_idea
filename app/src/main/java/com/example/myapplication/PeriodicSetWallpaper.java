@@ -4,6 +4,7 @@ import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -34,46 +35,19 @@ public class PeriodicSetWallpaper extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        String valueA = getInputData().getString("keyA"); // путь к картинке
-        Context applicationContext = getApplicationContext();
-        //int a = (int) ( Math.random() * images.length );
-
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    LoadSavePhoto ls = new LoadSavePhoto(applicationContext);
-                    Bitmap bitmap =ls.getImageFromName(ls.getNamesImages().get(1));
-System.out.println(ls.getNamesImages().get(1));
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        public void run() {
-                            WallpaperManager manager = WallpaperManager.getInstance(applicationContext);
-
-                            try {
-                                manager.setBitmap(bitmap);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-
-                    });
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
-            }
-        };
-thread.start();
-                    try {
-
-                        final Result success = Result.success();
-                        return success;
-                    } catch (Throwable throwable) {
-                        Log.e(TAG, "Error set periodic wallpaper", throwable);
-                        return Result.failure();
-                    }
-
-
+        try {
+            String valueA = getInputData().getString("keyA"); // путь к картинке
+            Context applicationContext = getApplicationContext();
+            LoadSavePhoto ls = LoadSavePhoto.getInstance(getApplicationContext());
+            Uri imageUri = Uri.parse(ls.getNamesImages().get(1));
+            Bitmap bitmap = ls.getImageFromName(imageUri);
+            System.out.println(ls.getNamesImages().get(1));
+            WallpaperManager manager = WallpaperManager.getInstance(applicationContext);
+            manager.setBitmap(bitmap);
+            return Result.success();
+        } catch (Throwable throwable) {
+            Log.e(TAG, "Error set periodic wallpaper", throwable);
+            return Result.failure();
+        }
     }
-
 }

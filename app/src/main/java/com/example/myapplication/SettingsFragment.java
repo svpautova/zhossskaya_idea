@@ -54,7 +54,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void run() {
                 WorkManager workManager = WorkManager.getInstance();
-LoadSavePhoto ls = new LoadSavePhoto(getContext());
+                LoadSavePhoto ls = LoadSavePhoto.getInstance(getContext().getApplicationContext());
                 List<String> files = ls.getNamesImages();
                 Log.d("!!!!!!", files.get(0));
                 int a = (int) (Math.random() * files.size());
@@ -83,11 +83,8 @@ LoadSavePhoto ls = new LoadSavePhoto(getContext());
 
             ExecutorService executorservice = Executors.newSingleThreadExecutor();
             Runnable runnable =() -> {
-                LoadSavePhoto ls = new LoadSavePhoto(getContext());
+                LoadSavePhoto ls = LoadSavePhoto.getInstance(getContext().getApplicationContext());
                 List<String> files = ls.getNamesImages();
-
-
-
                 int a = (int) ( Math.random() * files.size());
                 String picture_name = files.get(a);
                 Data myData = new Data.Builder()
@@ -100,7 +97,6 @@ LoadSavePhoto ls = new LoadSavePhoto(getContext());
                 workManager.enqueue(myWorkRequest);
             };
             executorservice.submit(runnable);
-
 
 
             }

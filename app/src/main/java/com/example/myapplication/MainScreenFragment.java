@@ -51,7 +51,7 @@ int  a = 0;
     public void onClick(View v) {
         if (v.getId()==R.id.like_button){
 
-            String name = "kkfjlkgvj" + a+ ".jpg";
+
             a++;
             Bitmap picture = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
             new Thread(new Runnable() {
@@ -59,10 +59,11 @@ int  a = 0;
                 public void run() {
 
 
-LoadSavePhoto ls = new LoadSavePhoto(getContext());
+                    LoadSavePhoto ls = LoadSavePhoto.getInstance(getContext().getApplicationContext());
+
 
                     try {
-                        ls.saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg", name);
+                        ls.saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

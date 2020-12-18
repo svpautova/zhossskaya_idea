@@ -41,41 +41,12 @@ public class AddPhotoFragment extends Fragment {
         buttonOpenGallery.setOnClickListener(mButtonClickListener);
         r = view.findViewById(R.id.picture_from_gallery);
     }
-    private final View.OnClickListener mButtonClickListener = new View.OnClickListener() {
 
+    private final View.OnClickListener mButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            // ..
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Intent i = new Intent(Intent.ACTION_PICK,
-                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(i, RESULT_LOAD_IMAGE);
-                    } catch (Exception exp) {
-                        Log.i("Error", exp.toString());
-                    }
-                    Bitmap finalB = null;
-
-                    LoadSavePhoto t1 = new LoadSavePhoto(getContext());
-                    List<String> t  = t1.getNamesImages();
-                    try {
-                        finalB = t1.getImageFromName(t.get(t.size()-1));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Bitmap   finalC = finalB;
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        public void run() {
-                            r.setImageBitmap(finalC);
-                        }
-                    });
-
-                }
-
-
-            }).start();
+            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(i, RESULT_LOAD_IMAGE);
         }
     };
 
@@ -88,11 +59,9 @@ public class AddPhotoFragment extends Fragment {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getContext().getApplicationContext().getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-
-              LoadSavePhoto t = new LoadSavePhoto(getContext());
-
-              t.saveBitmap(selectedImage, Bitmap.CompressFormat.JPEG, "image/jpeg", "ghvusgaj.jpg");
-
+                LoadSavePhoto t = LoadSavePhoto.getInstance(getContext().getApplicationContext());
+                t.saveBitmap(selectedImage, Bitmap.CompressFormat.JPEG, "image/jpeg");
+                r.setImageBitmap(selectedImage);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {

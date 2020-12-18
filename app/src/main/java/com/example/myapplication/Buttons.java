@@ -34,9 +34,8 @@ public final class Buttons extends MainScreenFragment{
         ExecutorService executorservice = Executors.newSingleThreadExecutor();
         Runnable runnable =() -> {
             try {
-                LoadSavePhoto ls = new LoadSavePhoto(context);
-            ls.saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg", name);
-                imageView.setImageBitmap(ls.getImageFromName(name));
+                LoadSavePhoto ls = LoadSavePhoto.getInstance(context.getApplicationContext());
+                imageView.setImageBitmap(ls.getImageFromName(ls.saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg")));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -51,7 +50,8 @@ public final class Buttons extends MainScreenFragment{
 
     static void Change_Wallpaper() {
         WorkManager workManager = WorkManager.getInstance();
-        LoadSavePhoto ls = new LoadSavePhoto(context);
+        LoadSavePhoto ls = LoadSavePhoto.getInstance(context.getApplicationContext());
+
 
         List<String> files = ls.getNamesImages();
         int a = (int) ( Math.random() * files.size());
@@ -68,7 +68,7 @@ public final class Buttons extends MainScreenFragment{
 
     static void Switch_on() {
         WorkManager workManager = WorkManager.getInstance();
-LoadSavePhoto ls = new LoadSavePhoto(context);
+LoadSavePhoto ls = LoadSavePhoto.getInstance(context.getApplicationContext());
         List<String> files = ls.getNamesImages();
         int a = (int) ( Math.random() * files.size());
         String picture_name = files.get(a);
