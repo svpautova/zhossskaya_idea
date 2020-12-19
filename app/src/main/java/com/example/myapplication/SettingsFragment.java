@@ -11,8 +11,17 @@ import android.widget.CompoundButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class SettingsFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
 
@@ -32,19 +41,63 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         PersistantStorage.init(getContext());
         PersistantStorage.setPropertyBoolean(getString(R.string.switch_check), false);
         return v;
-
     }
 
     @Override
     public void onClick(View v) {
+        //Buttons b = new Buttons(getActivity());
+        //Buttons.Change_Wallpaper();
+        WorkManager workManager = WorkManager.getInstance();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                LoadSavePhoto ls = LoadSavePhoto.getInstance(getContext().getApplicationContext());
+                List<String> files = ls.getNamesImages();
+                int a = (int)(Math.random()*files.size());
+                String picture_name = files.get(a);
+                Data myData = new Data.Builder()
+                        .putString("keyA", picture_name)
+                        .build();
+                OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
+                        .setInputData(myData)
+                        .build();
+                workManager.enqueue(myWorkRequest);
+                Log.d("!!!!!!", "click change");
+            }
+        }).start();
 
-        Buttons.Change_Wallpaper();
-        Log.d("!!!!!!", "click change");
+
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             PersistantStorage.setPropertyBoolean(getString(R.string.switch_check), isChecked);
             Log.d("!!!!!!", "switch "+ isChecked);
+        WorkManager workManager = WorkManager.getInstance();
+
+        if (isChecked){
+
+            ExecutorService executorservice = Executors.newSingleThreadExecutor();
+            Runnable runnable =() -> {
+                LoadSavePhoto ls = LoadSavePhoto.getInstance(getContext().getApplicationContext());
+                List<String> files = ls.getNamesImages();
+                int a = (int)(Math.random()*files.size());
+                String picture_name = files.get(a);
+                Data myData = new Data.Builder()
+                        .putString("keyA", picture_name)
+                        .build();
+                PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(PeriodicSetWallpaper.class, 15, TimeUnit.MINUTES, 13, TimeUnit.MINUTES)
+                        .addTag("pwr")
+                        .setInputData(myData)
+                        .build();
+                workManager.enqueue(myWorkRequest);
+            };
+            executorservice.submit(runnable);
+
+
+            }
+            else {
+                WorkManager.getInstance().cancelAllWorkByTag("pwr");
+            }
     }
 }

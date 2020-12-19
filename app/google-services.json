@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "853411177433",
+    "project_id": "themeder-9cdaa",
+    "storage_bucket": "themeder-9cdaa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:853411177433:android:7bd44feebd87f8234cafc8",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "853411177433-motek87e748mu6ooegdch28e3ug7k929.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbEy2HuJIqRkjyGy75aoiKGIErZ1Tn_gQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "853411177433-motek87e748mu6ooegdch28e3ug7k929.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
