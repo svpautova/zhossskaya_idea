@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,11 +43,32 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
         return v;
     }
 
-
+int  a = 0;
     @Override
     public void onClick(View v) {
         if (v.getId()==R.id.like_button){
-            Buttons.Like_button();
+            a++;
+            Bitmap picture = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    LoadSavePhoto ls = LoadSavePhoto.getInstance(getContext().getApplicationContext());
+                    try {
+                        Log.d("names", String.valueOf(ls.getNamesImages().size()));
+                        ls.saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                  //  try {
+                       // imageView.setImageBitmap(ls.getImageFromName(name, getContext()));
+                  //  } catch (IOException e) {
+                  //      e.printStackTrace();
+                  //  }
+                }
+            }).start();
+            GetPhotos.ImageGlide();
+            //Buttons b = new Buttons(getActivity());
+            //b.Like_button();
             Log.d("!!!!!!", "click OK");
         }
         if (v.getId()==R.id.dislike_button){
