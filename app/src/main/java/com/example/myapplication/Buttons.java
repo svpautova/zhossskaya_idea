@@ -1,10 +1,8 @@
 package com.example.myapplication;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.provider.MediaStore;
 
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
@@ -54,10 +52,10 @@ public final class Buttons extends MainScreenFragment{
 
 
         List<String> files = ls.getNamesImages();
-        int a = (int) ( Math.random() * files.size());
-        String picture_name = files.get(a);
+        int a = (int) (Math.random() * files.size());
+        String pictureName = files.get(a);
         Data myData = new Data.Builder()
-                .putString("keyA", picture_name)
+                .putString("keyA", pictureName)
                 .build();
         OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
                 .setInputData(myData)
@@ -70,7 +68,7 @@ public final class Buttons extends MainScreenFragment{
         WorkManager workManager = WorkManager.getInstance();
 LoadSavePhoto ls = LoadSavePhoto.getInstance(context.getApplicationContext());
         List<String> files = ls.getNamesImages();
-        int a = (int) ( Math.random() * files.size());
+        int a = (int) (Math.random() * files.size());
         String picture_name = files.get(a);
         Data myData = new Data.Builder()
                 .putString("keyA", picture_name)
