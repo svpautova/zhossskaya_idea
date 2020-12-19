@@ -66,12 +66,12 @@ public final class Buttons extends MainScreenFragment{
 
     static void Switch_on() {
         WorkManager workManager = WorkManager.getInstance();
-LoadSavePhoto ls = LoadSavePhoto.getInstance(context.getApplicationContext());
+        LoadSavePhoto ls = LoadSavePhoto.getInstance(context.getApplicationContext());
         List<String> files = ls.getNamesImages();
         int a = (int) (Math.random() * files.size());
-        String picture_name = files.get(a);
+        String pictureName = files.get(a);
         Data myData = new Data.Builder()
-                .putString("keyA", picture_name)
+                .putString("keyA", pictureName)
                 .build();
         PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(PeriodicSetWallpaper.class, 15, TimeUnit.MINUTES, 13, TimeUnit.MINUTES)
                 .addTag("pwr")
