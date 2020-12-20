@@ -34,8 +34,7 @@ public final class Buttons extends MainScreenFragment{
         ExecutorService executorservice = Executors.newSingleThreadExecutor();
         Runnable runnable =() -> {
             try {
-                LoadSavePhoto ls = ThemederApp.getInstance().getRepo();
-                imageView.setImageBitmap(ls.getImageFromName(ls.saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg")));
+                imageView.setImageBitmap(ThemederApp.getInstance().getRepo().getImageFromName(ThemederApp.getInstance().getRepo().saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg")));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -50,10 +49,9 @@ public final class Buttons extends MainScreenFragment{
 
     static void Change_Wallpaper() {
         WorkManager workManager = WorkManager.getInstance();
-        LoadSavePhoto ls = ThemederApp.getInstance().getRepo();
 
 
-        List<String> files = ls.getNamesImages();
+        List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
         int a = (int) ( Math.random() * files.size());
         String picture_name = files.get(a);
         Data myData = new Data.Builder()
@@ -68,8 +66,7 @@ public final class Buttons extends MainScreenFragment{
 
     static void Switch_on() {
         WorkManager workManager = WorkManager.getInstance();
-        LoadSavePhoto ls = ThemederApp.getInstance().getRepo();
-        List<String> files = ls.getNamesImages();
+        List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
         int a = (int) ( Math.random() * files.size());
         String picture_name = files.get(a);
         Data myData = new Data.Builder()

@@ -54,8 +54,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void run() {
                 WorkManager workManager = WorkManager.getInstance();
-                LoadSavePhoto ls = ThemederApp.getInstance().getRepo();
-                List<String> files = ls.getNamesImages();
+                List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
                 Log.d("!!!!!!", files.get(0));
                 int a = (int) (Math.random() * files.size());
                 String picture_name = files.get(a);
@@ -83,8 +82,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
             ExecutorService executorservice = Executors.newSingleThreadExecutor();
             Runnable runnable =() -> {
-                LoadSavePhoto ls = ThemederApp.getInstance().getRepo();
-                List<String> files = ls.getNamesImages();
+                List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
                 int a = (int) ( Math.random() * files.size());
                 String picture_name = files.get(a);
                 Data myData = new Data.Builder()

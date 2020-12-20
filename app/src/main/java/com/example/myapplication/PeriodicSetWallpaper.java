@@ -38,10 +38,9 @@ public class PeriodicSetWallpaper extends Worker {
         try {
             String valueA = getInputData().getString("keyA"); // путь к картинке
             Context applicationContext = getApplicationContext();
-            LoadSavePhoto ls = ThemederApp.getInstance().getRepo();
-            Uri imageUri = Uri.parse(ls.getNamesImages().get(1));
-            Bitmap bitmap = ls.getImageFromName(imageUri);
-            System.out.println(ls.getNamesImages().get(1));
+            Uri imageUri = Uri.parse(ThemederApp.getInstance().getRepo().getNamesImages().get(1));
+            Bitmap bitmap = ThemederApp.getInstance().getRepo().getImageFromName(imageUri);
+            System.out.println(ThemederApp.getInstance().getRepo().getNamesImages().get(1));
             WallpaperManager manager = WallpaperManager.getInstance(applicationContext);
             manager.setBitmap(bitmap);
             return Result.success();

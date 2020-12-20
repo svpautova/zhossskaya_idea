@@ -59,11 +59,10 @@ int  a = 0;
                 public void run() {
 
 
-                    LoadSavePhoto ls = ThemederApp.getInstance().getRepo();
 
 
                     try {
-                        ls.saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg");
+                        ThemederApp.getInstance().getRepo().saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
