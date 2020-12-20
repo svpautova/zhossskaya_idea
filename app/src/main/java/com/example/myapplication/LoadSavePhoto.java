@@ -25,17 +25,10 @@ import java.util.List;
 public class LoadSavePhoto {
     private final Context applicationContext;
     private final AppDatabase db;
-    private static LoadSavePhoto instance;
-    private LoadSavePhoto(Context inputContext) {
+
+    public LoadSavePhoto(Context inputContext) {
         applicationContext = inputContext;
         db = Room.databaseBuilder(applicationContext, AppDatabase.class, "populus-database").build();
-    }
-
-    public synchronized static LoadSavePhoto getInstance(Context applicationContext){
-        if (instance == null) {
-            instance = new LoadSavePhoto(applicationContext);
-        }
-        return instance;
     }
 
 

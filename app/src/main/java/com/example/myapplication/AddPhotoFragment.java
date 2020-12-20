@@ -59,7 +59,7 @@ public class AddPhotoFragment extends Fragment {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getContext().getApplicationContext().getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                LoadSavePhoto t = LoadSavePhoto.getInstance(getContext().getApplicationContext());
+                LoadSavePhoto t = ThemederApp.getInstance().getRepo();
                 t.saveBitmap(selectedImage, Bitmap.CompressFormat.JPEG, "image/jpeg");
                 r.setImageBitmap(selectedImage);
             } catch (FileNotFoundException e) {

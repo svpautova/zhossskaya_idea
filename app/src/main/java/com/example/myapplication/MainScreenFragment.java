@@ -59,7 +59,7 @@ int  a = 0;
                 public void run() {
 
 
-                    LoadSavePhoto ls = LoadSavePhoto.getInstance(getContext().getApplicationContext());
+                    LoadSavePhoto ls = ThemederApp.getInstance().getRepo();
 
 
                     try {
