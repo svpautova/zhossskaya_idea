@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
@@ -42,7 +43,7 @@ public class LoadSavePhoto {
     Публичное сохранение bitmap, получение uri
     */
     public Uri saveBitmap(@NonNull final Bitmap bitmap, @NonNull final Bitmap.CompressFormat format, @NonNull final String mimeType) throws IOException {
-        final String relativeLocation = Environment.DIRECTORY_PICTURES + File.separator + "favorite_image";
+        final String relativeLocation = Environment.DIRECTORY_PICTURES;
         final ContentValues contentValues = new ContentValues();
         contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, String.valueOf(System.currentTimeMillis()));
         contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);
@@ -55,20 +56,16 @@ public class LoadSavePhoto {
             uri = resolver.insert(contentUri, contentValues);
             stream = resolver.openOutputStream(uri);
         } else {
-            File imagesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File imagesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
             // contentValues.put(String.valueOf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)), relativeLocation);
             File image = new File(imagesDir, (applicationContext.getString(R.string.app_name) + System.currentTimeMillis()));
             stream = new FileOutputStream(image);
             // уже записал в файловый поток через этот иетод
 
             uri = Uri.fromFile(image);
-            ContentValues values = new ContentValues();
-
-            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-            values.put(MediaStore.MediaColumns.DATA, imagesDir.getAbsolutePath());
-
-            applicationContext.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
+            Intent mediaScanIntent = new Intent( Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            mediaScanIntent.setData(uri);
+            applicationContext.sendBroadcast(mediaScanIntent);
         }
         bitmap.compress(format, 100, stream);
         stream.flush();
@@ -112,6 +109,7 @@ public class LoadSavePhoto {
         }
         return getListNames;
     }
+
 
     // приватный метод сохранения имени файла в базу данных.
     // аргумент - имя фалйа как "image.jpg"
