@@ -5,7 +5,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -55,23 +59,13 @@ public class AddPhotoFragment extends Fragment {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getContext().getApplicationContext().getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                LoadSavePhoto t = LoadSavePhoto.getInstance(getContext().getApplicationContext());
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            t.saveBitmap(selectedImage,Bitmap.CompressFormat.JPEG,"image/jpeg");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
+                ThemederApp.getInstance().getRepo().saveBitmap(selectedImage, Bitmap.CompressFormat.JPEG, "image/jpeg");
                 r.setImageBitmap(selectedImage);
             } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-
-
 }

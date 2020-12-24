@@ -2,8 +2,6 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,12 +49,13 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
     public void onClick(View v) {
         //Buttons b = new Buttons(getActivity());
         //Buttons.Change_Wallpaper();
-        WorkManager workManager = WorkManager.getInstance();
         new Thread(new Runnable() {
+
             @Override
             public void run() {
-                LoadSavePhoto ls = LoadSavePhoto.getInstance(getContext().getApplicationContext());
-                List<String> files = ls.getNamesImages();
+                WorkManager workManager = WorkManager.getInstance();
+                List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
+                Log.d("!!!!!!", files.get(0));
                 int a = (int) (Math.random() * files.size());
                 String picture_name = files.get(a);
                 Data myData = new Data.Builder()
@@ -83,8 +82,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
             ExecutorService executorservice = Executors.newSingleThreadExecutor();
             Runnable runnable =() -> {
-                LoadSavePhoto ls = LoadSavePhoto.getInstance(getContext().getApplicationContext());
-                List<String> files = ls.getNamesImages();
+                List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
                 int a = (int) ( Math.random() * files.size());
                 String picture_name = files.get(a);
                 Data myData = new Data.Builder()

@@ -3,12 +3,20 @@ package com.example.myapplication;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 
@@ -30,10 +38,10 @@ public class PeriodicSetWallpaper extends Worker {
         try {
             String valueA = getInputData().getString("keyA"); // путь к картинке
             Context applicationContext = getApplicationContext();
-            LoadSavePhoto ls = LoadSavePhoto.getInstance(getApplicationContext());
-            //List<String> names = ls.getNamesImages();
-            Uri imageUri = Uri.parse(valueA);
-            Bitmap bitmap = ls.getImageFromName(imageUri);
+
+            Uri imageUri = Uri.parse(ThemederApp.getInstance().getRepo().getNamesImages().get(0));
+            Bitmap bitmap = ThemederApp.getInstance().getRepo().getImageFromName(imageUri);
+            System.out.println(ThemederApp.getInstance().getRepo().getNamesImages().get(0));
             WallpaperManager manager = WallpaperManager.getInstance(applicationContext);
             manager.setBitmap(bitmap);
             return Result.success();
