@@ -49,7 +49,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
     public void onClick(View v) {
         //Buttons b = new Buttons(getActivity());
         //Buttons.Change_Wallpaper();
-        Thread t = new Thread(new Runnable() {
+        new Thread(new Runnable() {
 
             @Override
             public void run() {
