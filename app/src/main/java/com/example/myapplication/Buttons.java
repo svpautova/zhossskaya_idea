@@ -1,11 +1,14 @@
 package com.example.myapplication;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.provider.MediaStore;
 
+import androidx.core.app.ActivityCompat;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
@@ -18,6 +21,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public final class Buttons extends MainScreenFragment{
+    private static final int PERMISSION_REQUEST_CODE = 0;
     static Context context; // возможно это не нужно
 
 
@@ -31,6 +35,8 @@ public final class Buttons extends MainScreenFragment{
 
         String name = "kkjj.jpg";
         Bitmap picture = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+
+
         ExecutorService executorservice = Executors.newSingleThreadExecutor();
         Runnable runnable =() -> {
             try {

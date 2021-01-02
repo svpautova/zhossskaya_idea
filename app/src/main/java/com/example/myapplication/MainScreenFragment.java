@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -14,6 +16,8 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
@@ -24,6 +28,7 @@ import java.util.concurrent.Executors;
 
 public class MainScreenFragment extends Fragment implements View.OnClickListener {
 
+    private static final int PERMISSION_REQUEST_CODE = 2;
     Button likeButton;
     Button dislikeButton;
     static List<Photo> photoList = new ArrayList<>();
@@ -46,21 +51,24 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
         return v;
     }
 
+
 int  a = 0;
     @Override
     public void onClick(View v) {
         if (v.getId()==R.id.like_button){
-
-
+             ActivityCompat.requestPermissions(getActivity(),
+                    new String[] {
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE
+                    },
+                    PERMISSION_REQUEST_CODE);
             a++;
+            if (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
             Bitmap picture = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-
-
-
-
                     try {
                         ThemederApp.getInstance().getRepo().saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg");
                     } catch (IOException e) {
@@ -76,6 +84,7 @@ int  a = 0;
 
                 }
             }).start();
+            }
             GetPhotos.ImageGlide();
             //Buttons b = new Buttons(getActivity());
             //b.Like_button();
