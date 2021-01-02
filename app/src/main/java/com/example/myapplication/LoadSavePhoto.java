@@ -1,9 +1,11 @@
 package com.example.myapplication;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
@@ -15,6 +17,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
 import java.io.File;
@@ -34,7 +37,9 @@ public class LoadSavePhoto {
     */
     public LoadSavePhoto(Context inputContext) {
         applicationContext = inputContext;
-        db = Room.databaseBuilder(applicationContext, AppDatabase.class, "populus-database").build();
+        db = Room.databaseBuilder(applicationContext, AppDatabase.class, "populus-database")
+                .fallbackToDestructiveMigration()
+                .build();
     }
 
 
@@ -43,35 +48,36 @@ public class LoadSavePhoto {
     Публичное сохранение bitmap, получение uri
     */
     public Uri saveBitmap(@NonNull final Bitmap bitmap, @NonNull final Bitmap.CompressFormat format, @NonNull final String mimeType) throws IOException {
-        final String relativeLocation = Environment.DIRECTORY_PICTURES;
-        final ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, String.valueOf(System.currentTimeMillis()));
-        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);
-        Uri uri;
-        OutputStream stream;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, relativeLocation);
-            final ContentResolver resolver = applicationContext.getContentResolver();
-            final Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-            uri = resolver.insert(contentUri, contentValues);
-            stream = resolver.openOutputStream(uri);
-        } else {
-            File imagesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            // contentValues.put(String.valueOf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)), relativeLocation);
-            File image = new File(imagesDir, (applicationContext.getString(R.string.app_name) + System.currentTimeMillis()));
-            stream = new FileOutputStream(image);
-            // уже записал в файловый поток через этот иетод
+            final String relativeLocation = Environment.DIRECTORY_PICTURES;
+            final ContentValues contentValues = new ContentValues();
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, String.valueOf(System.currentTimeMillis()));
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);
+            Uri uri;
+            OutputStream stream;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, relativeLocation);
+                final ContentResolver resolver = applicationContext.getContentResolver();
+                final Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                uri = resolver.insert(contentUri, contentValues);
+                stream = resolver.openOutputStream(uri);
+            } else {
+                File imagesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                // contentValues.put(String.valueOf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)), relativeLocation);
+                File image = new File(imagesDir, (applicationContext.getString(R.string.app_name) + System.currentTimeMillis()));
+                stream = new FileOutputStream(image);
+                // уже записал в файловый поток через этот иетод
 
-            uri = Uri.fromFile(image);
-            Intent mediaScanIntent = new Intent( Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            mediaScanIntent.setData(uri);
-            applicationContext.sendBroadcast(mediaScanIntent);
-        }
-        bitmap.compress(format, 100, stream);
-        stream.flush();
-        stream.close();
-        saveNameOfFile(uri.toString());
-        return uri;
+                uri = Uri.fromFile(image);
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                mediaScanIntent.setData(uri);
+                applicationContext.sendBroadcast(mediaScanIntent);
+            }
+            bitmap.compress(format, 100, stream);
+            stream.flush();
+            stream.close();
+            saveNameOfFile(uri.toString());
+            return uri;
+
     }
 
     /*

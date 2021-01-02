@@ -1,7 +1,9 @@
 package com.example.myapplication;
 
+import android.Manifest;
 import android.app.WallpaperManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -11,6 +13,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -21,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class PeriodicSetWallpaper extends Worker {
+
 
     //public int[] images = new int[] {R.drawable.img_pure, R.drawable.kitty, R.drawable.cute, R.drawable.mops};
 
