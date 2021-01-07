@@ -14,4 +14,13 @@
     <string name="favorites_folder" translatable="false">FavoritesThemder</string>
     <string name="open_gallery_button">Open Gallery</string>
     <string name="gallery_image">Gallery Image</string>
+    <string name="SPcategory" translatable="false">SPcategory</string>
+    <string-array name="categories">
+        <item>All</item>
+        <item>Cars</item>
+        <item>Forest</item>
+        <item>Mountains</item>
+        <item>Food</item>
+        <item>Girls</item>
+    </string-array>
 </resources>

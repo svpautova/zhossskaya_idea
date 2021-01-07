@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,8 +22,6 @@ import androidx.fragment.app.Fragment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class MainScreenFragment extends Fragment implements View.OnClickListener {
 
@@ -66,23 +63,20 @@ int  a = 0;
             if (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
             Bitmap picture = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        ThemederApp.getInstance().getRepo().saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-
-                  //  try {
-                       // imageView.setImageBitmap(ls.getImageFromName(name, getContext()));
-                  //  } catch (IOException e) {
-                  //      e.printStackTrace();
-                  //  }
-
+            new Thread(() -> {
+                try {
+                    ThemederApp.getInstance().getRepo().saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg");
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+
+
+              //  try {
+                   // imageView.setImageBitmap(ls.getImageFromName(name, getContext()));
+              //  } catch (IOException e) {
+              //      e.printStackTrace();
+              //  }
+
             }).start();
             }
             GetPhotos.ImageGlide();

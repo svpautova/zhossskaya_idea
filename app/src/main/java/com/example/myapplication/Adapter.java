@@ -12,11 +12,13 @@ import java.util.List;
 public class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
     protected final IListener mListener;
+    protected final List<String> mData;
 
 
-    public Adapter(List<ItemPhoto> data, IListener listener) {
+    public Adapter(List<String> data, IListener listener) {
 
         mListener = listener;
+        mData = data;
     }
 
     @NonNull
@@ -31,13 +33,13 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position){
-
+        holder.bind(mData.get(position));
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mData.size();
     }
 
 }
