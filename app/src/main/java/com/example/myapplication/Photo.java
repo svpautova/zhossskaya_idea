@@ -2,11 +2,12 @@ package com.example.myapplication;
 
 public class Photo {
     private int id;
-    private final String medium;
 
-    public Photo(int id, String medium) {
+    private final String photosrc;
+
+    public Photo(int id, String photosrc) {
         this.id = id;
-        this.medium = medium;
+        this.photosrc = photosrc;
     }
 
     public int getId() {
@@ -17,8 +18,6 @@ public class Photo {
         this.id = id;
     }
 
-    public String getMedium() {
-        return medium;
-    }
+    public String getPhotosrc() { return photosrc; }
 
 }
