@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 @Entity
 public class ImageFile {
     @PrimaryKey(autoGenerate = true)
-    @NotNull
     public long id;
 
     String name;

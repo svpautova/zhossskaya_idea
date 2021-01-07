@@ -1,23 +1,19 @@
 package com.example.myapplication;
 
-import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
 import java.io.File;
@@ -29,8 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoadSavePhoto {
+
+    public static final String STORAGE_NAME = "THEMEDERStorage";
     private final Context applicationContext;
     private final AppDatabase db;
+    private final SharedPreferences settings;
 
     /*
     конструтор класса
@@ -40,6 +39,7 @@ public class LoadSavePhoto {
         db = Room.databaseBuilder(applicationContext, AppDatabase.class, "populus-database")
                 .fallbackToDestructiveMigration()
                 .build();
+        settings = applicationContext.getSharedPreferences(STORAGE_NAME, Context.MODE_PRIVATE);
     }
 
 
@@ -124,4 +124,21 @@ public class LoadSavePhoto {
         imageDefClass.name = nameOfFIle;
         db.getImageDao().insert(imageDefClass);
     }
+
+    public void setPropertyBoolean(String name, Boolean value){
+        settings.edit().putBoolean(name, value).apply();
+    }
+
+    public Boolean getPropertyBoolean(String name){
+        return settings.getBoolean(name, false);
+    }
+
+    public void setPropertyString(String name,String value){
+        settings.edit().putString(name, value).apply();
+    }
+
+    public String getPropertyString(String name){
+        return settings.getString(name, "All");
+    }
+
 }

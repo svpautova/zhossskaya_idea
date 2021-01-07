@@ -1,5 +1,8 @@
 package com.example.myapplication;
 
+
 public interface IListener {
-    void onClicked();
+
+    void onClicked(String picPath);
+
 }

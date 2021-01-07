@@ -1,6 +1,10 @@
 package com.example.myapplication;
 
+import android.accessibilityservice.GestureDescription;
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,18 +12,28 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class FavoritesFragment extends Fragment {
+public class FavoritesFragment extends Fragment{
 
-    private Adapter mAdapter;
+    protected FavoritesPhotoRep repo = new FavoritesPhotoRep();
+    protected IListener mListener;
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if (requireActivity() instanceof IListener) {
+            mListener = (IListener) requireActivity();
+        }
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_favorites, container, false);
-        return v;
+        return inflater.inflate(R.layout.fragment_favorites, container, false);
 
     }
 
@@ -28,6 +42,30 @@ public class FavoritesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         final RecyclerView recycler = view.findViewById(R.id.recycler);
+        GridLayoutManager mLayout = new GridLayoutManager(getActivity(),
+                3, LinearLayoutManager.VERTICAL, false);
+        Adapter mAdapter = new Adapter(repo.list(), new ClickChecker());
+        recycler.setAdapter(mAdapter);
+        recycler.setLayoutManager(mLayout);
 
+
+    }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        repo.clear();
+        repo=null;
+        mListener=null;
+    }
+
+    class ClickChecker implements IListener{
+
+        @Override
+        public void onClicked(String picPath) {
+            if (mListener != null) {
+                Log.d("FavoritesFragment", ""+picPath);
+                mListener.onClicked(picPath);
+            }
+        }
     }
 }

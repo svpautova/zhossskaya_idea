@@ -8,7 +8,18 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/blue1"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
-            android:id="@+id/toolbar"/>
+            android:id="@+id/toolbar">
 
+        <androidx.appcompat.widget.AppCompatSpinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:layout_marginEnd="25dp"
+                android:layout_marginStart="10dp"
+                android:id="@+id/spinner"
+                android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight"
+                android:dropDownWidth="match_parent"/>
+
+    </com.google.android.material.appbar.MaterialToolbar>
 
 </LinearLayout>

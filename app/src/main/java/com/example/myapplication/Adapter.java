@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,16 +9,19 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
 import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
     protected final IListener mListener;
+    protected final List<String> mData;
 
 
-    public Adapter(List<ItemPhoto> data, IListener listener) {
+    public Adapter(List<String> data, IListener listener) {
 
         mListener = listener;
+        mData = data;
     }
 
     @NonNull
@@ -31,13 +36,13 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position){
-
+        holder.bind(mData.get(position));
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mData.size();
     }
 
 }

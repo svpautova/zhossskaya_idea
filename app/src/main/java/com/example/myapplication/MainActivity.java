@@ -1,55 +1,33 @@
 package com.example.myapplication;
 
 import android.annotation.SuppressLint;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.room.Database;
-import androidx.room.Room;
-import androidx.room.RoomDatabase;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IListener {
     private DrawerLayout drawerLayout;
+    protected static final String TAG_DETAILS = "PicDetails";
     // переменная для дирректории к папке
    // private String directoryToImage = Environment.DIRECTORY_PICTURES + File.separator + R.string.favorites_folder;
-    private static int RESULT_LOAD_IMAGE = 1;
+    private static final int RESULT_LOAD_IMAGE = 1;
 
+    Spinner spinner;
     // private static Context context;
 
     /*
@@ -89,6 +67,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         actionBarDrawerToggle.syncState();
 
+        spinner = findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                R.layout.custom_spinner_item,
+                getResources().getStringArray(R.array.categories));
+        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("Spinner", "Choose "+ parent.getItemAtPosition(position).toString());
+                ThemederApp.getInstance().getRepo().setPropertyString(getString(R.string.SPcategory), parent.getItemAtPosition(position).toString());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -104,17 +98,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(menuItem.getItemId()) {
             case R.id.settings:
                 fragmentClass = SettingsFragment.class;
+                spinner.setVisibility(View.INVISIBLE);
                 break;
             case R.id.add_photo:
                 fragmentClass = AddPhotoFragment.class;
+                spinner.setVisibility(View.INVISIBLE);
                 break;
             case R.id.favorites:
                 fragmentClass = FavoritesFragment.class;
+                spinner.setVisibility(View.INVISIBLE);
                 break;
             default:
                 fragmentClass = MainScreenFragment.class;
+                spinner.setVisibility(View.VISIBLE);
         }
-
+        Log.d("!!!!!!", ""+fragmentClass);
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
@@ -128,6 +126,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.closeDrawers();
 
         return true;
+    }
+
+
+    @Override
+    public void onClicked(String picPath) {
+        Log.d("Buttons", "Show Details");
+        PicDetailsFragment detailsFragment = PicDetailsFragment.newInstance(picPath);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, detailsFragment, TAG_DETAILS)
+                .addToBackStack(null)
+                .commit();
     }
 
 }

@@ -1,10 +1,8 @@
 package com.example.myapplication;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,8 +42,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         if (changeWallpaperSwitch != null) {
             changeWallpaperSwitch.setOnCheckedChangeListener(this);
         }
-        PersistantStorage.init(getContext());
-        PersistantStorage.setPropertyBoolean(getString(R.string.switch_check), false);
+        ThemederApp.getInstance().getRepo().setPropertyBoolean(getString(R.string.switch_check), false);
         return v;
     }
 
@@ -62,24 +59,20 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                 == PackageManager.PERMISSION_GRANTED)) {
             //Buttons b = new Buttons(getActivity());
             //Buttons.Change_Wallpaper();
-            new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-                    WorkManager workManager = WorkManager.getInstance();
-                    List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
-                    Log.d("!!!!!!", files.get(0));
-                    int a = (int) (Math.random() * files.size());
-                    String picture_name = files.get(a);
-                    Data myData = new Data.Builder()
-                            .putString("keyA", picture_name)
-                            .build();
-                    OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
-                            .setInputData(myData)
-                            .build();
-                    workManager.enqueue(myWorkRequest);
-                    Log.d("!!!!!!", "click change");
-                }
+            new Thread(() -> {
+                WorkManager workManager = WorkManager.getInstance();
+                List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
+                Log.d("!!!!!!", files.get(0));
+                int a = (int) (Math.random() * files.size());
+                String picture_name = files.get(a);
+                Data myData = new Data.Builder()
+                        .putString("keyA", picture_name)
+                        .build();
+                OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
+                        .setInputData(myData)
+                        .build();
+                workManager.enqueue(myWorkRequest);
+                Log.d("!!!!!!", "click change");
             }).start();
         }
 
@@ -87,7 +80,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
     private static final int PERMISSION_REQUEST_CODE = 0;
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            PersistantStorage.setPropertyBoolean(getString(R.string.switch_check), isChecked);
+            ThemederApp.getInstance().getRepo().setPropertyBoolean(getString(R.string.switch_check), isChecked);
             Log.d("!!!!!!", "switch "+ isChecked);
         WorkManager workManager = WorkManager.getInstance();
 
