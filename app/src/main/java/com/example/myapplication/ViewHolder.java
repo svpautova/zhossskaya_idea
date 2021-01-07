@@ -27,7 +27,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     }
 
 
-    void bind (String picPath) {
+    void bind(String picPath) {
         mPicPath=picPath;
         Glide.with(mPic).load(Uri.parse(picPath)).into(mPic);
     }

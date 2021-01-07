@@ -64,9 +64,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                 List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
                 Log.d("!!!!!!", files.get(0));
                 int a = (int) (Math.random() * files.size());
-                String picture_name = files.get(a);
+                String pictureName = files.get(a);
                 Data myData = new Data.Builder()
-                        .putString("keyA", picture_name)
+                        .putString("keyA", pictureName)
                         .build();
                 OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
                         .setInputData(myData)
