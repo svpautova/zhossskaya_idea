@@ -101,9 +101,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
 
                     if (files.size() != 0) {
-                        String picture_name = files.get(a);
+                        String picName = files.get(a);
                         Data myData = new Data.Builder()
-                                .putString("keyA", picture_name)
+                                .putString("keyA", picName)
                                 .build();
                         PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(PeriodicSetWallpaper.class, 15, TimeUnit.MINUTES, 13, TimeUnit.MINUTES)
                                 .addTag("pwr")
