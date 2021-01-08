@@ -6,7 +6,7 @@
     <string name="settings">НАСТРОЙКИ</string>
     <string name="periodic_switch_text">Периодическая смена обоев</string>
     <string name="settings_text">Настройки</string>
-    <string name="change_wallpaper_button">Поменять обои, сейчас!</string>
+    <string name="change_wallpaperButton">Поменять обои, сейчас!</string>
     <string name="open_gallery_button">Открыть галерею</string>
     <string name="gallery_image">"Картинка из галереи "</string>
 </resources>

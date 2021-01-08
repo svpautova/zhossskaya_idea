@@ -39,9 +39,9 @@ import java.util.UUID;
 public class PicDetailsFragment extends Fragment implements View.OnClickListener{
 
     protected static final String KEY = "PicDetailsKEY";
-    private final String CROPPED_IMG_NAME = "Themeder-";
-    Button wallpaper_button;
-    Button crop_button;
+    private final String croppedIMGname = "Themeder-";
+    Button wallpaperButton;
+    Button cropButton;
     Uri picUri;
     ImageView mPic;
 
@@ -60,10 +60,10 @@ public class PicDetailsFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_picdetails, container, false);
-        wallpaper_button = v.findViewById(R.id.wallButton);
-        wallpaper_button.setOnClickListener(this);
-        crop_button = v.findViewById(R.id.cropButton);
-        crop_button.setOnClickListener(this);
+        wallpaperButton = v.findViewById(R.id.wallButton);
+        wallpaperButton.setOnClickListener(this);
+        cropButton = v.findViewById(R.id.cropButton);
+        cropButton.setOnClickListener(this);
         picUri = Uri.parse(info());
 
         if (picUri != null) {
@@ -87,7 +87,7 @@ public class PicDetailsFragment extends Fragment implements View.OnClickListener
             }
         }
         else if (v.getId()==R.id.cropButton) {
-            String destinationFilename = CROPPED_IMG_NAME + UUID.randomUUID().toString();
+            String destinationFilename = croppedIMGname + UUID.randomUUID().toString();
             Uri imageUriResultCrop = startCrop(picUri, destinationFilename);
             Glide.with(mPic).load(imageUriResultCrop).into(mPic);
         }
