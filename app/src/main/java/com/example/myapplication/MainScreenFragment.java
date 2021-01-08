@@ -33,8 +33,8 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
     @SuppressLint("StaticFieldLeak")
     static ImageView imageView;
     static int n = 0;
-    String category = ThemederApp.getInstance().getRepo().getPropertyString("SPcategory");
-    String categoryPrev;
+    static String category = ThemederApp.getInstance().getRepo().getPropertyString("SPcategory");
+    static String categoryPrev;
 
     @Nullable
     @Override
@@ -50,8 +50,7 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
         return v;
     }
 
-
-int  a = 0;
+    int  a = 0;
     @Override
     public void onClick(View v) {
         if (v.getId()==R.id.like_button){
@@ -72,39 +71,21 @@ int  a = 0;
                     e.printStackTrace();
                 }
 
-
-              //  try {
-                   // imageView.setImageBitmap(ls.getImageFromName(name, getContext()));
-              //  } catch (IOException e) {
-              //      e.printStackTrace();
-              //  }
-
             }).start();
             }
             category = ThemederApp.getInstance().getRepo().getPropertyString("SPcategory");
             if(category.equals(categoryPrev)) {
-               // GetPhotos.ImageGlide();
                 GetPhotos.getPhotos();
             }
             else{
                 GetPhotos.getPhotos();
                 categoryPrev = category;
             }
-            //Buttons b = new Buttons(getActivity());
-            //b.Like_button();
+            Buttons.Like_button();
             Log.d("!!!!!!", "click OK");
         }
         if (v.getId()==R.id.dislike_button){
-           // Buttons.Dislike_button();
-            category = ThemederApp.getInstance().getRepo().getPropertyString("SPcategory");
-            if(category.equals(categoryPrev)) {
-               // GetPhotos.ImageGlide();
-                GetPhotos.getPhotos();
-            }
-            else{
-                GetPhotos.getPhotos();
-                categoryPrev = category;
-            }
+            Buttons.Dislike_button();
             Log.d("!!!!!!", "click decline");
         }
     }
