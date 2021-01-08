@@ -1,29 +1,22 @@
 package com.example.myapplication;
 
-import static com.example.myapplication.MainScreenFragment.category;
-import static com.example.myapplication.MainScreenFragment.categoryPrev;
+
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+
+import java.io.IOException;
 
 public class Buttons{
 
-    static void Like_button()  { // зеленая кнопка
-        category = ThemederApp.getInstance().getRepo().getPropertyString("SPcategory");
-        if(category.equals(categoryPrev)) {
-            GetPhotos.getPhotos();
-        }
-        else{
-            GetPhotos.getPhotos();
-            categoryPrev = category;
-        }
-    }
+    static void Like_button(CardStackAdapter adapter){
+        Bitmap picture = ((BitmapDrawable) adapter.viewHolder.image.getDrawable()).getBitmap();
 
-    static void Dislike_button(){
-        category = ThemederApp.getInstance().getRepo().getPropertyString("SPcategory");
-        if(category.equals(categoryPrev)) {
-            GetPhotos.getPhotos();
-        }
-        else{
-            GetPhotos.getPhotos();
-            categoryPrev = category;
-        }
+        new Thread(() -> {
+            try {
+                ThemederApp.getInstance().getRepo().saveBitmap(picture, Bitmap.CompressFormat.JPEG, "image/jpeg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }
