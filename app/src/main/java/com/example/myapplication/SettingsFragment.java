@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class SettingsFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
 
@@ -57,25 +59,25 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED)) {
-            //Buttons b = new Buttons(getActivity());
-            //Buttons.Change_Wallpaper();
+
             new Thread(() -> {
                 WorkManager workManager = WorkManager.getInstance();
                 List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
-                Log.d("!!!!!!", files.get(0));
-                int a = (int) (Math.random() * files.size());
-                String pictureName = files.get(a);
-                Data myData = new Data.Builder()
-                        .putString("keyA", pictureName)
-                        .build();
-                OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
-                        .setInputData(myData)
-                        .build();
-                workManager.enqueue(myWorkRequest);
-                Log.d("!!!!!!", "click change");
+                //Log.d("!!!!!!", files.get(0));
+                if (files.size() != 0) {
+                    int a = (int) (Math.random() * files.size());
+                    String pictureName = files.get(a);
+                    Data myData = new Data.Builder()
+                            .putString("keyA", pictureName)
+                            .build();
+                    OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
+                            .setInputData(myData)
+                            .build();
+                    workManager.enqueue(myWorkRequest);
+                    Log.d("!!!!!!", "click change");
+                }
             }).start();
         }
-
     }
     private static final int PERMISSION_REQUEST_CODE = 0;
     @Override
@@ -98,22 +100,25 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                 Runnable runnable = () -> {
                     List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
                     int a = (int) (Math.random() * files.size());
-                    String picture_name = files.get(a);
-                    Data myData = new Data.Builder()
-                            .putString("keyA", picture_name)
-                            .build();
-                    PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(PeriodicSetWallpaper.class, 15, TimeUnit.MINUTES, 13, TimeUnit.MINUTES)
-                            .addTag("pwr")
-                            .setInputData(myData)
-                            .build();
-                    workManager.enqueue(myWorkRequest);
+
+
+                    if (files.size() != 0) {
+                        String picture_name = files.get(a);
+                        Data myData = new Data.Builder()
+                                .putString("keyA", picture_name)
+                                .build();
+                        PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(PeriodicSetWallpaper.class, 15, TimeUnit.MINUTES, 13, TimeUnit.MINUTES)
+                                .addTag("pwr")
+                                .setInputData(myData)
+                                .build();
+                        workManager.enqueue(myWorkRequest);
+                    }
                 };
                 executorservice.submit(runnable);
-
             }
-            }
-            else {
-                WorkManager.getInstance().cancelAllWorkByTag("pwr");
-            }
+        }
+        else {
+            WorkManager.getInstance().cancelAllWorkByTag("pwr");
+        }
     }
 }
