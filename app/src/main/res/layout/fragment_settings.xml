@@ -29,10 +29,10 @@
             android:textColor="@color/black"/>
 
     <Button
-            android:text="@string/change_wallpaper_button"
+            android:text="@string/change_wallpaperButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/change_wallpaper_button"
+            android:id="@+id/change_wallpaperButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/switch_periodic"
             app:layout_constraintEnd_toEndOf="parent"

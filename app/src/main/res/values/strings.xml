@@ -9,7 +9,7 @@
     <string name="settings">SETTINGS</string>
     <string name="periodic_switch_text">Periodic wallpaper change</string>
     <string name="settings_text">Settings</string>
-    <string name="change_wallpaper_button">Change wallpaper now!</string>
+    <string name="change_wallpaperButton">Change wallpaper now!</string>
     <string name="switch_check" translatable="false">switch_check</string>
     <string name="favorites_folder" translatable="false">FavoritesThemder</string>
     <string name="open_gallery_button">Open Gallery</string>

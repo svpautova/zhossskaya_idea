@@ -48,9 +48,9 @@ public final class Buttons extends MainScreenFragment {
 
         List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
         int a = (int) ( Math.random() * files.size());
-        String picture_name = files.get(a);
+        String picName = files.get(a);
         Data myData = new Data.Builder()
-                .putString("keyA", picture_name)
+                .putString("keyA", picName)
                 .build();
         OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
                 .setInputData(myData)
@@ -63,9 +63,9 @@ public final class Buttons extends MainScreenFragment {
         WorkManager workManager = WorkManager.getInstance();
         List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
         int a = (int) ( Math.random() * files.size());
-        String picture_name = files.get(a);
+        String picName = files.get(a);
         Data myData = new Data.Builder()
-                .putString("keyA", picture_name)
+                .putString("keyA", picName)
                 .build();
         PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(PeriodicSetWallpaper.class, 15, TimeUnit.MINUTES, 13, TimeUnit.MINUTES)
                 .addTag("pwr")
