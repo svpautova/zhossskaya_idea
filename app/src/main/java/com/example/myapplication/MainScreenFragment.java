@@ -33,7 +33,8 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
     @SuppressLint("StaticFieldLeak")
     static ImageView imageView;
     static int n = 0;
-
+    String category = ThemederApp.getInstance().getRepo().getPropertyString("SPcategory");
+    String category_prev;
 
     @Nullable
     @Override
@@ -44,6 +45,7 @@ public class MainScreenFragment extends Fragment implements View.OnClickListener
         likeButton.setOnClickListener(this);
         dislikeButton = v.findViewById(R.id.dislike_button);
         dislikeButton.setOnClickListener(this);
+        category_prev = category;
         GetPhotos.getPhotos();
         return v;
     }
@@ -79,13 +81,30 @@ int  a = 0;
 
             }).start();
             }
-            GetPhotos.ImageGlide();
+            category = ThemederApp.getInstance().getRepo().getPropertyString("SPcategory");
+            if(category.equals(category_prev)) {
+               // GetPhotos.ImageGlide();
+                GetPhotos.getPhotos();
+            }
+            else{
+                GetPhotos.getPhotos();
+                category_prev = category;
+            }
             //Buttons b = new Buttons(getActivity());
             //b.Like_button();
             Log.d("!!!!!!", "click OK");
         }
         if (v.getId()==R.id.dislike_button){
-            Buttons.Dislike_button();
+           // Buttons.Dislike_button();
+            category = ThemederApp.getInstance().getRepo().getPropertyString("SPcategory");
+            if(category.equals(category_prev)) {
+               // GetPhotos.ImageGlide();
+                GetPhotos.getPhotos();
+            }
+            else{
+                GetPhotos.getPhotos();
+                category_prev = category;
+            }
             Log.d("!!!!!!", "click decline");
         }
     }
