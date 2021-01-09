@@ -2,7 +2,6 @@ package com.example.myapplication;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,7 +41,7 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     CardStackAdapter adapter;
     CardStackView cardStackView;
     GetPhotos model;
-    Drawable picture;
+    ImageView picture;
 
     @Nullable
     @Override
@@ -60,7 +60,8 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupCardStackView();
-        LiveData<List<Photo>> data = model.getImage(2);
+
+        LiveData<List<Photo>> data = model.getImage(3);
         data.observe(getViewLifecycleOwner(), photos -> {
             adapter = new CardStackAdapter(photos);
             cardStackView.setAdapter(adapter);
@@ -68,10 +69,9 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
             Log.d("MainScreenFragment", "setAdapter");
         });
 
-
         likeButton.setOnClickListener(v -> {
             SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder().setDirection(Direction.Right)
-                    .setDuration(Duration.Normal.duration)
+                    .setDuration(Duration.Slow.duration)
                     .setInterpolator(new AccelerateInterpolator())
                     .build();
             manager.setSwipeAnimationSetting(setting);
@@ -80,7 +80,7 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
 
         skipButton.setOnClickListener(v -> {
             SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder().setDirection(Direction.Left)
-                    .setDuration(Duration.Normal.duration)
+                    .setDuration(Duration.Slow.duration)
                     .setInterpolator(new AccelerateInterpolator())
                     .build();
             manager.setSwipeAnimationSetting(setting);
@@ -113,7 +113,10 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     @Override
     public void onCardDragging(Direction direction, float ratio) {
         Log.d("CardStackView", "onCardDragging: d = "+ direction.name() + " ratio=" + ratio);
-        picture =  adapter.viewHolder.image.getDrawable();
+        if(picture==null)
+        {
+            picture = adapter.viewHolder.image;
+        }
     }
 
     @Override
@@ -138,8 +141,9 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
             Log.d("MainScreenFragment", "Swipe Left");
         }
 
-        if (manager.getTopPosition() == adapter.getItemCount()-1){
-           paginate();
+        if (manager.getTopPosition() == adapter.getItemCount()-2){
+            Log.d("MainScreenFragment", "Paginate");
+            paginate();
         }
     }
 
@@ -156,12 +160,18 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     @Override
     public void onCardAppeared(View view, int position) {
         Log.d("CardStackView", "onCardAppeared: " + position);
+/*
+        if (adapter.viewHolder.image.getDrawable()!=null) {
+            picture = adapter.viewHolder.image.getDrawable();
+            Log.d("11111", "" + adapter.viewHolder.image.getDrawable());
+        }
+        */
 
     }
 
     @Override
     public void onCardDisappeared(View view, int position) {
-
+        //picture =  adapter.viewHolder.image.getDrawable();
         Log.d("CardStackView", "onCardDisappeared: " + position);
     }
 
@@ -180,11 +190,12 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
         });
          */
         List<Photo> old = adapter.getItems();
-        LiveData<List<Photo>> data = model.getImage(1);
+        LiveData<List<Photo>> data = model.getImage(2);
         data.observe(getViewLifecycleOwner(), photos -> {
             old.remove(0);
             old.addAll(photos);
             adapter.notifyDataSetChanged();
+
     });
 
     }

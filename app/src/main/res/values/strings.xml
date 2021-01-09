@@ -23,4 +23,5 @@
         <item>Food</item>
         <item>Girls</item>
     </string-array>
+    <integer name="cols">3</integer>
 </resources>

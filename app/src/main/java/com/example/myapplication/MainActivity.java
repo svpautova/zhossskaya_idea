@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int RESULT_LOAD_IMAGE = 1;
 
     Spinner spinner;
+    Toolbar toolbar;
     // private static Context context;
 
     /*
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
@@ -139,4 +140,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .commit();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        ThemederApp.getInstance().getRepo().setPropertyString(getString(R.string.SPcategory), "All");
+    }
 }

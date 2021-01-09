@@ -33,6 +33,8 @@ public class GetPhotos extends ViewModel {
                 public void onResponse(@NotNull Call<List<Photo>> call, @NotNull Response<List<Photo>> response) {
                     if (response.isSuccessful()) {
                         assert response.body() != null;
+                        Log.d("GetPhotos", ""+response.headers().get("x-RateLimit-Limit"));
+                        Log.d("GetPhotos", ""+response.headers().get("x-RateLimit-Remaining"));
                         photoList.postValue(response.body());
 
                         Log.d("GetPhotos", "Download photos");
