@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.NonNull;
@@ -15,15 +16,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DiffUtil;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
 import com.yuyakaido.android.cardstackview.Direction;
+import com.yuyakaido.android.cardstackview.Duration;
 import com.yuyakaido.android.cardstackview.StackFrom;
+import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
 import java.util.List;
@@ -32,12 +35,11 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
 
 
     FloatingActionButton skipButton;
-    FloatingActionButton rewindButton;
     FloatingActionButton likeButton;
     CardStackLayoutManager manager;
     CardStackAdapter adapter;
     CardStackView cardStackView;
-
+    GetPhotos model;
 
     @Nullable
     @Override
@@ -45,22 +47,40 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
         View v = inflater.inflate(R.layout.fragment_mainscreen, container, false);
         cardStackView = v.findViewById(R.id.card_stack_view);
         skipButton = v.findViewById(R.id.skip_button);
-        rewindButton = v.findViewById(R.id.rewind_button);
         likeButton = v.findViewById(R.id.like_button);
         manager = new CardStackLayoutManager(getContext().getApplicationContext(), this);
-        LiveData<List<Photo>> data = GetPhotos.getImage();
-        data.observe(this, photos -> {
-            adapter = new CardStackAdapter(photos);
-            cardStackView.setAdapter(adapter);
-        });
+        model = ViewModelProviders.of(this).get(GetPhotos.class);
+
         return v;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        LiveData<List<Photo>> data = model.getImage(3);
+        data.observe(getViewLifecycleOwner(), photos -> {
+            adapter = new CardStackAdapter(photos);
+            cardStackView.setAdapter(adapter);
+            Log.d("MainScreenFragment", "setAdapter");
+        });
         setupCardStackView();
+        likeButton.setOnClickListener(v -> {
+            SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder().setDirection(Direction.Right)
+                    .setDuration(Duration.Normal.duration)
+                    .setInterpolator(new AccelerateInterpolator())
+                    .build();
+            manager.setSwipeAnimationSetting(setting);
+            cardStackView.swipe();
+        });
+
+        skipButton.setOnClickListener(v -> {
+            SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder().setDirection(Direction.Left)
+                    .setDuration(Duration.Normal.duration)
+                    .setInterpolator(new AccelerateInterpolator())
+                    .build();
+            manager.setSwipeAnimationSetting(setting);
+            cardStackView.swipe();
+        });
     }
 
     private void setupCardStackView() {
@@ -110,7 +130,8 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
         if(direction==Direction.Left) {
             Log.d("MainScreenFragment", "Swipe Left");
         }
-        if (manager.getTopPosition() == adapter.getItemCount()){
+
+        if (manager.getTopPosition() == adapter.getItemCount()-2){
            paginate();
         }
     }
@@ -137,14 +158,26 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     }
 
     private void paginate() {
+
+        //это пока не удалять запасной вариант!!!!!!!!!
+        /*
         List<Photo> old = adapter.getItems();
-        LiveData<List<Photo>> data = GetPhotos.getImage();
-        data.observe(this, photos -> {
+        LiveData<List<Photo>> data = model.getImage();
+        data.observe(getViewLifecycleOwner(), photos -> {
             CardStackCallback callback = new CardStackCallback(old, photos);
             DiffUtil.DiffResult hasil = DiffUtil.calculateDiff(callback);
             adapter.setItems(photos);
+            Log.d("MainScreenFragment", "setItems");
             hasil.dispatchUpdatesTo(adapter);
         });
+         */
+        List<Photo> old = adapter.getItems();
+        LiveData<List<Photo>> data = model.getImage(1);
+        data.observe(getViewLifecycleOwner(), photos -> {
+            old.remove(0);
+            old.addAll(photos);
+            adapter.notifyDataSetChanged();
+    });
 
     }
 

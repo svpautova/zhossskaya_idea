@@ -16,24 +16,25 @@ import retrofit2.Response;
 
 public class GetPhotos extends ViewModel {
 
-    static MutableLiveData<List<Photo>> photoList;
-    static int m = 1;
+    MutableLiveData<List<Photo>> photoList;
+    int m = 1;
 
-    public static void getPhotos() {
+    private void getPhotos(int count) {
 
         PexelApi photosApi = new RetrofitClient().createService(PexelApi.class);
         Call<List<Photo>> callPhotos;
         String category = ThemederApp.getInstance().getRepo().getPropertyString("SPcategory");
         Log.d("GetPhotos", "Category: " + category);
         if(category.equals("All")) {
-            callPhotos = photosApi.getCurated(1, m);
-            m++;
+            callPhotos = photosApi.getCurated(count, m);
+            m=m+count;
             callPhotos.enqueue(new Callback<List<Photo>>() {
                 @Override
                 public void onResponse(@NotNull Call<List<Photo>> call, @NotNull Response<List<Photo>> response) {
                     if (response.isSuccessful()) {
                         assert response.body() != null;
                         photoList.postValue(response.body());
+
                         Log.d("GetPhotos", "Download photos");
                     } else {
                         Log.d("GetPhotos", "Don't download photos");
@@ -48,7 +49,8 @@ public class GetPhotos extends ViewModel {
 
         }
         else{
-            callPhotos = photosApi.getSearch(category,1, m);
+            callPhotos = photosApi.getSearch(category,count, m);
+            m=m+count;
             callPhotos.enqueue(new Callback<List<Photo>>() {
                 @Override
                 public void onResponse(@NotNull Call<List<Photo>> call, @NotNull Response<List<Photo>> response) {
@@ -69,10 +71,10 @@ public class GetPhotos extends ViewModel {
         }
     }
 
-    public static LiveData<List<Photo>> getImage(){
+    public LiveData<List<Photo>> getImage(int count){
 
         photoList = new MutableLiveData<>();
-        getPhotos();
+        getPhotos(count);
         return photoList;
     }
 
