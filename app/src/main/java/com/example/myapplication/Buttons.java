@@ -3,14 +3,15 @@ package com.example.myapplication;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import java.io.IOException;
 
 public class Buttons{
 
-    static void Like_button(CardStackAdapter adapter){
-        Bitmap picture = ((BitmapDrawable) adapter.viewHolder.image.getDrawable()).getBitmap();
+    static void Like_button(Drawable pic){
+        Bitmap picture = ((BitmapDrawable) pic).getBitmap();
         Log.d("Buttons", "Save Photo");
         new Thread(() -> {
             try {

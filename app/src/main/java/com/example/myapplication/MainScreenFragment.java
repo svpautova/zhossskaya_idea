@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     CardStackAdapter adapter;
     CardStackView cardStackView;
     GetPhotos model;
+    Drawable picture;
 
     @Nullable
     @Override
@@ -57,13 +59,16 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        LiveData<List<Photo>> data = model.getImage(3);
+        setupCardStackView();
+        LiveData<List<Photo>> data = model.getImage(2);
         data.observe(getViewLifecycleOwner(), photos -> {
             adapter = new CardStackAdapter(photos);
             cardStackView.setAdapter(adapter);
+
             Log.d("MainScreenFragment", "setAdapter");
         });
-        setupCardStackView();
+
+
         likeButton.setOnClickListener(v -> {
             SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder().setDirection(Direction.Right)
                     .setDuration(Duration.Normal.duration)
@@ -89,7 +94,7 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
 
 
     private void initialize() {
-        manager.setStackFrom(StackFrom.Top);
+        manager.setStackFrom(StackFrom.None);
         manager.setVisibleCount(3);
         manager.setTranslationInterval(8.0f);
         manager.setScaleInterval(0.95f);
@@ -108,6 +113,7 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     @Override
     public void onCardDragging(Direction direction, float ratio) {
         Log.d("CardStackView", "onCardDragging: d = "+ direction.name() + " ratio=" + ratio);
+        picture =  adapter.viewHolder.image.getDrawable();
     }
 
     @Override
@@ -115,6 +121,7 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
 
         Log.d("CardStackView", "onCardSwiped: p=" + manager.getTopPosition() + " d=" + direction);
         if(direction==Direction.Right){
+            Log.d("MainScreenFragment", "Swipe Right");
             ActivityCompat.requestPermissions(getActivity(),
                     new String[] {
                             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -123,15 +130,15 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
                     2);
             if (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
-            Buttons.Like_button(adapter);
+            Buttons.Like_button(picture);
             }
-            Log.d("MainScreenFragment", "Swipe Right");
+
         }
         if(direction==Direction.Left) {
             Log.d("MainScreenFragment", "Swipe Left");
         }
 
-        if (manager.getTopPosition() == adapter.getItemCount()-2){
+        if (manager.getTopPosition() == adapter.getItemCount()-1){
            paginate();
         }
     }
@@ -149,6 +156,7 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     @Override
     public void onCardAppeared(View view, int position) {
         Log.d("CardStackView", "onCardAppeared: " + position);
+
     }
 
     @Override
