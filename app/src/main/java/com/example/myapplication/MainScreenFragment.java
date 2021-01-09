@@ -190,7 +190,7 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
         });
          */
         List<Photo> old = adapter.getItems();
-        LiveData<List<Photo>> data = model.getImage(2);
+        LiveData<List<Photo>> data = model.getImage(1);
         data.observe(getViewLifecycleOwner(), photos -> {
             old.remove(0);
             old.addAll(photos);

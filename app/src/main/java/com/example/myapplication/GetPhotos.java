@@ -39,13 +39,14 @@ public class GetPhotos extends ViewModel {
 
                         Log.d("GetPhotos", "Download photos");
                     } else {
-                        Log.d("GetPhotos", "Don't download photos");
+
+                        Log.d("GetPhotos", "Don't download photos: "+response.toString());
                     }
                 }
 
                 @Override
                 public void onFailure(@NotNull Call<List<Photo>> call, @NotNull Throwable t) {
-                    Log.d("GetPhotos", "Failure");
+                    Log.d("GetPhotos", "Failure: "+t.getMessage());
                 }
             });
 
@@ -61,13 +62,15 @@ public class GetPhotos extends ViewModel {
                         photoList.postValue(response.body());
                         Log.d("GetPhotos", "Download photos");
                     } else {
-                        Log.d("GetPhotos", "Don't download photos");
+
+                        Log.d("GetPhotos", "Don't download photos: "+response.toString());
                     }
                 }
 
                 @Override
                 public void onFailure(@NotNull Call<List<Photo>> call, @NotNull Throwable t) {
-                    Log.d("GetPhotos", "Failure");
+
+                    Log.d("GetPhotos", "Failure: "+t.getMessage());
                 }
             });
         }
