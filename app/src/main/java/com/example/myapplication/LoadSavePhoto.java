@@ -141,4 +141,5 @@ public class LoadSavePhoto {
         return settings.getString(name, "All");
     }
 
+
 }

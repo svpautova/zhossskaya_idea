@@ -10,14 +10,20 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 public class FavoritesFragment extends Fragment{
 
-    protected FavoritesPhotoRep repo = new FavoritesPhotoRep();
+    protected FavoritesPhotoRep model;
     protected IListener mListener;
+
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -38,12 +44,15 @@ public class FavoritesFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        model = ViewModelProviders.of(this).get(FavoritesPhotoRep.class);
         final RecyclerView recycler = view.findViewById(R.id.recycler);
         GridLayoutManager mLayout = new GridLayoutManager(getActivity(),
-                3, LinearLayoutManager.VERTICAL, false);
-        Adapter mAdapter = new Adapter(repo.list(), new ClickChecker());
-        recycler.setAdapter(mAdapter);
+                getResources().getInteger(R.integer.cols), LinearLayoutManager.VERTICAL, false);
+        LiveData<List<String>> data = model.getPhotoList();
+        data.observe(getViewLifecycleOwner(), photos -> {
+            Adapter mAdapter = new Adapter(photos, new ClickChecker());
+            recycler.setAdapter(mAdapter);
+        });
         recycler.setLayoutManager(mLayout);
 
 
@@ -51,8 +60,7 @@ public class FavoritesFragment extends Fragment{
     @Override
     public void onDetach() {
         super.onDetach();
-        repo.clear();
-        repo=null;
+        model.clear();
         mListener=null;
     }
 

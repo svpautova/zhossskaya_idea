@@ -2,76 +2,88 @@ package com.example.myapplication;
 
 import android.util.Log;
 
-import com.bumptech.glide.Glide;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GetPhotos extends MainScreenFragment {
+public class GetPhotos extends ViewModel {
 
-    static int m = 1;
+    MutableLiveData<List<Photo>> photoList;
 
-    public static void getPhotos() {
-        photosApi = new RetrofitClient().createService(PexelApi.class);
+
+    private void getPhotos(int count) {
+
+        PexelApi photosApi = new RetrofitClient().createService(PexelApi.class);
         Call<List<Photo>> callPhotos;
-        String category;
-        category=ThemederApp.getInstance().getRepo().getPropertyString("SPcategory");
-        Log.d("cat", category);
+        String category = ThemederApp.getInstance().getRepo().getPropertyString("SPcategory");
+        Log.d("GetPhotos", "Category: " + category);
+        Random r = new Random();
+        int m = r.nextInt(999);
         if(category.equals("All")) {
-            callPhotos = photosApi.getCurated(1, m);
-            m++;
+            callPhotos = photosApi.getSearch("desktop backgrounds", count, m);
             callPhotos.enqueue(new Callback<List<Photo>>() {
                 @Override
                 public void onResponse(@NotNull Call<List<Photo>> call, @NotNull Response<List<Photo>> response) {
                     if (response.isSuccessful()) {
+
                         assert response.body() != null;
-                        photoList.addAll(response.body());
-                        Log.d("!!!!!!", "Download photos");
-                        ImageGlide();
+                        Log.d("GetPhotos", ""+response.headers().get("x-RateLimit-Limit"));
+                        Log.d("GetPhotos", ""+response.headers().get("x-RateLimit-Remaining"));
+                        photoList.postValue(response.body());
+
+                        Log.d("GetPhotos", "Download photos");
                     } else {
-                        Log.d("!!!!!!", "Don't download photos");
+                        Log.d("GetPhotos", "Don't download photos: "+response.toString());
+
                     }
                 }
 
                 @Override
                 public void onFailure(@NotNull Call<List<Photo>> call, @NotNull Throwable t) {
-                    Log.d("!!!!!!", "no");
+                    Log.d("GetPhotos", "Failure: "+t.getMessage());
                 }
             });
+
         }
         else{
-            callPhotos = photosApi.getSearch(category,1, m);
-            m++;
+            callPhotos = photosApi.getSearch(category,count, m);
             callPhotos.enqueue(new Callback<List<Photo>>() {
                 @Override
                 public void onResponse(@NotNull Call<List<Photo>> call, @NotNull Response<List<Photo>> response) {
                     if (response.isSuccessful()) {
+
                         assert response.body() != null;
-                        photoList.addAll(response.body());
-                        Log.d("!!!!!!", "Download photos");
-                        ImageGlide();
+                        photoList.postValue(response.body());
+                        Log.d("GetPhotos", "Download photos");
                     } else {
-                        Log.d("!!!!!!", "Don't download photos");
+
+                        Log.d("GetPhotos", "Don't download photos: "+response.toString());
                     }
                 }
 
                 @Override
                 public void onFailure(@NotNull Call<List<Photo>> call, @NotNull Throwable t) {
-                    Log.d("!!!!!!", "no");
+
+                    Log.d("GetPhotos", "Failure: "+t.getMessage());
                 }
             });
         }
     }
 
-    public static void ImageGlide(){
-        Glide.with(MainScreenFragment.imageView)
-                .load(photoList.get(n).getPhotosrc())
-                .into(imageView);
-        n++;
+    public LiveData<List<Photo>> getImage(int count){
+
+        photoList = new MutableLiveData<>();
+        getPhotos(count);
+        return photoList;
     }
+
 }

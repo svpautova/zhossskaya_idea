@@ -18,7 +18,8 @@
                 android:layout_marginStart="10dp"
                 android:id="@+id/spinner"
                 android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight"
-                android:dropDownWidth="match_parent"/>
+                android:dropDownWidth="match_parent"
+                android:spinnerMode="dialog"/>
 
     </com.google.android.material.appbar.MaterialToolbar>
 

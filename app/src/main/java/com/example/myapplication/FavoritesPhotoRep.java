@@ -1,18 +1,23 @@
 package com.example.myapplication;
 
-import java.util.ArrayList;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class FavoritesPhotoRep {
+public class FavoritesPhotoRep extends ViewModel {
 
-    private List<String> mData = new ArrayList<>();
+    MutableLiveData<List<String>> mData;
     private Disposable disposable;
-    protected FavoritesPhotoRep(){
+    public LiveData<List<String>> getPhotoList(){
+        mData = new MutableLiveData<>();
         initializeData();
+        return mData;
     }
 
     private void initializeData() {
@@ -21,26 +26,10 @@ public class FavoritesPhotoRep {
         disposable = observable.
                 subscribeOn(Schedulers.io()).
                 map(i->ThemederApp.getInstance().getRepo().getNamesImages()).
-                subscribe(this::setmData);
-    }
-
-    private void setmData(List<String> data){
-        mData=data;
+                subscribe(v->mData.postValue(v));
     }
 
     public void clear(){
         disposable.dispose();
-    }
-
-    public List<String> list() {
-        return mData;
-    }
-
-    public int size() {
-        return mData.size();
-    }
-
-    public String item(int index) {
-        return mData.get(index);
     }
 }
