@@ -31,7 +31,9 @@ import com.yuyakaido.android.cardstackview.StackFrom;
 import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainScreenFragment extends Fragment implements CardStackListener {
 
@@ -53,23 +55,17 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
         likeButton = v.findViewById(R.id.like_button);
         manager = new CardStackLayoutManager(getContext().getApplicationContext(), this);
         model = ViewModelProviders.of(this).get(GetPhotos.class);
-
+        setupCardStackView();
         return v;
     }
+
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupCardStackView();
-
-        LiveData<List<Photo>> data = model.getImage(1);
-        data.observe(getViewLifecycleOwner(), photos -> {
-            adapter = new CardStackAdapter(photos);
-            cardStackView.setAdapter(adapter);
-
-            Log.d("MainScreenFragment", "setAdapter");
-        });
-
+        Log.d("ddd", "onViewCreated");
+        changeCategory();
         likeButton.setOnClickListener(v -> {
             SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder().setDirection(Direction.Right)
                     .setDuration(Duration.Slow.duration)
@@ -115,7 +111,6 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
 
     @Override
     public void onCardDragging(Direction direction, float ratio) {
-        //Log.d("CardStackView", "onCardDragging: d = "+ direction.name() + " ratio=" + ratio);
     }
 
     @Override
@@ -141,7 +136,7 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
         }
 
 
-        if (manager.getTopPosition() == adapter.getItemCount()){
+        if (manager.getTopPosition() == adapter.getItemCount()-2){
             Log.d("MainScreenFragment", "Paginate");
             paginate();
         }
@@ -173,28 +168,52 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     }
 
     private void paginate() {
-
-        //это пока не удалять запасной вариант!!!!!!!!!
-        /*
         List<Photo> old = adapter.getItems();
-        LiveData<List<Photo>> data = model.getImage();
+        LiveData<List<Photo>> data = model.getImage(5);
         data.observe(getViewLifecycleOwner(), photos -> {
-            CardStackCallback callback = new CardStackCallback(old, photos);
-            DiffUtil.DiffResult hasil = DiffUtil.calculateDiff(callback);
-            adapter.setItems(photos);
-            Log.d("MainScreenFragment", "setItems");
-            hasil.dispatchUpdatesTo(adapter);
-        });
-*/
-        List<Photo> old = adapter.getItems();
-        LiveData<List<Photo>> data = model.getImage(1);
-        data.observe(getViewLifecycleOwner(), photos -> {
+            Random r = new Random(56);
+            int num = r.nextInt(5)-1;
             old.remove(0);
-            old.addAll(photos);
+            old.remove(0);
+            old.add(photos.get(num));
+            old.add(photos.get(inFive(num+1)));
             adapter.notifyDataSetChanged();
+        });
 
-    });
+    }
 
+
+    private int inNine(int num){
+        if (num>9){
+            return num-9;
+        }
+        else{
+            return num;
+        }
+    }
+    private int inFive(int num){
+        if (num>5){
+            return num-5;
+        }
+        else{
+            return num;
+        }
+    }
+    void changeCategory(){
+        LiveData<List<Photo>> data = model.getImage(10);
+        data.observe(getViewLifecycleOwner(), photos -> {
+            Random r = new Random(33);
+            int num = r.nextInt(10)-1;
+            List<Photo> toAdapter = new ArrayList<>();
+            toAdapter.add(photos.get(inNine(num)));
+            toAdapter.add(photos.get(inNine(num+1)));
+            toAdapter.add(photos.get(inNine(num+2)));
+            toAdapter.add(photos.get(inNine(num+5)));
+            adapter = new CardStackAdapter(toAdapter);
+            cardStackView.setAdapter(adapter);
+
+            Log.d("MainScreenFragment", "resetAdapter");
+        });
     }
 
 }

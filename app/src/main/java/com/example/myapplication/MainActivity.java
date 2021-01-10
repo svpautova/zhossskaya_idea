@@ -18,37 +18,12 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 
-
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IListener {
     private DrawerLayout drawerLayout;
     protected static final String TAG_DETAILS = "PicDetails";
-    // переменная для дирректории к папке
-   // private String directoryToImage = Environment.DIRECTORY_PICTURES + File.separator + R.string.favorites_folder;
-    private static final int RESULT_LOAD_IMAGE = 1;
 
     Spinner spinner;
     Toolbar toolbar;
-    // private static Context context;
-
-    /*
-    Публичный метод для открытия галлереи с последующим выбором нужного изображения
-     *//*
-    public void openGalleryForLoadFile(){
-        ExecutorService executorservice = Executors.newSingleThreadExecutor();
-        Runnable runnable =() -> {
-            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(i, RESULT_LOAD_IMAGE);
-        };
-        executorservice.submit(runnable);
-    }
-
-    /*
-    Публичный метод для сохранения Bitmap в нужную дирректорию.
-    Вызывать внешне в потоке через экзекьютер.
-    Пример вызова - аргумент контекст, битмап изображение, Bitmap.CompressFormat.JPEG, "image/jpeg", и имя файла без расширения
-    saveBitmap(getApplicationContext(), selectedImage, Bitmap.CompressFormat.JPEG, "image/jpeg", "imgji");
-
-     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +52,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("Spinner", "Choose "+ parent.getItemAtPosition(position).toString());
+                String oldCategory = ThemederApp.getInstance().getRepo().getPropertyString(getString(R.string.SPcategory));
                 ThemederApp.getInstance().getRepo().setPropertyString(getString(R.string.SPcategory), parent.getItemAtPosition(position).toString());
+                String newCategory = ThemederApp.getInstance().getRepo().getPropertyString(getString(R.string.SPcategory));
+                Fragment fragment= getSupportFragmentManager()
+                        .findFragmentByTag(getResources().getString(R.string.mainscreen));
+                if (fragment instanceof MainScreenFragment) {
+                    if(!oldCategory.equals(newCategory)) {
+                        ((MainScreenFragment) fragment).changeCategory();
+                    }
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
@@ -86,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_container, new MainScreenFragment())
+                    .add(R.id.fragment_container, new MainScreenFragment(), getResources().getString(R.string.mainscreen))
                     .commit();
         }
 
@@ -94,35 +78,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @SuppressLint("NonConstantResourceId")
     public boolean onNavigationItemSelected(MenuItem menuItem) {
-        Fragment fragment = null;
-        Class fragmentClass;
+        Fragment fragment;
+        String tag;
         switch(menuItem.getItemId()) {
             case R.id.settings:
-                fragmentClass = SettingsFragment.class;
+                fragment = new SettingsFragment();
+                tag=getResources().getString(R.string.settings);
                 spinner.setVisibility(View.INVISIBLE);
                 break;
             case R.id.add_photo:
-                fragmentClass = AddPhotoFragment.class;
+                fragment = new AddPhotoFragment();
+                tag=getResources().getString(R.string.add_photo);
                 spinner.setVisibility(View.INVISIBLE);
                 break;
             case R.id.favorites:
-                fragmentClass = FavoritesFragment.class;
+                fragment = new FavoritesFragment();
+                tag=getResources().getString(R.string.favorites);
                 spinner.setVisibility(View.INVISIBLE);
                 break;
             default:
-                fragmentClass = MainScreenFragment.class;
+                fragment = new MainScreenFragment();
+                tag=getResources().getString(R.string.mainscreen);
                 spinner.setVisibility(View.VISIBLE);
-        }
-        Log.d("!!!!!!", ""+fragmentClass);
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        assert fragment != null;
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, tag).commit();
 
         drawerLayout.closeDrawers();
 

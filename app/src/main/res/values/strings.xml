@@ -17,11 +17,13 @@
     <string name="SPcategory" translatable="false">SPcategory</string>
     <string-array name="categories">
         <item>All</item>
+        <item>City</item>
         <item>Cars</item>
-        <item>Forest</item>
-        <item>Mountains</item>
+        <item>Nature</item>
+        <item>Flowers</item>
         <item>Food</item>
-        <item>Girls</item>
+        <item>Animals</item>
+        <item>Bikini</item>
     </string-array>
     <integer name="cols">3</integer>
 </resources>
