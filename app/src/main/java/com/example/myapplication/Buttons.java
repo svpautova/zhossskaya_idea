@@ -11,8 +11,8 @@ import java.io.IOException;
 
 public class Buttons{
 
-    static void Like_button(ImageView pic){
-        Bitmap picture = ((BitmapDrawable) pic.getDrawable()).getBitmap();
+    static void Like_button(Drawable pic){
+        Bitmap picture = ((BitmapDrawable) pic).getBitmap();
         Log.d("Buttons", "Save Photo");
         new Thread(() -> {
             try {

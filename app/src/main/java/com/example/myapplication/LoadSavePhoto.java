@@ -141,4 +141,12 @@ public class LoadSavePhoto {
         return settings.getString(name, "All");
     }
 
+    public void setPropertyInteger(String name, int value){
+        settings.edit().putInt(name, value).apply();
+    }
+
+    public int getPropertyInteger(String name){
+        return settings.getInt(name, 1);
+    }
+
 }

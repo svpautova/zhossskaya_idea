@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .add(R.id.fragment_container, new MainScreenFragment())
                     .commit();
         }
+
     }
 
     @SuppressLint("NonConstantResourceId")

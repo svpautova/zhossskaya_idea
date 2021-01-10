@@ -17,7 +17,6 @@ import retrofit2.Response;
 public class GetPhotos extends ViewModel {
 
     MutableLiveData<List<Photo>> photoList;
-    int m = 1;
 
     private void getPhotos(int count) {
 
@@ -25,9 +24,10 @@ public class GetPhotos extends ViewModel {
         Call<List<Photo>> callPhotos;
         String category = ThemederApp.getInstance().getRepo().getPropertyString("SPcategory");
         Log.d("GetPhotos", "Category: " + category);
+        int m = ThemederApp.getInstance().getRepo().getPropertyInteger(category);
+        Log.d("!!!!!", "m="+m);
         if(category.equals("All")) {
             callPhotos = photosApi.getCurated(count, m);
-            m=m+count;
             callPhotos.enqueue(new Callback<List<Photo>>() {
                 @Override
                 public void onResponse(@NotNull Call<List<Photo>> call, @NotNull Response<List<Photo>> response) {
@@ -53,7 +53,6 @@ public class GetPhotos extends ViewModel {
         }
         else{
             callPhotos = photosApi.getSearch(category,count, m);
-            m=m+count;
             callPhotos.enqueue(new Callback<List<Photo>>() {
                 @Override
                 public void onResponse(@NotNull Call<List<Photo>> call, @NotNull Response<List<Photo>> response) {
@@ -74,6 +73,7 @@ public class GetPhotos extends ViewModel {
                 }
             });
         }
+        ThemederApp.getInstance().getRepo().setPropertyInteger(category,m+count);
     }
 
     public LiveData<List<Photo>> getImage(int count){

@@ -15,7 +15,6 @@ import java.util.List;
 public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.ViewHolder> {
 
     private List<Photo> items;
-    public ViewHolder viewHolder;
 
     public CardStackAdapter(List<Photo> items) {
         this.items = items;
@@ -26,8 +25,8 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.item_spot, parent, false);
-        viewHolder = new ViewHolder(view);
-        return viewHolder;
+
+        return new ViewHolder(view);
     }
 
     @Override
