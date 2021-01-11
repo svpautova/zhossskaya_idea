@@ -26,4 +26,5 @@
         <item>Bikini</item>
     </string-array>
     <integer name="cols">3</integer>
+    <string name="refresh_text">Please, turn on the internet connection!</string>
 </resources>

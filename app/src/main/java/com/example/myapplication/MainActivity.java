@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,16 +19,22 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IListener {
     private DrawerLayout drawerLayout;
     protected static final String TAG_DETAILS = "PicDetails";
+    protected static final String S_TAG = "MainActivitySaveInstantState";
 
+    boolean spinnerVisibility;
     Spinner spinner;
     Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("");
@@ -49,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("Spinner", "Choose "+ parent.getItemAtPosition(position).toString());
@@ -59,7 +67,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .findFragmentByTag(getResources().getString(R.string.mainscreen));
                 if (fragment instanceof MainScreenFragment) {
                     if(!oldCategory.equals(newCategory)) {
-                        ((MainScreenFragment) fragment).changeCategory();
+                        ((MainScreenFragment) fragment).reloadAdapter();
+                        Log.d("qqqq","onItemSelected");
                     }
                 }
             }
@@ -73,7 +82,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .add(R.id.fragment_container, new MainScreenFragment(), getResources().getString(R.string.mainscreen))
                     .commit();
         }
-
+        else {
+            if(savedInstanceState.getBoolean(S_TAG)){
+                spinnerVisibility=savedInstanceState.getBoolean(S_TAG);
+                spinner.setVisibility(View.VISIBLE);
+            }
+            else{
+                spinnerVisibility=savedInstanceState.getBoolean(S_TAG);
+                spinner.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -83,21 +101,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(menuItem.getItemId()) {
             case R.id.settings:
                 fragment = new SettingsFragment();
+                spinnerVisibility=false;
                 tag=getResources().getString(R.string.settings);
                 spinner.setVisibility(View.INVISIBLE);
                 break;
             case R.id.add_photo:
                 fragment = new AddPhotoFragment();
+                spinnerVisibility=false;
                 tag=getResources().getString(R.string.add_photo);
                 spinner.setVisibility(View.INVISIBLE);
                 break;
             case R.id.favorites:
                 fragment = new FavoritesFragment();
+                spinnerVisibility=false;
                 tag=getResources().getString(R.string.favorites);
                 spinner.setVisibility(View.INVISIBLE);
                 break;
             default:
                 fragment = new MainScreenFragment();
+                spinnerVisibility=true;
                 tag=getResources().getString(R.string.mainscreen);
                 spinner.setVisibility(View.VISIBLE);
         }
@@ -126,5 +148,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onStop() {
         super.onStop();
         ThemederApp.getInstance().getRepo().setPropertyString(getString(R.string.SPcategory), "All");
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState){
+        super.onSaveInstanceState(savedInstanceState);
+            savedInstanceState.putBoolean(S_TAG,spinnerVisibility);
     }
 }

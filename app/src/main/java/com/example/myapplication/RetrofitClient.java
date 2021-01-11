@@ -11,7 +11,7 @@ public class RetrofitClient {
 
     private final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://api.pexels.com/v1/")
-            .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().registerTypeAdapter(new TypeToken<List<Photo>>() {
+            .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().registerTypeAdapter(new TypeToken<List<String>>() {
             }.getType(), new GsonDeserialiser()).create()))
             .build();
 

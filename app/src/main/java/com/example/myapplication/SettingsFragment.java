@@ -39,10 +39,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         changeWallpaper = v.findViewById(R.id.change_wallpaperButton);
         changeWallpaper.setOnClickListener(this);
         changeWallpaperSwitch = v.findViewById(R.id.switch_periodic);
+        changeWallpaperSwitch.setChecked(ThemederApp.getInstance().getRepo().getPropertyBoolean(getString(R.string.switch_check)));
         if (changeWallpaperSwitch != null) {
             changeWallpaperSwitch.setOnCheckedChangeListener(this);
         }
-        ThemederApp.getInstance().getRepo().setPropertyBoolean(getString(R.string.switch_check), false);
         return v;
     }
 
