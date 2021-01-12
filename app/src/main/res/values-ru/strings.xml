@@ -13,13 +13,24 @@
     <string name="refresh_text">Пожалуйста, включите соединение с интернетом!</string>
     <string name="text_settings">Настройки</string>
     <string name="text_addphoto">Загрузить фото</string>
-    <string name="text_favorites">Избарнное</string>
+    <string name="text_favorites">Избранное</string>
     <string name="info">О приложении</string>
+    <string name="SPcategory">SPcategory</string>
     <string-array name="wallpapers">
         <item>Сменить…</item>
         <item>Сменить обои</item>
         <item>Сменить экран блокировки</item>
         <item>Сменить оба</item>
+    </string-array>
+    <string-array name="categories">
+        <item>Разное</item>
+        <item>Город</item>
+        <item>Авто</item>
+        <item>Природа</item>
+        <item>Цветы</item>
+        <item>Еда</item>
+        <item>Животные</item>
+        <item>Девушки</item>
     </string-array>
 
 </resources>
