@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,11 +37,9 @@ import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 public class MainScreenFragment extends Fragment implements CardStackListener {
-    private static final int PERMISSION_REQUEST_CODE = 1;
     private final String S_TAG = "MainScreenFragmentSaveInstantState";
 
     FloatingActionButton skipButton;
@@ -151,68 +148,33 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    intentPressButton();
-                }
-            }else{
-                if ((grantResults[0] == PackageManager.PERMISSION_GRANTED) && (grantResults[1] == PackageManager.PERMISSION_GRANTED)){
-                    intentPressButton();
-                }
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    public void intentPressButton(){
-        Buttons.Like_button(picture);
-    }
-
-    @Override
     public void onCardSwiped(Direction direction) {
 
         Log.d("CardStackView", "onCardSwiped: p=" + manager.getTopPosition() + " d=" + direction);
         if(direction==Direction.Right){
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                        == PackageManager.PERMISSION_GRANTED) ) {
-                    intentPressButton();
-                }else {
-                    requestPermissions(
-                            new String[]{
-                                    Manifest.permission.READ_EXTERNAL_STORAGE
-                            },
-                            PERMISSION_REQUEST_CODE);
-                }
-            }else{
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                    if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                            == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            == PackageManager.PERMISSION_GRANTED)) {
-                        intentPressButton();
-                    }else {
-                        requestPermissions(
-                                new String[]{
-                                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                        Manifest.permission.READ_EXTERNAL_STORAGE
-                                },
-                                PERMISSION_REQUEST_CODE);
-                    }
-                }else{
-                    intentPressButton();
-                }
+            Log.d("MainScreenFragment", "Swipe Right");
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[] {
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE
+                    },
+                    2);
+            if (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+            Buttons.Like_button(picture);
             }
+
         }
         if(direction==Direction.Left) {
             Log.d("MainScreenFragment", "Swipe Left");
         }
+
+
         if (manager.getTopPosition() == adapter.getItemCount()-2){
             Log.d("MainScreenFragment", "Paginate");
             paginate();
         }
+
     }
 
     @Override
