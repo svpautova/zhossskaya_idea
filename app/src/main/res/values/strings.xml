@@ -14,6 +14,8 @@
 
 
     <string name="switch_check" translatable="false">switch_check</string>
+    <string name="switch_check_lock" translatable="false">switch_check_lock</string>
+    <string name="switch_check_both" translatable="false">switch_check_both</string>
     <string name="favorites_folder" translatable="false">FavoritesThemder</string>
     <string name="open_gallery_button">Open Gallery</string>
     <string name="gallery_image">Gallery Image</string>
