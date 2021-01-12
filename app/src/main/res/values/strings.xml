@@ -31,14 +31,14 @@
     </string-array>
 
     <string-array name="categories">
-        <item>All</item>
-        <item>City</item>
-        <item>Cars</item>
-        <item>Nature</item>
-        <item>Flowers</item>
-        <item>Food</item>
-        <item>Animals</item>
-        <item>Bikini</item>
+        <item>Разное</item>
+        <item>Город</item>
+        <item>Авто</item>
+        <item>Природа</item>
+        <item>Цветы</item>
+        <item>Еда</item>
+        <item>Животные</item>
+        <item>Девушки</item>
     </string-array>
     <integer name="cols">3</integer>
     <string name="refresh_text">Please, turn on the internet connection!</string>

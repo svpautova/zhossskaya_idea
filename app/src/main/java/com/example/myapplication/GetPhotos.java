@@ -24,11 +24,12 @@ public class GetPhotos extends ViewModel {
 
         PexelApi photosApi = new RetrofitClient().createService(PexelApi.class);
         Call<List<String>> callPhotos;
+        String trCategory = "";
         String category = ThemederApp.getInstance().getRepo().getPropertyString("SPcategory");
         Log.d("GetPhotos", "Category: " + category);
         Random r = new Random();
         int m = r.nextInt(150);
-        if(category.equals("All")) {
+        if(category.equals("Разное")) {
             callPhotos = photosApi.getSearch("desktop backgrounds", count, m);
             callPhotos.enqueue(new Callback<List<String>>() {
                 @Override
@@ -55,7 +56,8 @@ public class GetPhotos extends ViewModel {
 
         }
         else{
-            callPhotos = photosApi.getSearch(category,count, m);
+            trCategory=translater(category);
+            callPhotos = photosApi.getSearch(trCategory,count, m);
             callPhotos.enqueue(new Callback<List<String>>() {
                 @Override
                 public void onResponse(@NotNull Call<List<String>> call, @NotNull Response<List<String>> response) {
@@ -88,4 +90,29 @@ public class GetPhotos extends ViewModel {
         return photoList;
     }
 
+    public String translater(String category){
+        String enCategory = "";
+        if(category.equals("Город")){
+            enCategory="City";
+        }
+        if(category.equals("Авто")){
+            enCategory="Cars";
+        }
+        if(category.equals("Природа")){
+            enCategory="Nature";
+        }
+        if(category.equals("Цветы")){
+            enCategory="Flowers";
+        }
+        if(category.equals("Еда")){
+            enCategory="Food";
+        }
+        if(category.equals("Животные")){
+            enCategory="Animals";
+        }
+        if(category.equals("Девушки")){
+            enCategory="Bikini";
+        }
+        return enCategory;
+    }
 }
