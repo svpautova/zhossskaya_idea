@@ -19,7 +19,7 @@
     <string name="favorites_folder" translatable="false">FavoritesThemder</string>
     <string name="open_gallery_button">Open Gallery</string>
     <string name="gallery_image">Gallery Image</string>
-    <string name="SPcategory" translatable="false">SPcategory</string>
+    <string name="SPcategory">SPcategory</string>
     <string name="info">About Themeder</string>
 
 
@@ -31,14 +31,14 @@
     </string-array>
 
     <string-array name="categories">
-        <item>Разное</item>
-        <item>Город</item>
-        <item>Авто</item>
-        <item>Природа</item>
-        <item>Цветы</item>
-        <item>Еда</item>
-        <item>Животные</item>
-        <item>Девушки</item>
+        <item>All</item>
+        <item>City</item>
+        <item>Auto</item>
+        <item>Nature</item>
+        <item>Flowers</item>
+        <item>Food</item>
+        <item>Animals</item>
+        <item>Bikini</item>
     </string-array>
     <integer name="cols">3</integer>
     <string name="refresh_text">Please, turn on the internet connection!</string>
