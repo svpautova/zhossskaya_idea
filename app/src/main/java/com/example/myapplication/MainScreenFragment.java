@@ -1,8 +1,11 @@
 package com.example.myapplication;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,15 +40,17 @@ import java.util.List;
 import java.util.Random;
 
 public class MainScreenFragment extends Fragment implements CardStackListener {
-
+    private final String S_TAG = "MainScreenFragmentSaveInstantState";
 
     FloatingActionButton skipButton;
     FloatingActionButton likeButton;
+    FloatingActionButton refreshButton;
     CardStackLayoutManager manager;
     CardStackAdapter adapter;
     CardStackView cardStackView;
     GetPhotos model;
     Drawable picture;
+
 
     @Nullable
     @Override
@@ -53,6 +59,7 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
         cardStackView = v.findViewById(R.id.card_stack_view);
         skipButton = v.findViewById(R.id.skip_button);
         likeButton = v.findViewById(R.id.like_button);
+        refreshButton = v.findViewById(R.id.rewind_button);
         manager = new CardStackLayoutManager(getContext().getApplicationContext(), this);
         model = ViewModelProviders.of(this).get(GetPhotos.class);
         setupCardStackView();
@@ -62,8 +69,26 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("ddd", "onViewCreated");
-        changeCategory();
+        if(isOnline(getContext().getApplicationContext())){
+
+            if (savedInstanceState!=null){
+                Log.d("qqqq","savedInstanceState");
+                adapter = new CardStackAdapter(savedInstanceState.getStringArrayList(S_TAG));
+                cardStackView.setAdapter(adapter);
+            }
+            else{
+                Log.d("qqqq","!savedInstanceState");
+                reloadAdapter();
+            }
+
+        }
+         else{
+             Toast toast =  Toast.makeText(getContext().getApplicationContext(),
+                     getString(R.string.refresh_text),Toast.LENGTH_SHORT);
+             toast.show();
+             refreshButton.setVisibility(View.VISIBLE);
+        }
+
         likeButton.setOnClickListener(v -> {
             SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder().setDirection(Direction.Right)
                     .setDuration(Duration.Slow.duration)
@@ -82,6 +107,17 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
             cardStackView.swipe();
         });
 
+        refreshButton.setOnClickListener(v -> {
+            if(isOnline(getContext().getApplicationContext())){
+                reloadAdapter();
+                refreshButton.setVisibility(View.INVISIBLE);
+            }
+            else{
+                Toast toast =  Toast.makeText(getContext().getApplicationContext(),
+                        getString(R.string.refresh_text),Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
 
     }
 
@@ -166,29 +202,30 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     }
 
     private void paginate() {
-        List<Photo> old = adapter.getItems();
-        LiveData<List<Photo>> data = model.getImage(5);
-        data.observe(getViewLifecycleOwner(), photos -> {
-            Random r = new Random(56);
-            int num = r.nextInt(5)-1;
-            old.remove(0);
-            old.remove(0);
-            old.add(photos.get(num));
-            old.add(photos.get(inFive(num+1)));
-            adapter.notifyDataSetChanged();
-        });
-
-    }
-
-
-    private int inNine(int num){
-        if (num>9){
-            return num-9;
+        List<String> old = adapter.getItems();
+        if(isOnline(getContext().getApplicationContext())){
+            LiveData<List<String>> data = model.getImage(5);
+            data.observe(getViewLifecycleOwner(), photos -> {
+                Random r = new Random(56);
+                int num = r.nextInt(5)-1;
+                old.remove(0);
+                old.add(photos.get(num));
+                adapter.notifyDataSetChanged();
+            });
         }
         else{
-            return num;
+            Toast toast =  Toast.makeText(getContext().getApplicationContext(),
+                    getString(R.string.refresh_text),Toast.LENGTH_SHORT);
+            toast.show();
+            old.clear();
+            adapter.notifyDataSetChanged();
+            refreshButton.setVisibility(View.VISIBLE);
         }
+
+
     }
+
+
     private int inFive(int num){
         if (num>5){
             return num-5;
@@ -197,22 +234,38 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
             return num;
         }
     }
-    void changeCategory(){
-        LiveData<List<Photo>> data = model.getImage(10);
+    void reloadAdapter(){
+        LiveData<List<String>> data = model.getImage(5);
         data.observe(getViewLifecycleOwner(), photos -> {
             Random r = new Random(33);
-            int num = r.nextInt(10)-1;
-            List<Photo> toAdapter = new ArrayList<>();
-            toAdapter.add(photos.get(inNine(num)));
-            toAdapter.add(photos.get(inNine(num+1)));
-            toAdapter.add(photos.get(inNine(num+2)));
-            toAdapter.add(photos.get(inNine(num+5)));
+            int num = r.nextInt(5)-1;
+            List<String> toAdapter = new ArrayList<>();
+            toAdapter.add(photos.get(num));
+            toAdapter.add(photos.get(inFive(num+1)));
+            toAdapter.add(photos.get(inFive(num+2)));
             adapter = new CardStackAdapter(toAdapter);
             cardStackView.setAdapter(adapter);
 
             Log.d("MainScreenFragment", "resetAdapter");
         });
     }
+
+    public static boolean isOnline(Context context)
+    {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnected();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState){
+        super.onSaveInstanceState(savedInstanceState);
+        if (adapter!=null){
+            savedInstanceState.putStringArrayList(S_TAG, (ArrayList<String>) adapter.getItems());
+        }
+    }
+
 
 }
 

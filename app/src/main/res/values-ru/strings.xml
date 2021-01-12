@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="mainscreen">ГЛАВНЫЙ ЭКРАН</string>
-    <string name="favorites">ИЗБРАННОЕ</string>
-    <string name="add_photo">ЗАГРУЗИТЬ ФОТО</string>
-    <string name="settings">НАСТРОЙКИ</string>
+    <string name="menu_mainscreen">ГЛАВНЫЙ ЭКРАН</string>
+    <string name="menu_favorites">ИЗБРАННОЕ</string>
+    <string name="menu_addphoto">ЗАГРУЗИТЬ ФОТО</string>
+    <string name="menu_settings">НАСТРОЙКИ</string>
     <string name="periodic_switch_text">Периодическая смена обоев</string>
     <string name="periodic_switch_lockscreen_text">Периодическая смена экрана блокировки</string>
     <string name="periodic_switch_both_text">Периодическая смена (оба)</string>
     <string name="settings_text">Настройки</string>
     <string name="open_gallery_button">Открыть галерею</string>
     <string name="gallery_image">"Картинка из галереи "</string>
+    <string name="refresh_text">Пожалуйста, включите соединение с интернетом!</string>
+    <string name="text_settings">Настройки</string>
+    <string name="text_addphoto">Загрузить фото</string>
+    <string name="text_favorites">Избарнное</string>
     <string name="info">О приложении</string>
     <string-array name="wallpapers">
         <item>Сменить…</item>

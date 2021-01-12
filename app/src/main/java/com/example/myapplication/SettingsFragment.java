@@ -62,6 +62,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         if (changeWallpaperSwitch != null) {
             changeWallpaperSwitch.setOnCheckedChangeListener(this);
         }
+
         changeLockscreenSwitch.setChecked(ThemederApp.getInstance().getRepo().getPropertyBoolean(getString(R.string.switch_check_lock)));
         if (changeLockscreenSwitch != null) {
             changeLockscreenSwitch.setOnCheckedChangeListener(this);

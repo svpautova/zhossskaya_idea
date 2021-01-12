@@ -17,22 +17,22 @@ import retrofit2.Response;
 
 public class GetPhotos extends ViewModel {
 
-    MutableLiveData<List<Photo>> photoList;
+    MutableLiveData<List<String>> photoList;
 
 
     private void getPhotos(int count) {
 
         PexelApi photosApi = new RetrofitClient().createService(PexelApi.class);
-        Call<List<Photo>> callPhotos;
+        Call<List<String>> callPhotos;
         String category = ThemederApp.getInstance().getRepo().getPropertyString("SPcategory");
         Log.d("GetPhotos", "Category: " + category);
         Random r = new Random();
-        int m = r.nextInt(199);
+        int m = r.nextInt(150);
         if(category.equals("All")) {
             callPhotos = photosApi.getSearch("desktop backgrounds", count, m);
-            callPhotos.enqueue(new Callback<List<Photo>>() {
+            callPhotos.enqueue(new Callback<List<String>>() {
                 @Override
-                public void onResponse(@NotNull Call<List<Photo>> call, @NotNull Response<List<Photo>> response) {
+                public void onResponse(@NotNull Call<List<String>> call, @NotNull Response<List<String>> response) {
                     if (response.isSuccessful()) {
 
                         assert response.body() != null;
@@ -48,7 +48,7 @@ public class GetPhotos extends ViewModel {
                 }
 
                 @Override
-                public void onFailure(@NotNull Call<List<Photo>> call, @NotNull Throwable t) {
+                public void onFailure(@NotNull Call<List<String>> call, @NotNull Throwable t) {
                     Log.d("GetPhotos", "Failure: "+t.getMessage());
                 }
             });
@@ -56,30 +56,32 @@ public class GetPhotos extends ViewModel {
         }
         else{
             callPhotos = photosApi.getSearch(category,count, m);
-            callPhotos.enqueue(new Callback<List<Photo>>() {
+            callPhotos.enqueue(new Callback<List<String>>() {
                 @Override
-                public void onResponse(@NotNull Call<List<Photo>> call, @NotNull Response<List<Photo>> response) {
+                public void onResponse(@NotNull Call<List<String>> call, @NotNull Response<List<String>> response) {
                     if (response.isSuccessful()) {
 
                         assert response.body() != null;
+                        Log.d("GetPhotos", ""+response.headers().get("x-RateLimit-Limit"));
+                        Log.d("GetPhotos", ""+response.headers().get("x-RateLimit-Remaining"));
                         photoList.postValue(response.body());
+
                         Log.d("GetPhotos", "Download photos");
                     } else {
-
                         Log.d("GetPhotos", "Don't download photos: "+response.toString());
+
                     }
                 }
 
                 @Override
-                public void onFailure(@NotNull Call<List<Photo>> call, @NotNull Throwable t) {
-
+                public void onFailure(@NotNull Call<List<String>> call, @NotNull Throwable t) {
                     Log.d("GetPhotos", "Failure: "+t.getMessage());
                 }
             });
         }
     }
 
-    public LiveData<List<Photo>> getImage(int count){
+    public LiveData<List<String>> getImage(int count){
 
         photoList = new MutableLiveData<>();
         getPhotos(count);

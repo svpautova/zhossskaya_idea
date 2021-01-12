@@ -14,9 +14,9 @@ import java.util.List;
 
 public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.ViewHolder> {
 
-    private List<Photo> items;
+    private final List<String> items;
 
-    public CardStackAdapter(List<Photo> items) {
+    public CardStackAdapter(List<String> items) {
         this.items = items;
     }
 
@@ -31,9 +31,9 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Photo item = items.get(position);
+        String item = items.get(position);
         Glide.with(holder.image)
-                .load(item.getPhotosrc())
+                .load(item)
                 .into(holder.image);
     }
 
@@ -51,12 +51,8 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
 
     }
 
-    public List<Photo> getItems() {
+    public List<String> getItems() {
         return items;
-    }
-
-    public void setItems(List<Photo> items) {
-        this.items = items;
     }
 
 }

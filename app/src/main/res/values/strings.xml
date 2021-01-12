@@ -3,10 +3,10 @@
     <string name="toolbar_header" translatable="false">THEMEDER</string>
     <string name="open" translatable="false">open</string>
     <string name="close" translatable="false">close</string>
-    <string name="mainscreen">MAIN SCREEN</string>
-    <string name="favorites">FAVORITES</string>
-    <string name="add_photo">UPLOAD PHOTO</string>
-    <string name="settings">SETTINGS</string>
+    <string name="menu_mainscreen">MAIN SCREEN</string>
+    <string name="menu_favorites">FAVORITES</string>
+    <string name="menu_addphoto">UPLOAD PHOTO</string>
+    <string name="menu_settings">SETTINGS</string>
     <string name="periodic_switch_text">Periodic wallpaper change</string>
     <string name="periodic_switch_lockscreen_text">Periodic lockscreen change</string>
     <string name="periodic_switch_both_text">Periodic change (both)</string>
@@ -41,4 +41,8 @@
         <item>Bikini</item>
     </string-array>
     <integer name="cols">3</integer>
+    <string name="refresh_text">Please, turn on the internet connection!</string>
+    <string name="text_settings">Settings</string>
+    <string name="text_addphoto">Upload photo</string>
+    <string name="text_favorites">Favorites</string>
 </resources>

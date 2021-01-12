@@ -10,6 +10,8 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
             android:id="@+id/toolbar">
 
+
+
         <androidx.appcompat.widget.AppCompatSpinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -18,8 +20,19 @@
                 android:layout_marginStart="10dp"
                 android:id="@+id/spinner"
                 android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight"
-                android:dropDownWidth="match_parent"
-                android:spinnerMode="dialog"/>
+                android:dropDownWidth="match_parent" />
+
+        <TextView
+                android:id="@+id/toolbarTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="65dp"
+                android:layout_marginStart="10dp"
+                android:theme="@style/MenuItemStyle"
+                android:textColor="@color/white"
+                android:textAlignment="center"/>
+
+
 
     </com.google.android.material.appbar.MaterialToolbar>
 
