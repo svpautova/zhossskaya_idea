@@ -121,7 +121,7 @@ public class GetPhotos extends ViewModel {
             enCategory="Animals";
             flag=1;
         }
-        if(category.equals("Девушки")){
+        if(category.equals("Бикини")){
             enCategory="Bikini";
             flag=1;
         }

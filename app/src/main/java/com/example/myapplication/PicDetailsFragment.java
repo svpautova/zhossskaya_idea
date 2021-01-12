@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 
 import android.graphics.drawable.BitmapDrawable;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -88,15 +89,17 @@ public class PicDetailsFragment extends Fragment implements View.OnClickListener
         if (v.getId()==R.id.cropButton) {
             String destinationFilename = croppedIMGname + UUID.randomUUID().toString();
             Uri imageUriResultCrop = startCrop(picUri, destinationFilename);
+            Drawable d = Drawable.createFromPath(imageUriResultCrop.toString());
+            if(d == null){
+                imageUriResultCrop = null;
+            }
             if (imageUriResultCrop != null) {
                 Log.d("crop", "before glide");
                 Glide.with(mPic).load(imageUriResultCrop).into(mPic);
                 Log.d("crop", "after glide");
             }
             else {
-                Log.d("cropCancel", "before glide");
                 Glide.with(mPic).load(picUri).into(mPic);
-                Log.d("cropCancel", "after glide");
             }
         }
     }
