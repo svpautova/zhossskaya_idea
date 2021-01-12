@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     Spinner spinner;
     Toolbar toolbar;
+    TextView toolbarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+
+        toolbarTitle = findViewById(R.id.toolbarTitle);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.navigationView);
@@ -91,19 +95,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(menuItem.getItemId()) {
             case R.id.settings:
                 fragment = new SettingsFragment();
-                getSupportActionBar().setTitle("YOUR_TITLE");
+                toolbarTitle.setText(R.string.text_settings);
                 tag=getResources().getString(R.string.text_settings);
-                spinner.setVisibility(View.INVISIBLE);
+                spinner.setVisibility(View.GONE);
                 break;
             case R.id.add_photo:
                 fragment = new AddPhotoFragment();
+                toolbarTitle.setText(R.string.text_addphoto);
                 tag=getResources().getString(R.string.menu_addphoto);
-                spinner.setVisibility(View.INVISIBLE);
+                spinner.setVisibility(View.GONE);
                 break;
             case R.id.favorites:
                 fragment = new FavoritesFragment();
+                toolbarTitle.setText(R.string.text_favorites);
                 tag=getResources().getString(R.string.menu_favorites);
-                spinner.setVisibility(View.INVISIBLE);
+                spinner.setVisibility(View.GONE);
                 break;
             default:
                 fragment = new MainScreenFragment();

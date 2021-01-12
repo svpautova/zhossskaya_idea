@@ -28,4 +28,6 @@
     <integer name="cols">3</integer>
     <string name="refresh_text">Please, turn on the internet connection!</string>
     <string name="text_settings">Settings</string>
+    <string name="text_addphoto">Upload photo</string>
+    <string name="text_favorites">Favorites</string>
 </resources>

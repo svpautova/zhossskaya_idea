@@ -11,4 +11,6 @@
     <string name="gallery_image">"Картинка из галереи "</string>
     <string name="refresh_text">Пожалуйста, включите соединение с интернетом!</string>
     <string name="text_settings">Настройки</string>
+    <string name="text_addphoto">Загрузить фото</string>
+    <string name="text_favorites">Избарнное</string>
 </resources>
