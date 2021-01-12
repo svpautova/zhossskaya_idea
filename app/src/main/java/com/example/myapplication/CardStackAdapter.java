@@ -14,7 +14,7 @@ import java.util.List;
 
 public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.ViewHolder> {
 
-    private List<String> items;
+    private final List<String> items;
 
     public CardStackAdapter(List<String> items) {
         this.items = items;
@@ -54,6 +54,5 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
     public List<String> getItems() {
         return items;
     }
-
 
 }

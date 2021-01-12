@@ -25,15 +25,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected static final String TAG_DETAILS = "PicDetails";
     protected static final String S_TAG = "MainActivitySaveInstantState";
 
-    boolean spinnerVisibility;
     Spinner spinner;
     Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
 
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
@@ -64,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ThemederApp.getInstance().getRepo().setPropertyString(getString(R.string.SPcategory), parent.getItemAtPosition(position).toString());
                 String newCategory = ThemederApp.getInstance().getRepo().getPropertyString(getString(R.string.SPcategory));
                 Fragment fragment= getSupportFragmentManager()
-                        .findFragmentByTag(getResources().getString(R.string.mainscreen));
+                        .findFragmentByTag(getResources().getString(R.string.menu_mainscreen));
                 if (fragment instanceof MainScreenFragment) {
                     if(!oldCategory.equals(newCategory)) {
                         ((MainScreenFragment) fragment).reloadAdapter();
@@ -79,18 +76,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_container, new MainScreenFragment(), getResources().getString(R.string.mainscreen))
+                    .add(R.id.fragment_container, new MainScreenFragment(), getResources().getString(R.string.menu_mainscreen))
                     .commit();
         }
         else {
-            if(savedInstanceState.getBoolean(S_TAG)){
-                spinnerVisibility=savedInstanceState.getBoolean(S_TAG);
-                spinner.setVisibility(View.VISIBLE);
-            }
-            else{
-                spinnerVisibility=savedInstanceState.getBoolean(S_TAG);
-                spinner.setVisibility(View.INVISIBLE);
-            }
+            spinner.setVisibility(savedInstanceState.getInt(S_TAG));
         }
     }
 
@@ -101,26 +91,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(menuItem.getItemId()) {
             case R.id.settings:
                 fragment = new SettingsFragment();
-                spinnerVisibility=false;
-                tag=getResources().getString(R.string.settings);
+                getSupportActionBar().setTitle("YOUR_TITLE");
+                tag=getResources().getString(R.string.text_settings);
                 spinner.setVisibility(View.INVISIBLE);
                 break;
             case R.id.add_photo:
                 fragment = new AddPhotoFragment();
-                spinnerVisibility=false;
-                tag=getResources().getString(R.string.add_photo);
+                tag=getResources().getString(R.string.menu_addphoto);
                 spinner.setVisibility(View.INVISIBLE);
                 break;
             case R.id.favorites:
                 fragment = new FavoritesFragment();
-                spinnerVisibility=false;
-                tag=getResources().getString(R.string.favorites);
+                tag=getResources().getString(R.string.menu_favorites);
                 spinner.setVisibility(View.INVISIBLE);
                 break;
             default:
                 fragment = new MainScreenFragment();
-                spinnerVisibility=true;
-                tag=getResources().getString(R.string.mainscreen);
+                tag=getResources().getString(R.string.menu_mainscreen);
                 spinner.setVisibility(View.VISIBLE);
         }
 
@@ -128,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, tag).commit();
 
         drawerLayout.closeDrawers();
+
 
         return true;
     }
@@ -153,6 +141,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onSaveInstanceState(@NonNull Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
-            savedInstanceState.putBoolean(S_TAG,spinnerVisibility);
+            savedInstanceState.putInt(S_TAG, spinner.getVisibility());
     }
 }

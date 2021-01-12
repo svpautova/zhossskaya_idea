@@ -37,14 +37,15 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
         changeWallpaper = v.findViewById(R.id.change_wallpaperButton);
-        changeWallpaper.setOnClickListener(this);
         changeWallpaperSwitch = v.findViewById(R.id.switch_periodic);
+        changeWallpaperSwitch.setOnCheckedChangeListener(this);
         changeWallpaperSwitch.setChecked(ThemederApp.getInstance().getRepo().getPropertyBoolean(getString(R.string.switch_check)));
         if (changeWallpaperSwitch != null) {
             changeWallpaperSwitch.setOnCheckedChangeListener(this);
         }
         return v;
     }
+
 
     @Override
     public void onClick(View v) {

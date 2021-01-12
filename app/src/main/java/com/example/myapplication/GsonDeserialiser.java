@@ -1,7 +1,5 @@
 package com.example.myapplication;
 
-import android.util.Log;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
