@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import android.util.Log;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -15,7 +17,8 @@ public class GsonDeserialiser implements JsonDeserializer<List<String>> {
     @Override
     public List<String> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonArray photosJ = json.getAsJsonObject().get("photos").getAsJsonArray();
-
+        String k = json.getAsJsonObject().get("total_results").getAsString();
+        Log.d("total_results", k);
         for (int i=0; i < photosJ.size(); i++) {
             String photo = photosJ.get(i).getAsJsonObject().get("src").getAsJsonObject().get("portrait").getAsString();
 
