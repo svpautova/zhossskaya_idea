@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.Manifest;
 import android.content.pm.PackageManager;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -109,29 +111,23 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         WorkManager workManager = WorkManager.getInstance();
 
         if (isChecked){
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.READ_EXTERNAL_STORAGE
-                    },
-                    PERMISSION_REQUEST_CODE);
-            if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED)) {
-                ExecutorService executorservice = Executors.newSingleThreadExecutor();
-                Runnable runnable = () -> {
-
-                        Data myData = new Data.Builder()
-                                .putString("keyA", "no")
-                                .build();
-                        PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(PeriodicSetWallpaper.class, 1, TimeUnit.DAYS, 22, TimeUnit.HOURS)
-                                .addTag("pwr")
-                                .setInputData(myData)
-                                .build();
-                        workManager.enqueue(myWorkRequest);
-
-                };
-                executorservice.submit(runnable);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) ) {
+                    intentPositionOne();
+                }
+            }else {
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED)) {
+                        intentPositionOne();
+                    }else{
+                        changeWallpaperSwitch.setChecked(false);
+                    }
+                } else {
+                    intentPositionOne();
+                }
             }
         }
         else {
@@ -146,27 +142,22 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
             WorkManager workManager = WorkManager.getInstance();
 
             if (isChecked){
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                Manifest.permission.READ_EXTERNAL_STORAGE
-                        },
-                        PERMISSION_REQUEST_CODE);
-                if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                        == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        == PackageManager.PERMISSION_GRANTED)) {
-                    ExecutorService executorservice = Executors.newSingleThreadExecutor();
-                    Runnable runnable = () -> {
-                            Data myData = new Data.Builder()
-                                    .putString("keyA", "no")
-                                    .build();
-                            PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(PeriodicSetWallpaper.class, 1, TimeUnit.DAYS, 22, TimeUnit.HOURS)
-                                    .addTag("pwr")
-                                    .setInputData(myData)
-                                    .build();
-                            workManager.enqueue(myWorkRequest);
-                    };
-                    executorservice.submit(runnable);
+
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED) ) {
+                        intentPositionTwo();
+                    }
+                }else {
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                                == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                == PackageManager.PERMISSION_GRANTED)) {
+                            intentPositionTwo();
+                        }
+                    } else {
+                        intentPositionTwo();
+                    }
                 }
             }
             else {
@@ -181,29 +172,21 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
             WorkManager workManager = WorkManager.getInstance();
 
             if (isChecked){
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                Manifest.permission.READ_EXTERNAL_STORAGE
-                        },
-                        PERMISSION_REQUEST_CODE);
-                if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                        == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        == PackageManager.PERMISSION_GRANTED)) {
-                    ExecutorService executorservice = Executors.newSingleThreadExecutor();
-                    Runnable runnable = () -> {
-
-                            Data myData = new Data.Builder()
-                                    .putString("keyA", "no")
-                                    .build();
-                            PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(PeriodicSetWallpaper.class, 1, TimeUnit.DAYS, 22, TimeUnit.HOURS)
-                                    .addTag("pwr")
-                                    .setInputData(myData)
-                                    .build();
-                            workManager.enqueue(myWorkRequest);
-
-                    };
-                    executorservice.submit(runnable);
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED) ) {
+                        intentPositionThree();
+                    }
+                }else {
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                                == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                == PackageManager.PERMISSION_GRANTED)) {
+                            intentPositionThree();
+                        }
+                    } else {
+                        intentPositionThree();
+                    }
                 }
             }
             else {
@@ -212,67 +195,117 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         }
     }
 
+    public void intentPositionOne(){
+        Log.d("Change wallpaper", String.valueOf(WallpaperChangerConstants.wallpaperRegime));
+        WallpaperChangerConstants.wallpaperRegime = 1;
+        new Thread(() -> {
+            WorkManager workManager = WorkManager.getInstance();
+            Data myData = new Data.Builder()
+                    .putString("keyA", "no")
+                    .build();
+            OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
+                    .setInputData(myData)
+                    .build();
+            workManager.enqueue(myWorkRequest);
+            Log.d("!!!!!!", "click change");
+        }).start();
+    }
+
+    public void intentPositionTwo(){
+        Log.d("Change wallpaper", String.valueOf(WallpaperChangerConstants.wallpaperRegime));
+        WallpaperChangerConstants.wallpaperRegime = 2;
+        new Thread(() -> {
+            WorkManager workManager = WorkManager.getInstance();
+
+            Data myData = new Data.Builder()
+                    .putString("keyA", "no")
+                    .build();
+            OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
+                    .setInputData(myData)
+                    .build();
+            workManager.enqueue(myWorkRequest);
+            Log.d("!!!!!!", "click change");
+        }).start();
+    }
+
+    public void intentPositionThree() {
+        Log.d("Change wallpaper", String.valueOf(WallpaperChangerConstants.wallpaperRegime));
+        WallpaperChangerConstants.wallpaperRegime = 0;
+        new Thread(() -> {
+            WorkManager workManager = WorkManager.getInstance();
+            Data myData = new Data.Builder()
+                    .putString("keyA", "no")
+                    .build();
+            OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
+                    .setInputData(myData)
+                    .build();
+            workManager.enqueue(myWorkRequest);
+            Log.d("!!!!!!", "click change");
+        }).start();
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         WallpaperChangerConstants.random = 1;
         String text = parent.getItemAtPosition(position).toString();
         Log.d("onItemSelected", text + "pos" + String.valueOf(position));
-        ActivityCompat.requestPermissions(getActivity(),
-                new String[]{
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                },
-                PERMISSION_REQUEST_CODE);
-        if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED)) {
 
             if (position == 1) {
-                Log.d("Change wallpaper", String.valueOf(WallpaperChangerConstants.wallpaperRegime));
-                WallpaperChangerConstants.wallpaperRegime = 1;
-                new Thread(() -> {
-                    WorkManager workManager = WorkManager.getInstance();
-                        Data myData = new Data.Builder()
-                                .putString("keyA", "no")
-                                .build();
-                        OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
-                                .setInputData(myData)
-                                .build();
-                        workManager.enqueue(myWorkRequest);
-                        Log.d("!!!!!!", "click change");
-                }).start();
-            } else if (position == 2) {
-                Log.d("Change wallpaper", String.valueOf(WallpaperChangerConstants.wallpaperRegime));
-                WallpaperChangerConstants.wallpaperRegime = 2;
-                new Thread(() -> {
-                    WorkManager workManager = WorkManager.getInstance();
-
-                        Data myData = new Data.Builder()
-                                .putString("keyA", "no")
-                                .build();
-                        OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
-                                .setInputData(myData)
-                                .build();
-                        workManager.enqueue(myWorkRequest);
-                        Log.d("!!!!!!", "click change");
-                }).start();
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED) ) {
+                        intentPositionOne();
+                    }
+                }else {
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                                == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                == PackageManager.PERMISSION_GRANTED)) {
+                            intentPositionOne();
+                        }
+                    } else {
+                        intentPositionOne();
+                    }
+                }
+            }else if (position == 2) {
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED) ) {
+                        intentPositionTwo();
+                    }else {
+                        changeWallpaperSwitch.setChecked(false);
+                    }
+                }else {
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                                == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                == PackageManager.PERMISSION_GRANTED)) {
+                            intentPositionTwo();
+                        }
+                    } else {
+                        intentPositionTwo();
+                    }
+                }
             } else if (position == 3) {
-                Log.d("Change wallpaper", String.valueOf(WallpaperChangerConstants.wallpaperRegime));
-                WallpaperChangerConstants.wallpaperRegime = 0;
-                new Thread(() -> {
-                    WorkManager workManager = WorkManager.getInstance();
-                        Data myData = new Data.Builder()
-                                .putString("keyA", "no")
-                                .build();
-                        OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
-                                .setInputData(myData)
-                                .build();
-                        workManager.enqueue(myWorkRequest);
-                        Log.d("!!!!!!", "click change");
-                }).start();
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED) ) {
+                        intentPositionThree();
+                    }
+                }else {
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                                == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                == PackageManager.PERMISSION_GRANTED)) {
+                            intentPositionThree();
+                        }
+                    } else {
+                        intentPositionThree();
+                    }
+                }
             }
         }
-    }
+
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
