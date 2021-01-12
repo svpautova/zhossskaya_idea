@@ -29,7 +29,7 @@ public class GetPhotos extends ViewModel {
         Log.d("GetPhotos", "Category: " + category);
         Random r = new Random();
         int m = r.nextInt(150);
-        if(category.equals("Разное")) {
+        if(category.equals("All")) {
             callPhotos = photosApi.getSearch("desktop backgrounds", count, m);
             callPhotos.enqueue(new Callback<List<String>>() {
                 @Override
@@ -92,27 +92,44 @@ public class GetPhotos extends ViewModel {
 
     public String translater(String category){
         String enCategory = "";
+        int flag=0;
+        if(category.equals("Разное")){
+            enCategory="desktop backgrounds";
+            flag=1;
+        }
         if(category.equals("Город")){
             enCategory="City";
+            flag=1;
         }
         if(category.equals("Авто")){
             enCategory="Cars";
+            flag=1;
         }
         if(category.equals("Природа")){
             enCategory="Nature";
+            flag=1;
         }
         if(category.equals("Цветы")){
             enCategory="Flowers";
+            flag=1;
         }
         if(category.equals("Еда")){
             enCategory="Food";
+            flag=1;
         }
         if(category.equals("Животные")){
             enCategory="Animals";
+            flag=1;
         }
-        if(category.equals("Девушки")){
+        if(category.equals("Бикини")){
             enCategory="Bikini";
+            flag=1;
         }
-        return enCategory;
+        if(flag==1){
+            return enCategory;
+        }
+        else{
+            return category;
+        }
     }
 }
