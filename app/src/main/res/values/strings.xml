@@ -8,13 +8,26 @@
     <string name="add_photo">UPLOAD PHOTO</string>
     <string name="settings">SETTINGS</string>
     <string name="periodic_switch_text">Periodic wallpaper change</string>
+    <string name="periodic_switch_lockscreen_text">Periodic lockscreen change</string>
+    <string name="periodic_switch_both_text">Periodic change (both)</string>
     <string name="settings_text">Settings</string>
-    <string name="change_wallpaperButton">Change wallpaper now!</string>
+
+
     <string name="switch_check" translatable="false">switch_check</string>
     <string name="favorites_folder" translatable="false">FavoritesThemder</string>
     <string name="open_gallery_button">Open Gallery</string>
     <string name="gallery_image">Gallery Image</string>
     <string name="SPcategory" translatable="false">SPcategory</string>
+    <string name="info">About Themeder</string>
+
+
+    <string-array name="wallpapers">
+        <item>Change…</item>
+        <item>Change wallpaper</item>
+        <item>Change lock screen</item>
+        <item>Change both</item>
+    </string-array>
+
     <string-array name="categories">
         <item>All</item>
         <item>City</item>

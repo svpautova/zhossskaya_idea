@@ -2,13 +2,17 @@ package com.example.myapplication;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,60 +26,75 @@ import androidx.work.WorkManager;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import com.mikepenz.aboutlibraries.LibsBuilder;
+
+
+
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class SettingsFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
+public class SettingsFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
 
-    Button changeWallpaper;
+    Spinner changeWallpaper;
+    Button aboutButton;
     SwitchMaterial changeWallpaperSwitch;
+    SwitchMaterial changeLockscreenSwitch;
+    SwitchMaterial changeBothSwitch;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
-        changeWallpaper = v.findViewById(R.id.change_wallpaperButton);
-        changeWallpaper.setOnClickListener(this);
+        changeWallpaper = v.findViewById(R.id.changeOnce);
+        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(getActivity(), R.array.wallpapers, android.R.layout.simple_spinner_item);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        changeWallpaper.setAdapter(adapter1);
+        aboutButton = v.findViewById(R.id.info);
+        aboutButton.setOnClickListener(this);
+        changeWallpaper.setOnItemSelectedListener(this);
         changeWallpaperSwitch = v.findViewById(R.id.switch_periodic);
+        changeLockscreenSwitch = v.findViewById(R.id.switch_periodic_lockscreen);
+        changeBothSwitch = v.findViewById(R.id.switch_both_periodic);
+        changeWallpaperSwitch.setChecked(ThemederApp.getInstance().getRepo().getPropertyBoolean(getString(R.string.switch_check)));
         if (changeWallpaperSwitch != null) {
             changeWallpaperSwitch.setOnCheckedChangeListener(this);
         }
-        ThemederApp.getInstance().getRepo().setPropertyBoolean(getString(R.string.switch_check), false);
+        changeLockscreenSwitch.setChecked(ThemederApp.getInstance().getRepo().getPropertyBoolean(getString(R.string.switch_check)));
+        if (changeLockscreenSwitch != null) {
+            changeLockscreenSwitch.setOnCheckedChangeListener(this);
+        }
+        changeBothSwitch.setChecked(ThemederApp.getInstance().getRepo().getPropertyBoolean(getString(R.string.switch_check)));
+        if (changeBothSwitch != null) {
+            changeBothSwitch.setOnCheckedChangeListener(this);
+        }
         return v;
     }
 
+
     @Override
     public void onClick(View v) {
-        ActivityCompat.requestPermissions(getActivity(),
-                new String[]{
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                },
-                PERMISSION_REQUEST_CODE);
-        if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED)) {
+        if (v.getId() == R.id.info) {
 
-            new Thread(() -> {
-                WorkManager workManager = WorkManager.getInstance();
-                List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
-                //Log.d("!!!!!!", files.get(0));
-                if (files.size() != 0) {
-                    int a = (int) (Math.random() * files.size());
-                    String pictureName = files.get(a);
-                    Data myData = new Data.Builder()
-                            .putString("keyA", pictureName)
-                            .build();
-                    OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
-                            .setInputData(myData)
-                            .build();
-                    workManager.enqueue(myWorkRequest);
-                    Log.d("!!!!!!", "click change");
-                }
-            }).start();
+            LibsBuilder libsBuilder = new LibsBuilder()
+                    //.withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                    .withActivityTitle(getString(R.string.info))
+                    .withAboutIconShown(true)
+                    .withAboutAppName("Themeder")
+                    .withAboutVersionShown(true)
+                    .withAboutDescription("Меняем обои с 2020 года.\n Приложение разработано в рамках курса Разработка приложений на Android")
+                    //.withAboutSpecial1Description("мэйл")
+
+                    //.withAutoDetect(false)
+                    //.withLibraries("ucrop", "lifecycle:extensions")
+                    .withExcludedLibraries("androidx_*");
+            Log.d("info", "after libs");
+            libsBuilder.start(getActivity());
+
         }
+
     }
     private static final int PERMISSION_REQUEST_CODE = 0;
     @Override
@@ -105,7 +124,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                         Data myData = new Data.Builder()
                                 .putString("keyA", picName)
                                 .build();
-                        PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(PeriodicSetWallpaper.class, 15, TimeUnit.MINUTES, 13, TimeUnit.MINUTES)
+                        PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(PeriodicSetWallpaper.class, 1, TimeUnit.DAYS, 22, TimeUnit.HOURS)
                                 .addTag("pwr")
                                 .setInputData(myData)
                                 .build();
@@ -118,5 +137,86 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         else {
             WorkManager.getInstance().cancelAllWorkByTag("pwr");
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String text = parent.getItemAtPosition(position).toString();
+        Log.d("onItemSelected", text + "pos" + String.valueOf(position));
+        ActivityCompat.requestPermissions(getActivity(),
+                new String[]{
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                },
+                PERMISSION_REQUEST_CODE);
+        if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED)) {
+
+            if (position == 1) {
+                Log.d("Change wallpaper", String.valueOf(WallpaperChangerConstants.wallpaperRegime));
+                WallpaperChangerConstants.wallpaperRegime = 1;
+                new Thread(() -> {
+                    WorkManager workManager = WorkManager.getInstance();
+                    List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
+                    //Log.d("!!!!!!", files.get(0));
+                    if (files.size() != 0) {
+                        int a = (int) (Math.random() * files.size());
+                        String pictureName = files.get(a);
+                        Data myData = new Data.Builder()
+                                .putString("keyA", pictureName)
+                                .build();
+                        OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
+                                .setInputData(myData)
+                                .build();
+                        workManager.enqueue(myWorkRequest);
+                        Log.d("!!!!!!", "click change");
+                    }
+                }).start();
+            } else if (position == 2) {
+                Log.d("Change wallpaper", String.valueOf(WallpaperChangerConstants.wallpaperRegime));
+                WallpaperChangerConstants.wallpaperRegime = 2;
+                new Thread(() -> {
+                    WorkManager workManager = WorkManager.getInstance();
+                    List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
+                    if (files.size() != 0) {
+                        int a = (int) (Math.random() * files.size());
+                        String pictureName = files.get(a);
+                        Data myData = new Data.Builder()
+                                .putString("keyA", pictureName)
+                                .build();
+                        OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
+                                .setInputData(myData)
+                                .build();
+                        workManager.enqueue(myWorkRequest);
+                        Log.d("!!!!!!", "click change");
+                    }
+                }).start();
+            } else if (position == 3) {
+                Log.d("Change wallpaper", String.valueOf(WallpaperChangerConstants.wallpaperRegime));
+                WallpaperChangerConstants.wallpaperRegime = 0;
+                new Thread(() -> {
+                    WorkManager workManager = WorkManager.getInstance();
+                    List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
+                    if (files.size() != 0) {
+                        int a = (int) (Math.random() * files.size());
+                        String pictureName = files.get(a);
+                        Data myData = new Data.Builder()
+                                .putString("keyA", pictureName)
+                                .build();
+                        OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
+                                .setInputData(myData)
+                                .build();
+                        workManager.enqueue(myWorkRequest);
+                        Log.d("!!!!!!", "click change");
+                    }
+                }).start();
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        Log.d("Change wallpaper", String.valueOf(WallpaperChangerConstants.wallpaperRegime));
     }
 }
