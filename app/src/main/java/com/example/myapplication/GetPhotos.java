@@ -27,7 +27,7 @@ public class GetPhotos extends ViewModel {
         String category = ThemederApp.getInstance().getRepo().getPropertyString("SPcategory");
         Log.d("GetPhotos", "Category: " + category);
         Random r = new Random();
-        int m = r.nextInt(999);
+        int m = r.nextInt(199);
         if(category.equals("All")) {
             callPhotos = photosApi.getSearch("desktop backgrounds", count, m);
             callPhotos.enqueue(new Callback<List<Photo>>() {

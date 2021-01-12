@@ -1,41 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".SettingsFragment">
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-            android:text="@string/periodic_switch_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/switch_periodic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textColor="@color/black"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <TextView
-            android:text="@string/settings_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/settingsTextView"
-            app:layout_constraintBottom_toTopOf="@+id/switch_periodic"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:textColor="@color/black"/>
+        <com.google.android.material.switchmaterial.SwitchMaterial
+                android:text="@string/periodic_switch_text"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/switch_periodic"
+                app:layout_constraintBottom_toTopOf="@id/switch_periodic_lockscreen"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"
+                android:textSize="15sp" />
+        <com.google.android.material.switchmaterial.SwitchMaterial
+                android:text="@string/periodic_switch_lockscreen_text"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/switch_periodic_lockscreen"
+                app:layout_constraintBottom_toTopOf="@id/switch_both_periodic"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"
+                android:textSize="15sp" />
 
-    <Button
-            android:text="@string/change_wallpaperButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/change_wallpaperButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switch_periodic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+        <com.google.android.material.switchmaterial.SwitchMaterial
+                android:text="@string/periodic_switch_both_text"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/switch_both_periodic"
+                app:layout_constraintBottom_toTopOf="@id/changeOnce"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="100dp"
+                android:textSize="15sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+        <Spinner
+                android:layout_width="300dp"
+                android:entries="@array/wallpapers"
+                android:textColor="@color/black"
+                android:id="@+id/changeOnce"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/info"
+                android:layout_marginBottom="50dp"
+            />
+
+        <Button
+                android:text="@string/info"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/info"
+                android:layout_marginBottom="100dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/detailsPic"
+                android:textSize="15sp" />
+
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/detailsPic"
+                android:src="@drawable/mail" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
