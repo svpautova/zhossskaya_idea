@@ -10,18 +10,23 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 
@@ -36,16 +41,18 @@ import java.io.Serializable;
 import java.util.UUID;
 
 
-public class PicDetailsFragment extends Fragment implements View.OnClickListener{
+public class PicDetailsFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener{
 
     protected static final String KEY = "PicDetailsKEY";
     private final String croppedIMGname = "Themeder-";
-    Button wallpaperButton;
+    Spinner wallpaperButton;
     Button cropButton;
     Uri picUri;
     ImageView mPic;
+    Bitmap bitmap = null;
 
-    public static PicDetailsFragment newInstance(String picPath) {
+
+    public static PicDetailsFragment newInstance(String picPath)  {
 
         final Bundle extras = new Bundle();
         extras.putSerializable(KEY, (Serializable) picPath);
@@ -61,7 +68,10 @@ public class PicDetailsFragment extends Fragment implements View.OnClickListener
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_picdetails, container, false);
         wallpaperButton = v.findViewById(R.id.wallButton);
-        wallpaperButton.setOnClickListener(this);
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.wallpapers, android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        wallpaperButton.setAdapter(adapter2);
+        wallpaperButton.setOnItemSelectedListener(this);
         cropButton = v.findViewById(R.id.cropButton);
         cropButton.setOnClickListener(this);
         picUri = Uri.parse(info());
@@ -74,22 +84,20 @@ public class PicDetailsFragment extends Fragment implements View.OnClickListener
     }
     @Override
     public void onClick(View v) {
-        if (v.getId()==R.id.wallButton) {
 
-            Bitmap bitmap = null;
-            bitmap = ((BitmapDrawable) mPic.getDrawable()).getBitmap();
-
-            WallpaperManager manager = WallpaperManager.getInstance(getActivity());
-            try {
-                manager.setBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        else if (v.getId()==R.id.cropButton) {
+        if (v.getId()==R.id.cropButton) {
             String destinationFilename = croppedIMGname + UUID.randomUUID().toString();
             Uri imageUriResultCrop = startCrop(picUri, destinationFilename);
-            Glide.with(mPic).load(imageUriResultCrop).into(mPic);
+            if (imageUriResultCrop != null) {
+                Log.d("crop", "before glide");
+                Glide.with(mPic).load(imageUriResultCrop).into(mPic);
+                Log.d("crop", "after glide");
+            }
+            else {
+                Log.d("cropCancel", "before glide");
+                Glide.with(mPic).load(picUri).into(mPic);
+                Log.d("cropCancel", "after glide");
+            }
         }
     }
 
@@ -133,10 +141,53 @@ public class PicDetailsFragment extends Fragment implements View.OnClickListener
 
         options.setStatusBarColor(R.color.blue1);
         options.setToolbarColor(R.color.blue1);
-
-        options.setToolbarTitle("Crop");
+        options.setToolbarWidgetColor(R.color.blue1);
+        options.setActiveControlsWidgetColor(R.color.blue1);
+        options.setRootViewBackgroundColor(R.color.blue1);
+        options.setToolbarTitle("Crop and rotate");
 
         return options;
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (position == 1) {
+            bitmap = ((BitmapDrawable) mPic.getDrawable()).getBitmap();
+            WallpaperManager manager = WallpaperManager.getInstance(getActivity());
+            try {
+                manager.setBitmap(bitmap, null, false, WallpaperManager.FLAG_SYSTEM);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (position == 2) {
+
+            bitmap = ((BitmapDrawable) mPic.getDrawable()).getBitmap();
+            WallpaperManager manager = WallpaperManager.getInstance(getActivity());
+            try {
+                manager.setBitmap(bitmap, null, false, WallpaperManager.FLAG_LOCK);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (position == 3) {
+
+            bitmap = ((BitmapDrawable) mPic.getDrawable()).getBitmap();
+            WallpaperManager manager = WallpaperManager.getInstance(getActivity());
+            try {
+                manager.setBitmap(bitmap);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

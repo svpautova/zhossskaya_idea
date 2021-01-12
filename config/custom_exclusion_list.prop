@@ -1,0 +1,150 @@
+okhttp (4.7.2) -> com_squareup_okhttp3__okhttp
+
+androidx_arch_core__core_runtime
+androidx_slidingpanelayout__slidingpanelayout
+androidx_core__core_ktx
+
+FindBugs-jsr305 (2.0.1) -> com_google_code_findbugs__jsr305
+Hamcrest Core (1.3) -> org_hamcrest__hamcrest_core
+
+androidx_work__work_runtime
+androidx_constraintlayout__constraintlayout_solver
+androidx_fragment__fragment
+androidx_databinding__viewbinding
+
+com_yuyakaido_android__card_stack_view
+
+androidx_legacy__legacy_support_core_utils
+androidx_lifecycle__lifecycle_viewmodel_ktx
+
+RxJava (2.2.8) -> io_reactivex_rxjava2__rxjava
+Hamcrest library (1.3) -> org_hamcrest__hamcrest_library
+
+androidx_lifecycle__lifecycle_process
+androidx_test_espresso__espresso_idling_resource
+androidx_navigation__navigation_runtime_ktx
+androidx_exifinterface__exifinterface
+androidx_room__room_common
+org_jetbrains_kotlin__kotlin_stdlib_common
+Glide (4.9.0) -> com_github_bumptech_glide__glide
+
+androidx_vectordrawable__vectordrawable
+androidx_activity__activity
+androidx_lifecycle__lifecycle_viewmodel_savedstate
+androidx_test_ext__junit
+
+uCrop (2.2.6) -> com_github_yalantis__ucrop
+
+androidx_navigation__navigation_fragment
+
+JUnit (4.12) -> junit__junit
+
+androidx_fragment__fragment_ktx
+androidx_annotation__annotation_experimental
+androidx_cursoradapter__cursoradapter
+
+Converter: Gson (2.9.0) -> com_squareup_retrofit2__converter_gson
+
+androidx_swiperefreshlayout__swiperefreshlayout
+
+com_squareup_okhttp3__logging_interceptor
+
+androidx_sqlite__sqlite
+androidx_customview__customview
+androidx_annotation__annotation
+androidx_viewpager__viewpager
+androidx_room__room_runtime
+
+javax.inject (1) -> javax_inject__javax_inject
+
+androidx_test_espresso__espresso_core
+androidx_arch_core__core_common
+androidx_legacy__legacy_support_v4
+androidx_lifecycle__lifecycle_viewmodel
+
+Gson (2.8.6) -> com_google_code_gson__gson
+
+androidx_lifecycle__lifecycle_livedata_core
+androidx_test__monitor
+
+com_github_bumptech_glide__gifdecoder
+
+androidx_interpolator__interpolator
+androidx_navigation__navigation_runtime
+androidx_versionedparcelable__versionedparcelable
+androidx_localbroadcastmanager__localbroadcastmanager
+
+AboutLibraries Library (8.6.5) -> com_mikepenz__aboutlibraries_core
+
+androidx_coordinatorlayout__coordinatorlayout
+androidx_sqlite__sqlite_framework
+androidx_lifecycle__lifecycle_livedata_core_ktx
+androidx_media__media
+androidx_test__runner
+
+org_jetbrains_kotlin__kotlin_stdlib_jdk7
+org_jetbrains_kotlinx__kotlinx_coroutines_core
+org_jetbrains_kotlin__kotlin_stdlib_jdk8
+
+androidx_transition__transition
+androidx_lifecycle__lifecycle_common
+androidx_drawerlayout__drawerlayout
+androidx_navigation__navigation_fragment_ktx
+
+reactive-streams (1.0.2) -> org_reactivestreams__reactive_streams
+Retrofit (2.9.0) -> com_squareup_retrofit2__retrofit
+
+androidx_navigation__navigation_common_ktx
+androidx_collection__collection
+
+org_jetbrains_kotlin__kotlin_stdlib
+
+Guava ListenableFuture only (1.0) -> com_google_guava__listenablefuture
+
+androidx_recyclerview__recyclerview
+androidx_activity__activity_ktx
+com_github_bumptech_glide__annotations
+com_github_bumptech_glide__disklrucache
+
+androidx_constraintlayout__constraintlayout
+androidx_lifecycle__lifecycle_service
+androidx_print__print
+
+Support CardView v7 (1.0.0) -> androidx_cardview__cardview
+
+androidx_legacy__legacy_support_core_ui
+
+Hamcrest Integration (1.3) -> org_hamcrest__hamcrest_integration
+
+androidx_vectordrawable__vectordrawable_animated
+
+org_jetbrains_kotlinx__kotlinx_coroutines_android
+
+androidx_lifecycle__lifecycle_livedata
+androidx_savedstate__savedstate
+androidx_lifecycle__lifecycle_runtime
+androidx_core__core
+
+JavaWriter (2.1.1) -> com_squareup__javawriter
+androidx_collection__collection_ktx
+
+androidx_loader__loader
+androidx_navigation__navigation_common
+
+Okio (2.6.0) -> com_squareup_okio__okio
+RoundedImageView (2.3.0) -> com_makeramen__roundedimageview
+
+androidx_lifecycle__lifecycle_runtime_ktx
+androidx_documentfile__documentfile
+androidx_appcompat__appcompat_resources
+com_mikepenz__fastadapter
+
+androidx_lifecycle__lifecycle_extensions
+
+Material Components for Android (1.2.1) -> com_google_android_material__material
+org_jetbrains__annotations
+
+androidx_viewpager2__viewpager2
+androidx_asynclayoutinflater__asynclayoutinflater
+androidx_test__core
+androidx_appcompat__appcompat

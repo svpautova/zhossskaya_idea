@@ -66,8 +66,6 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
         return v;
     }
 
-
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
