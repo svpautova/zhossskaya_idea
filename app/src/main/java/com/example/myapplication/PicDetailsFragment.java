@@ -89,16 +89,13 @@ public class PicDetailsFragment extends Fragment implements View.OnClickListener
         if (v.getId()==R.id.cropButton) {
             String destinationFilename = croppedIMGname + UUID.randomUUID().toString();
             Uri imageUriResultCrop = startCrop(picUri, destinationFilename);
-            Drawable d = Drawable.createFromPath(imageUriResultCrop.toString());
-            if(d == null){
-                imageUriResultCrop = null;
-            }
+
             if (imageUriResultCrop != null) {
                 Log.d("crop", "before glide");
                 Glide.with(mPic).load(imageUriResultCrop).into(mPic);
                 Log.d("crop", "after glide");
             }
-            else {
+            else{
                 Glide.with(mPic).load(picUri).into(mPic);
             }
         }
