@@ -80,7 +80,6 @@ public class GetPhotos extends ViewModel {
     }
 
     public LiveData<List<Photo>> getImage(int count){
-
         photoList = new MutableLiveData<>();
         getPhotos(count);
         return photoList;

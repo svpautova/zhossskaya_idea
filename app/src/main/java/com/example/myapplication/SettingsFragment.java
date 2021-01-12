@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,18 +20,22 @@ import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+import androidx.work.Worker;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.yuyakaido.android.cardstackview.Direction;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class SettingsFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
-
-    Button changeWallpaper;
-    SwitchMaterial changeWallpaperSwitch;
+    private static final int PERMISSION_REQUEST_CODE = 0;
+    private static final int PERMISSION_REQUEST_CODE_SWITCH = 1;
+    private Button changeWallpaper;
+    private SwitchMaterial changeWallpaperSwitch;
 
     @Nullable
     @Override
@@ -47,72 +52,115 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onClick(View v) {
-        ActivityCompat.requestPermissions(getActivity(),
-                new String[]{
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                },
-                PERMISSION_REQUEST_CODE);
-        if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED)) {
-
-            new Thread(() -> {
-                WorkManager workManager = WorkManager.getInstance();
-                List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
-                //Log.d("!!!!!!", files.get(0));
-                if (files.size() != 0) {
-                    int a = (int) (Math.random() * files.size());
-                    String pictureName = files.get(a);
-                    Data myData = new Data.Builder()
-                            .putString("keyA", pictureName)
-                            .build();
-                    OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(PeriodicSetWallpaper.class)
-                            .setInputData(myData)
-                            .build();
-                    workManager.enqueue(myWorkRequest);
-                    Log.d("!!!!!!", "click change");
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            System.out.println("fsdasD");
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    intentWorkManager();
                 }
-            }).start();
+            }else{
+                if ((grantResults[0] == PackageManager.PERMISSION_GRANTED) && (grantResults[1] == PackageManager.PERMISSION_GRANTED)){
+                    intentWorkManager();
+                }
+            }
+        }
+        if (requestCode == PERMISSION_REQUEST_CODE_SWITCH) {
+            System.out.println("fsdasD");
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    changeWallpaperSwitch.setChecked(true);
+                    intentChangeWorkManager();
+                }
+            }else{
+                if ((grantResults[0] == PackageManager.PERMISSION_GRANTED) && (grantResults[1] == PackageManager.PERMISSION_GRANTED)){
+                    changeWallpaperSwitch.setChecked(true);
+                    intentChangeWorkManager();
+                }
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    public void intentWorkManager(){
+        OneTimeWorkRequest myWorkRequest1 = new OneTimeWorkRequest.Builder(FileWallpaperWorkManager.class).build();
+        WorkManager.getInstance().enqueue(myWorkRequest1);
+    }
+
+    public void intentChangeWorkManager(){
+        OneTimeWorkRequest myWorkRequest2 = new OneTimeWorkRequest.Builder(ChangeFileWallpaperWorkManager.class).build();
+        WorkManager.getInstance().enqueue(myWorkRequest2);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if ((ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()).getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) ) {
+                intentWorkManager();
+            }else {
+                requestPermissions(
+                        new String[]{
+                                Manifest.permission.READ_EXTERNAL_STORAGE
+                        },
+                        PERMISSION_REQUEST_CODE);
+            }
+        }else{
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                if ((ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()).getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()).getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED)) {
+                    intentWorkManager();
+                }else {
+                    requestPermissions(
+                            new String[]{
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    Manifest.permission.READ_EXTERNAL_STORAGE
+                            },
+                            PERMISSION_REQUEST_CODE);
+                }
+            }else{
+                intentWorkManager();
+            }
         }
     }
-    private static final int PERMISSION_REQUEST_CODE = 0;
+
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            ThemederApp.getInstance().getRepo().setPropertyBoolean(getString(R.string.switch_check), isChecked);
-            Log.d("!!!!!!", "switch "+ isChecked);
-        WorkManager workManager = WorkManager.getInstance();
-
+        ThemederApp.getInstance().getRepo().setPropertyBoolean(getString(R.string.switch_check), isChecked);
+        Log.d("!!!!!!", "switch "+ isChecked);
         if (isChecked){
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.READ_EXTERNAL_STORAGE
-                    },
-                    PERMISSION_REQUEST_CODE);
-            if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED)) {
-                ExecutorService executorservice = Executors.newSingleThreadExecutor();
-                Runnable runnable = () -> {
-                    List<String> files = ThemederApp.getInstance().getRepo().getNamesImages();
-                    int a = (int) (Math.random() * files.size());
-
-
-                    if (files.size() != 0) {
-                        String picName = files.get(a);
-                        Data myData = new Data.Builder()
-                                .putString("keyA", picName)
-                                .build();
-                        PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(PeriodicSetWallpaper.class, 15, TimeUnit.MINUTES, 13, TimeUnit.MINUTES)
-                                .addTag("pwr")
-                                .setInputData(myData)
-                                .build();
-                        workManager.enqueue(myWorkRequest);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if ((ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()).getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) ) {
+                    intentChangeWorkManager();
+                }else {
+                    changeWallpaperSwitch.setChecked(false);
+                    requestPermissions(
+                            new String[]{
+                                    Manifest.permission.READ_EXTERNAL_STORAGE
+                            },
+                            PERMISSION_REQUEST_CODE_SWITCH);
+                }
+            }else{
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if ((ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()).getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()).getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED)) {
+                        intentChangeWorkManager();
+                    }else {
+                        changeWallpaperSwitch.setChecked(false);
+                        requestPermissions(
+                                new String[]{
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                        Manifest.permission.READ_EXTERNAL_STORAGE
+                                },
+                                PERMISSION_REQUEST_CODE_SWITCH);
                     }
-                };
-                executorservice.submit(runnable);
+                }else{
+                    intentChangeWorkManager();
+                }
             }
         }
         else {

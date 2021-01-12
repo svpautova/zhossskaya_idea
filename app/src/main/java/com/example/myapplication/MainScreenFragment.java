@@ -1,9 +1,15 @@
 package com.example.myapplication;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,13 +37,36 @@ import com.yuyakaido.android.cardstackview.StackFrom;
 import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class MainScreenFragment extends Fragment implements CardStackListener {
 
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        // Restore UI state from the savedInstanceState.
+        // This bundle has also been passed to onCreate.
 
+        if (savedInstanceState != null) {
+
+            Bitmap bitmap = (Bitmap)savedInstanceState.getParcelable("picture");
+            // Convert Bitmap to Drawable:
+            picture = new BitmapDrawable(bitmap);
+        }
+    }
+
+    public void onSaveInstanceState(@NotNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Bitmap bitmap = (Bitmap)((BitmapDrawable) picture).getBitmap();
+        outState.putParcelable("picture", bitmap);
+    }
+
+    private static final int PERMISSION_REQUEST_CODE = 3;
     FloatingActionButton skipButton;
     FloatingActionButton likeButton;
     CardStackLayoutManager manager;
@@ -53,13 +82,11 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
         cardStackView = v.findViewById(R.id.card_stack_view);
         skipButton = v.findViewById(R.id.skip_button);
         likeButton = v.findViewById(R.id.like_button);
-        manager = new CardStackLayoutManager(getContext().getApplicationContext(), this);
+        manager = new CardStackLayoutManager(Objects.requireNonNull(getContext()).getApplicationContext(), this);
         model = ViewModelProviders.of(this).get(GetPhotos.class);
         setupCardStackView();
         return v;
     }
-
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -114,33 +141,68 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    intentPressButton();
+                }
+            }else{
+                if ((grantResults[0] == PackageManager.PERMISSION_GRANTED) && (grantResults[1] == PackageManager.PERMISSION_GRANTED)){
+                    intentPressButton();
+                }
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    public void intentPressButton(){
+        Buttons.Like_button(picture);
+    }
+
+    @Override
     public void onCardSwiped(Direction direction) {
 
         Log.d("CardStackView", "onCardSwiped: p=" + manager.getTopPosition() + " d=" + direction);
         if(direction==Direction.Right){
-            Log.d("MainScreenFragment", "Swipe Right");
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[] {
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.READ_EXTERNAL_STORAGE
-                    },
-                    2);
-            if (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
-            Buttons.Like_button(picture);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if ((ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()).getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) ) {
+                    intentPressButton();
+                }else {
+                    requestPermissions(
+                            new String[]{
+                                    Manifest.permission.READ_EXTERNAL_STORAGE
+                            },
+                            PERMISSION_REQUEST_CODE);
+                }
+            }else{
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if ((ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()).getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()).getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED)) {
+                        intentPressButton();
+                    }else {
+                        requestPermissions(
+                                new String[]{
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                        Manifest.permission.READ_EXTERNAL_STORAGE
+                                },
+                                PERMISSION_REQUEST_CODE);
+                    }
+                }else{
+                    intentPressButton();
+                }
             }
-
         }
         if(direction==Direction.Left) {
             Log.d("MainScreenFragment", "Swipe Left");
         }
-
-
         if (manager.getTopPosition() == adapter.getItemCount()-2){
             Log.d("MainScreenFragment", "Paginate");
             paginate();
         }
-
     }
 
     @Override
@@ -199,6 +261,7 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
             return num;
         }
     }
+
     void changeCategory(){
         LiveData<List<Photo>> data = model.getImage(10);
         data.observe(getViewLifecycleOwner(), photos -> {
@@ -211,7 +274,6 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
             toAdapter.add(photos.get(inNine(num+5)));
             adapter = new CardStackAdapter(toAdapter);
             cardStackView.setAdapter(adapter);
-
             Log.d("MainScreenFragment", "resetAdapter");
         });
     }

@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Room;
@@ -23,6 +24,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Completable;
+import io.reactivex.schedulers.Schedulers;
+
+import static android.content.ContentValues.TAG;
 
 public class LoadSavePhoto {
 
@@ -95,6 +101,12 @@ public class LoadSavePhoto {
         }
     }
 
+    public boolean deleteImageFromUri(Uri uri){
+        applicationContext.getApplicationContext().getContentResolver().delete(uri, null, null);
+        deleteNameOfFile(uri.toString());
+        return true;
+    }
+
     /*
     Приватный метод полуения названия картинок из базы данных.
     Возвращает класы картинок с полем - имя для метода getNamesImages()
@@ -125,6 +137,12 @@ public class LoadSavePhoto {
         db.getImageDao().insert(imageDefClass);
     }
 
+    private void deleteNameOfFile(String nameOfFIle) {
+        ImageFile imageDefClass = new ImageFile();
+        imageDefClass.name = nameOfFIle;
+        db.getImageDao().delete(imageDefClass);
+    }
+
     public void setPropertyBoolean(String name, Boolean value){
         settings.edit().putBoolean(name, value).apply();
     }
@@ -140,6 +158,4 @@ public class LoadSavePhoto {
     public String getPropertyString(String name){
         return settings.getString(name, "All");
     }
-
-
 }
