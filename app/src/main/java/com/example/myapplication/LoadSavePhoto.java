@@ -24,28 +24,36 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+// класс для работы с памятью
 public class LoadSavePhoto {
 
+    // константы для работы с памятью
     public static final String STORAGE_NAME = "THEMEDERStorage";
     private final Context applicationContext;
     private final AppDatabase db;
     private final SharedPreferences settings;
 
     /*
-    конструтор класса
+    Конструтор класса. Контексты, база данных.
     */
     public LoadSavePhoto(Context inputContext) {
         applicationContext = inputContext;
-        db = Room.databaseBuilder(applicationContext, AppDatabase.class, "populus-database")
+        db = Room.databaseBuilder(applicationContext, AppDatabase.class, "themeder-database")
                 .fallbackToDestructiveMigration()
                 .build();
         settings = applicationContext.getSharedPreferences(STORAGE_NAME, Context.MODE_PRIVATE);
     }
 
-
+    /*
+    функция удаление записи из базы данных по имени.
+     */
+    public boolean deleteNameOfFile(String nameOfFIle) {
+        db.getImageDao().deleteImage(nameOfFIle);
+        return true;
+    }
 
     /*
-    Публичное сохранение bitmap, получение uri
+    Публичное сохранение bitmap, получение uri.
     */
     public Uri saveBitmap(@NonNull final Bitmap bitmap, @NonNull final Bitmap.CompressFormat format, @NonNull final String mimeType) throws IOException {
             final String relativeLocation = Environment.DIRECTORY_PICTURES;
@@ -62,11 +70,8 @@ public class LoadSavePhoto {
                 stream = resolver.openOutputStream(uri);
             } else {
                 File imagesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                // contentValues.put(String.valueOf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)), relativeLocation);
                 File image = new File(imagesDir, (applicationContext.getString(R.string.app_name) + System.currentTimeMillis()));
                 stream = new FileOutputStream(image);
-                // уже записал в файловый поток через этот иетод
-
                 uri = Uri.fromFile(image);
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 mediaScanIntent.setData(uri);
@@ -77,12 +82,10 @@ public class LoadSavePhoto {
             stream.close();
             saveNameOfFile(uri.toString());
             return uri;
-
     }
 
     /*
-    Публичный метод получения картинки из директории приложения.
-    nameFile - параметр названия файла, например "image.jpg"
+    Публичный метод получения картинки из uri.
     Возрващает Bitmap объект картинки.
      */
     public Bitmap getImageFromName(Uri uriImage) throws IOException {
@@ -105,7 +108,7 @@ public class LoadSavePhoto {
 
     /*
     Публичный метод получения строк - названий файлов в избранной дирреткории.
-    Возвращает список типа стринг, где каждый элемент такой, как "image.jpg"
+    Возвращает список.
      */
     public List<String> getNamesImages() {
         List<ImageFile> defClass = loadImageClasses();
@@ -116,15 +119,16 @@ public class LoadSavePhoto {
         return getListNames;
     }
 
-
-    // приватный метод сохранения имени файла в базу данных.
-    // аргумент - имя фалйа как "image.jpg"
+    /*
+    Публичный метод сохранения имени файла в базу данных.
+     */
     public void saveNameOfFile(String nameOfFIle) {
         ImageFile imageDefClass = new ImageFile();
         imageDefClass.name = nameOfFIle;
         db.getImageDao().insert(imageDefClass);
     }
 
+    // методы работы с префересами.
     public void setPropertyBoolean(String name, Boolean value){
         settings.edit().putBoolean(name, value).apply();
     }
@@ -140,6 +144,4 @@ public class LoadSavePhoto {
     public String getPropertyString(String name){
         return settings.getString(name, "All");
     }
-
-
 }
