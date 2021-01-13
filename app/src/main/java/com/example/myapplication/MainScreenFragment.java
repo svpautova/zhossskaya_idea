@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -153,11 +152,11 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    intentPressButton();
+                    Buttons.Like_button(picture);
                 }
             }else{
                 if ((grantResults[0] == PackageManager.PERMISSION_GRANTED) && (grantResults[1] == PackageManager.PERMISSION_GRANTED)){
-                    intentPressButton();
+                    Buttons.Like_button(picture);
                 }
             }
         }
