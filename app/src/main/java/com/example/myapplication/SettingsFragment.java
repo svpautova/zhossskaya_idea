@@ -38,13 +38,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class SettingsFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
-
     Spinner changeWallpaper;
     Button aboutButton;
     SwitchMaterial changeWallpaperSwitch;
     SwitchMaterial changeLockscreenSwitch;
     SwitchMaterial changeBothSwitch;
-
 
     @Nullable
     @Override
@@ -64,7 +62,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         if (changeWallpaperSwitch != null) {
             changeWallpaperSwitch.setOnCheckedChangeListener(this);
         }
-
         changeLockscreenSwitch.setChecked(ThemederApp.getInstance().getRepo().getPropertyBoolean(getString(R.string.switch_check_lock)));
         if (changeLockscreenSwitch != null) {
             changeLockscreenSwitch.setOnCheckedChangeListener(this);
@@ -76,30 +73,23 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         return v;
     }
 
-
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.info) {
-
             LibsBuilder libsBuilder = new LibsBuilder()
-                    //.withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
                     .withActivityTitle(getString(R.string.info))
                     .withAboutIconShown(true)
                     .withAboutAppName("Themeder")
                     .withAboutVersionShown(true)
                     .withAboutDescription("Меняем обои с 2020 года.\n Приложение разработано в рамках курса Разработка приложений на Android")
-                    //.withAboutSpecial1Description("мэйл")
-
-                    //.withAutoDetect(false)
-                    //.withLibraries("ucrop", "lifecycle:extensions")
                     .withExcludedLibraries("androidx_*");
             Log.d("info", "after libs");
             libsBuilder.start(getActivity());
-
         }
-
     }
+
     private static final int PERMISSION_REQUEST_CODE = 0;
+
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         WallpaperChangerConstants.random = 1;
@@ -189,10 +179,12 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
             }
         }
     }
+
     public void periodicIntent(String tag) {
-        WorkManager workManager = WorkManager.getInstance();
         ExecutorService executorservice = Executors.newSingleThreadExecutor();
         Runnable runnable = () -> {
+            WorkManager workManager = WorkManager.getInstance();
+
             Data myData = new Data.Builder()
                     .putString("keyA", "no")
                     .build();
@@ -206,9 +198,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
     }
 
     public void intentPositionOne(){
-        Log.d("Change wallpaper", String.valueOf(WallpaperChangerConstants.wallpaperRegime));
-        WallpaperChangerConstants.wallpaperRegime = 1;
-        new Thread(() -> {
+        ExecutorService executorservice = Executors.newSingleThreadExecutor();
+        Runnable runnable = () -> {
+            Log.d("Change wallpaper", String.valueOf(WallpaperChangerConstants.wallpaperRegime));
+            WallpaperChangerConstants.wallpaperRegime = 1;
             WorkManager workManager = WorkManager.getInstance();
             Data myData = new Data.Builder()
                     .putString("keyA", "no")
@@ -218,16 +211,16 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                     .build();
             workManager.enqueue(myWorkRequest);
             Log.d("!!!!!!", "click change");
-        }).start();
+        };
+        executorservice.submit(runnable);
     }
 
-
     public void intentPositionTwo(){
-        Log.d("Change wallpaper", String.valueOf(WallpaperChangerConstants.wallpaperRegime));
-        WallpaperChangerConstants.wallpaperRegime = 2;
-        new Thread(() -> {
+        ExecutorService executorservice = Executors.newSingleThreadExecutor();
+        Runnable runnable = () -> {
+            Log.d("Change wallpaper", String.valueOf(WallpaperChangerConstants.wallpaperRegime));
+            WallpaperChangerConstants.wallpaperRegime = 2;
             WorkManager workManager = WorkManager.getInstance();
-
             Data myData = new Data.Builder()
                     .putString("keyA", "no")
                     .build();
@@ -236,13 +229,15 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                     .build();
             workManager.enqueue(myWorkRequest);
             Log.d("!!!!!!", "click change");
-        }).start();
+        };
+        executorservice.submit(runnable);
     }
 
     public void intentPositionThree() {
-        Log.d("Change wallpaper", String.valueOf(WallpaperChangerConstants.wallpaperRegime));
-        WallpaperChangerConstants.wallpaperRegime = 0;
-        new Thread(() -> {
+        ExecutorService executorservice = Executors.newSingleThreadExecutor();
+        Runnable runnable = () -> {
+            Log.d("Change wallpaper", String.valueOf(WallpaperChangerConstants.wallpaperRegime));
+            WallpaperChangerConstants.wallpaperRegime = 0;
             WorkManager workManager = WorkManager.getInstance();
             Data myData = new Data.Builder()
                     .putString("keyA", "no")
@@ -252,7 +247,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                     .build();
             workManager.enqueue(myWorkRequest);
             Log.d("!!!!!!", "click change");
-        }).start();
+        };
+        executorservice.submit(runnable);
     }
 
     @Override
@@ -316,7 +312,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                 }
             }
         }
-
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
