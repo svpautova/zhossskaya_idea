@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -153,29 +152,27 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    intentPressButton();
+                    Buttons.Like_button(picture);
                 }
             }else{
                 if ((grantResults[0] == PackageManager.PERMISSION_GRANTED) && (grantResults[1] == PackageManager.PERMISSION_GRANTED)){
-                    intentPressButton();
+                    Buttons.Like_button(picture);
                 }
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    public void intentPressButton(){
-        Buttons.Like_button(picture);
-    }
-
     @Override
     public void onCardSwiped(Direction direction) {
         Log.d("CardStackView", "onCardSwiped: p=" + manager.getTopPosition() + " d=" + direction);
         if(direction==Direction.Right){
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            Log.d("MainScreenFragment", "Swipe Right");
+            if (picture!=null){
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
                         == PackageManager.PERMISSION_GRANTED) ) {
-                    intentPressButton();
+                    Buttons.Like_button(picture);
                 }else {
                     requestPermissions(
                             new String[]{
@@ -188,7 +185,7 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
                     if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
                             == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             == PackageManager.PERMISSION_GRANTED)) {
-                        intentPressButton();
+                        Buttons.Like_button(picture);
                     }else {
                         requestPermissions(
                                 new String[]{
@@ -198,9 +195,12 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
                                 PERMISSION_REQUEST_CODE);
                     }
                 }else{
-                    intentPressButton();
+                    Buttons.Like_button(picture);
                 }
             }
+            }
+            picture=null;
+
         }
         if(direction==Direction.Left) {
             Log.d("MainScreenFragment", "Swipe Left");
@@ -232,19 +232,19 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     @Override
     public void onCardDisappeared(View view, int position) {
         ImageView imageView = view.findViewById(R.id.item_image);
-        picture = imageView.getDrawable();
+        if (imageView!=null) {
+            picture = imageView.getDrawable();
+        }
         Log.d("CardStackView", "onCardDisappeared: " + position);
     }
 
     private void paginate() {
         List<String> old = adapter.getItems();
         if(isOnline(getContext().getApplicationContext())){
-            LiveData<List<String>> data = model.getImage(5);
+            LiveData<List<String>> data = model.getImage(1);
             data.observe(getViewLifecycleOwner(), photos -> {
-                Random r = new Random(56);
-                int num = r.nextInt(5)-1;
                 old.remove(0);
-                old.add(photos.get(num));
+                old.add(photos.get(0));
                 adapter.notifyDataSetChanged();
             });
         }

@@ -65,7 +65,7 @@ public class PicDetailsFragment extends Fragment implements View.OnClickListener
 
     public static PicDetailsFragment newInstance(String picPath)  {
         final Bundle extras = new Bundle();
-        extras.putSerializable(KEY, (Serializable) picPath);
+        extras.putSerializable(KEY, picPath);
         final PicDetailsFragment fragment = new PicDetailsFragment();
         fragment.setArguments(extras);
         return fragment;
@@ -78,9 +78,11 @@ public class PicDetailsFragment extends Fragment implements View.OnClickListener
         wallpaperButton = v.findViewById(R.id.wallButton);
         delButton  = v.findViewById(R.id.detailsButton);
         delButton.setOnClickListener(this);
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.wallpapers, android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        wallpaperButton.setAdapter(adapter2);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext().getApplicationContext(),
+                R.layout.custom_spinner_item_pic_details,
+                getResources().getStringArray(R.array.wallpapers));
+        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
+        wallpaperButton.setAdapter(adapter);
         wallpaperButton.setOnItemSelectedListener(this);
         cropButton = v.findViewById(R.id.cropButton);
         cropButton.setOnClickListener(this);
@@ -191,45 +193,39 @@ public class PicDetailsFragment extends Fragment implements View.OnClickListener
         }
         if (position == 1) {
             ExecutorService executorService = Executors.newSingleThreadExecutor();
-            executorService.execute(new Runnable(){
-                public void run(){
-                    bitmap = ((BitmapDrawable) mPic.getDrawable()).getBitmap();
-                    WallpaperManager manager = WallpaperManager.getInstance(getActivity());
-                    try {
-                        manager.setBitmap(bitmap, null, false, WallpaperManager.FLAG_SYSTEM);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            executorService.execute(() -> {
+                bitmap = ((BitmapDrawable) mPic.getDrawable()).getBitmap();
+                WallpaperManager manager = WallpaperManager.getInstance(getActivity());
+                try {
+                    manager.setBitmap(bitmap, null, false, WallpaperManager.FLAG_SYSTEM);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             });
             executorService.shutdown();
         }
         else if (position == 2) {
             ExecutorService executorService = Executors.newSingleThreadExecutor();
-            executorService.execute(new Runnable(){
-                public void run(){
-                    bitmap = ((BitmapDrawable) mPic.getDrawable()).getBitmap();
-                    WallpaperManager manager = WallpaperManager.getInstance(getActivity());
-                    try {
-                        manager.setBitmap(bitmap, null, false, WallpaperManager.FLAG_LOCK);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            executorService.execute(() -> {
+                bitmap = ((BitmapDrawable) mPic.getDrawable()).getBitmap();
+                WallpaperManager manager = WallpaperManager.getInstance(getActivity());
+                try {
+                    manager.setBitmap(bitmap, null, false, WallpaperManager.FLAG_LOCK);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             });
             executorService.shutdown();
         }
         else if (position == 3) {
             ExecutorService executorService = Executors.newSingleThreadExecutor();
-            executorService.execute(new Runnable(){
-                public void run() {
-                    bitmap = ((BitmapDrawable) mPic.getDrawable()).getBitmap();
-                    WallpaperManager manager = WallpaperManager.getInstance(getActivity());
-                    try {
-                        manager.setBitmap(bitmap);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            executorService.execute(() -> {
+                bitmap = ((BitmapDrawable) mPic.getDrawable()).getBitmap();
+                WallpaperManager manager = WallpaperManager.getInstance(getActivity());
+                try {
+                    manager.setBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             });
             executorService.shutdown();
@@ -238,6 +234,5 @@ public class PicDetailsFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 }

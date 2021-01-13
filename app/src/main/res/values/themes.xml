@@ -12,12 +12,20 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="android:textColor">#ff000f</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="MenuItemStyle">
+    <style name="MenuItemStyle" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:fontFamily">@font/rubik_mono_one</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">14sp</item>
     </style>
+
+    <style name="Spinner_item" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:fontFamily">@font/rubik_mono_one</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 </resources>

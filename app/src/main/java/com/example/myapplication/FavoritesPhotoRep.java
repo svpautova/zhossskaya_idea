@@ -30,6 +30,9 @@ public class FavoritesPhotoRep extends ViewModel {
     }
 
     public void clear(){
-        disposable.dispose();
+
+        if(disposable!=null){
+            disposable.dispose();
+        }
     }
 }
