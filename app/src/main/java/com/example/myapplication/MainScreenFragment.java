@@ -146,17 +146,23 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     @Override
     public void onCardDragging(Direction direction, float ratio) {
     }
+
+    void runLikeButton(){
+        Buttons.Like_button(picture);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
+        Log.d("onRequestPermissionsR",""+picture);
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Buttons.Like_button(picture);
+                    runLikeButton();
                 }
             }else{
                 if ((grantResults[0] == PackageManager.PERMISSION_GRANTED) && (grantResults[1] == PackageManager.PERMISSION_GRANTED)){
-                    Buttons.Like_button(picture);
+                    runLikeButton();
                 }
             }
         }
@@ -168,17 +174,15 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
         Log.d("CardStackView", "onCardSwiped: p=" + manager.getTopPosition() + " d=" + direction);
         if(direction==Direction.Right){
             Log.d("MainScreenFragment", "Swipe Right");
+            Log.d("onCardSwiped",""+picture);
             if (picture!=null){
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                    if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
                         == PackageManager.PERMISSION_GRANTED) ) {
-                    Buttons.Like_button(picture);
-                }else {
-                    requestPermissions(
-                            new String[]{
-                                    Manifest.permission.READ_EXTERNAL_STORAGE
-                            },
-                            PERMISSION_REQUEST_CODE);
+                        runLikeButton();
+                    }else {
+                        requestPermissions(
+                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
                 }
             }else{
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -195,12 +199,10 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
                                 PERMISSION_REQUEST_CODE);
                     }
                 }else{
-                    Buttons.Like_button(picture);
+                    runLikeButton();
+                }
                 }
             }
-            }
-            picture=null;
-
         }
         if(direction==Direction.Left) {
             Log.d("MainScreenFragment", "Swipe Left");
