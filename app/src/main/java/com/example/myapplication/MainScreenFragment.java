@@ -46,25 +46,7 @@ import java.util.Random;
 
 public class MainScreenFragment extends Fragment implements CardStackListener {
 
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        // Restore UI state from the savedInstanceState.
-        // This bundle has also been passed to onCreate.
 
-        if (savedInstanceState != null) {
-
-            Bitmap bitmap = (Bitmap)savedInstanceState.getParcelable("picture");
-            // Convert Bitmap to Drawable:
-            picture = new BitmapDrawable(bitmap);
-        }
-    }
-
-    public void onSaveInstanceState(@NotNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Bitmap bitmap = (Bitmap)((BitmapDrawable) picture).getBitmap();
-        outState.putParcelable("picture", bitmap);
-    }
 
     private static final int PERMISSION_REQUEST_CODE = 3;
     FloatingActionButton skipButton;

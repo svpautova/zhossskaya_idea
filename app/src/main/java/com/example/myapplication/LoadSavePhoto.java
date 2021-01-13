@@ -93,6 +93,7 @@ public class LoadSavePhoto {
      */
     public Bitmap getImageFromName(Uri uriImage) throws IOException {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+
             ImageDecoder.Source source = ImageDecoder.createSource(applicationContext.getApplicationContext().getContentResolver(), uriImage);
             return ImageDecoder.decodeBitmap(source);
         } else {
@@ -101,11 +102,7 @@ public class LoadSavePhoto {
         }
     }
 
-    public boolean deleteImageFromUri(Uri uri){
-        applicationContext.getApplicationContext().getContentResolver().delete(uri, null, null);
-        deleteNameOfFile(uri.toString());
-        return true;
-    }
+
 
     /*
     Приватный метод полуения названия картинок из базы данных.
@@ -137,10 +134,9 @@ public class LoadSavePhoto {
         db.getImageDao().insert(imageDefClass);
     }
 
-    private void deleteNameOfFile(String nameOfFIle) {
-        ImageFile imageDefClass = new ImageFile();
-        imageDefClass.name = nameOfFIle;
-        db.getImageDao().delete(imageDefClass);
+    public boolean deleteNameOfFile(String nameOfFIle) {
+        db.getImageDao().deleteImage(nameOfFIle);
+        return true;
     }
 
     public void setPropertyBoolean(String name, Boolean value){

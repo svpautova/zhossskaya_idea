@@ -3,8 +3,10 @@ package com.example.myapplication;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.ContentObserver;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,12 @@ public class FavoritesFragment extends Fragment{
             mListener = (IListener) requireActivity();
         }
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //подписка
+       }
 
     @Nullable
     @Override
@@ -94,4 +102,6 @@ public class FavoritesFragment extends Fragment{
             }
         }
     }
+
+
 }

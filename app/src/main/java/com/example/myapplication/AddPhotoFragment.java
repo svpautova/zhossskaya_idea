@@ -80,7 +80,7 @@ public class AddPhotoFragment extends Fragment {
 
     private final View.OnClickListener mButtonClickListener = v -> {
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                if ((ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()).getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
                         == PackageManager.PERMISSION_GRANTED) ) {
                     intentGallery();
                 }else {
@@ -92,8 +92,8 @@ public class AddPhotoFragment extends Fragment {
                 }
             }else{
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                    if ((ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()).getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                            == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()).getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    if ((ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             == PackageManager.PERMISSION_GRANTED)) {
                         intentGallery();
                     }else {
@@ -118,7 +118,7 @@ public class AddPhotoFragment extends Fragment {
             System.out.println("jhfgds");
             try {
                 final Uri imageUri = data.getData();
-                final InputStream imageStream = Objects.requireNonNull(getContext()).getApplicationContext().getContentResolver().openInputStream(imageUri);
+                final InputStream imageStream = getContext().getApplicationContext().getContentResolver().openInputStream(imageUri);
 
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
 
