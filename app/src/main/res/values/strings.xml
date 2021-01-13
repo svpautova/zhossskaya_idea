@@ -33,7 +33,7 @@
     <string-array name="categories">
         <item>All</item>
         <item>City</item>
-        <item>Auto</item>
+        <item>Car</item>
         <item>Nature</item>
         <item>Flowers</item>
         <item>Food</item>
@@ -45,4 +45,12 @@
     <string name="text_settings">Settings</string>
     <string name="text_addphoto">Upload photo</string>
     <string name="text_favorites">Favorites</string>
+    <string name="tag_settings" translatable="false">Settings</string>
+    <string name="tag_addphoto" translatable="false">Upload photo</string>
+    <string name="tag_favorites" translatable="false">Favorites</string>
+    <string name="tag_mainscreen" translatable="false">Mainscreen</string>
+    <string name="default_spinner">All</string>
+    <string name="delete_button">Delete</string>
+    <string name="crop_button">Crop</string>
+    <string name="picture" translatable="false">picture</string>
 </resources>

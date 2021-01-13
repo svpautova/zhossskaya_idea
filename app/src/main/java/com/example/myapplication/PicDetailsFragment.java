@@ -56,7 +56,7 @@ public class PicDetailsFragment extends Fragment implements View.OnClickListener
     public static PicDetailsFragment newInstance(String picPath)  {
 
         final Bundle extras = new Bundle();
-        extras.putSerializable(KEY, (Serializable) picPath);
+        extras.putSerializable(KEY, picPath);
 
         final PicDetailsFragment fragment = new PicDetailsFragment();
         fragment.setArguments(extras);
@@ -69,9 +69,11 @@ public class PicDetailsFragment extends Fragment implements View.OnClickListener
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_picdetails, container, false);
         wallpaperButton = v.findViewById(R.id.wallButton);
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.wallpapers, android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        wallpaperButton.setAdapter(adapter2);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext().getApplicationContext(),
+                R.layout.custom_spinner_item_pic_details,
+                getResources().getStringArray(R.array.wallpapers));
+        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
+        wallpaperButton.setAdapter(adapter);
         wallpaperButton.setOnItemSelectedListener(this);
         cropButton = v.findViewById(R.id.cropButton);
         cropButton.setOnClickListener(this);
@@ -115,16 +117,11 @@ public class PicDetailsFragment extends Fragment implements View.OnClickListener
 
         Uri outputF = Uri.fromFile(new File(getActivity().getCacheDir(), fileName));
         UCrop uCrop = UCrop.of(uri, outputF);
-        //uCrop.withAspectRatio(1,1);
         uCrop.withAspectRatio(3,4);
-        //uCrop.useSourceImageAspectRatio();
-        //uCrop.withAspectRatio(2,3);
-        //uCrop.withAspectRatio(16,9);
         uCrop.withMaxResultSize(450,450);
         uCrop.withOptions(getCropOptions());
         uCrop.start(getActivity());
         Uri imageUriResultCrop = UCrop.getOutput(uCrop.getIntent(getActivity()));
-        //Bitmap bitmap = (Bitmap) UCrop.getOutput(uCrop.getIntent(getActivity()));
 
         Log.d("ucrop.of", imageUriResultCrop.toString());
         return imageUriResultCrop;
@@ -134,8 +131,6 @@ public class PicDetailsFragment extends Fragment implements View.OnClickListener
     private UCrop.Options getCropOptions(){
         UCrop.Options options = new UCrop.Options();
         options.setCompressionQuality(70);
-        //options.setCompressionFormat(Bitmap.CompressFormat.PNG);
-        //options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
         options.setHideBottomControls(false);
         options.setFreeStyleCropEnabled(true);
 
@@ -188,6 +183,5 @@ public class PicDetailsFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 }

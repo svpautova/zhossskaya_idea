@@ -61,6 +61,18 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         changeLockscreenSwitch = v.findViewById(R.id.switch_periodic_lockscreen);
         changeBothSwitch = v.findViewById(R.id.switch_both_periodic);
         changeWallpaperSwitch.setChecked(ThemederApp.getInstance().getRepo().getPropertyBoolean(getString(R.string.switch_check)));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext().getApplicationContext(),
+                R.layout.custom_spinner_item_pic_details,
+                getResources().getStringArray(R.array.wallpapers));
+        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
+        changeWallpaper.setAdapter(adapter);
+        return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         if (changeWallpaperSwitch != null) {
             changeWallpaperSwitch.setOnCheckedChangeListener(this);
         }
@@ -73,9 +85,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         if (changeBothSwitch != null) {
             changeBothSwitch.setOnCheckedChangeListener(this);
         }
-        return v;
     }
-
 
     @Override
     public void onClick(View v) {

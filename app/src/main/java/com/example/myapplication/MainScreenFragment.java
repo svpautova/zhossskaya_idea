@@ -153,17 +153,19 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
         Log.d("CardStackView", "onCardSwiped: p=" + manager.getTopPosition() + " d=" + direction);
         if(direction==Direction.Right){
             Log.d("MainScreenFragment", "Swipe Right");
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[] {
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.READ_EXTERNAL_STORAGE
-                    },
-                    2);
-            if (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
-            Buttons.Like_button(picture);
+            if (picture!=null){
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE
+                        },
+                        2);
+                if (ContextCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    Buttons.Like_button(picture);
+                }
             }
-
+            picture=null;
         }
         if(direction==Direction.Left) {
             Log.d("MainScreenFragment", "Swipe Left");
@@ -197,19 +199,19 @@ public class MainScreenFragment extends Fragment implements CardStackListener {
     @Override
     public void onCardDisappeared(View view, int position) {
         ImageView imageView = view.findViewById(R.id.item_image);
-        picture = imageView.getDrawable();
+        if (imageView!=null) {
+            picture = imageView.getDrawable();
+        }
         Log.d("CardStackView", "onCardDisappeared: " + position);
     }
 
     private void paginate() {
         List<String> old = adapter.getItems();
         if(isOnline(getContext().getApplicationContext())){
-            LiveData<List<String>> data = model.getImage(5);
+            LiveData<List<String>> data = model.getImage(1);
             data.observe(getViewLifecycleOwner(), photos -> {
-                Random r = new Random(56);
-                int num = r.nextInt(5)-1;
                 old.remove(0);
-                old.add(photos.get(num));
+                old.add(photos.get(0));
                 adapter.notifyDataSetChanged();
             });
         }
