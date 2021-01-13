@@ -17,4 +17,8 @@ public interface ImageDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(ImageFile... imagefile);
+
+    @Query("DELETE FROM imagefile WHERE name = :name")
+    public void deleteImage(String name);
 }
+
