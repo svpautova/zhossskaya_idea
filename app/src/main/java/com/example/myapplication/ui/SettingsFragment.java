@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.ui;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -17,7 +17,6 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.work.Data;
@@ -25,14 +24,15 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import com.example.myapplication.utils.PeriodicSetWallpaper;
+import com.example.myapplication.R;
+import com.example.myapplication.utils.ThemederApp;
+import com.example.myapplication.utils.WallpaperChangerConstants;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
 
-
-import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;

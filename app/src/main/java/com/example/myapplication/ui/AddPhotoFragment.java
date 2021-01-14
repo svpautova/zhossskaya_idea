@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.ui;
 
 import android.Manifest;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,12 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
+import com.example.myapplication.R;
+import com.example.myapplication.utils.ThemederApp;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +35,11 @@ import static android.app.Activity.RESULT_OK;
 
 public class AddPhotoFragment extends Fragment {
     private static final int PERMISSION_REQUEST_CODE = 0;
-    ImageView r;
+    private static final String SAVE_URI_TAG = "AddPhotoFragmentSaveUriTAG";
+    ImageView imageView;
+    Uri imageUri;
+
+
     private static final int RESULT_LOAD_IMAGE = 1;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,14 +51,19 @@ public class AddPhotoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Button buttonOpenGallery = view.findViewById(R.id.open_gallery_button);
         buttonOpenGallery.setOnClickListener(mButtonClickListener);
-        r = view.findViewById(R.id.picture_from_gallery);
+        imageView = view.findViewById(R.id.picture_from_gallery);
+        if(savedInstanceState!=null){
+            Log.d("onViewCreated", ""+savedInstanceState.getString(SAVE_URI_TAG));
+            imageUri= Uri.parse(savedInstanceState.getString(SAVE_URI_TAG));
+            Glide.with(imageView).load(imageUri).into(imageView);
+
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
-            System.out.println("fsdasD");
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     intentGallery();
@@ -109,7 +122,7 @@ public class AddPhotoFragment extends Fragment {
         super.onActivityResult(reqCode, resultCode, data);
         if (reqCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             try {
-                final Uri imageUri = data.getData();
+                imageUri = data.getData();
                 final InputStream imageStream = getContext().getApplicationContext().getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
 
@@ -118,10 +131,18 @@ public class AddPhotoFragment extends Fragment {
                         .subscribeOn(Schedulers.io())
                         .subscribe();
 
-                r.setImageBitmap(selectedImage);
+                imageView.setImageBitmap(selectedImage);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState){
+        super.onSaveInstanceState(savedInstanceState);
+        if (imageUri!=null){
+            savedInstanceState.putString(SAVE_URI_TAG, String.valueOf(imageUri));
         }
     }
 }

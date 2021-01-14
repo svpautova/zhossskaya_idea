@@ -1,4 +1,5 @@
-package com.example.myapplication;
+package com.example.myapplication.networks;
+
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.utils;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -23,7 +23,7 @@ public class FavoritesPhotoRep extends ViewModel {
 
     private void initializeData() {
 
-        disposable = Single.fromCallable(()->ThemederApp.getInstance().getRepo().getNamesImages())
+        disposable = Single.fromCallable(()-> ThemederApp.getInstance().getRepo().getNamesImages())
                 .subscribeOn(Schedulers.io())
                 .subscribe(v->mData.postValue(v));
 

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.utils;
 
 
 import android.graphics.Bitmap;
@@ -12,7 +12,7 @@ public class Buttons{
 
     private Buttons(){}
 
-    static void Like_button(Drawable pic){
+    public static void Like_button(Drawable pic){
         Bitmap picture = ((BitmapDrawable) pic).getBitmap();
         Log.d("Buttons", "Save Photo");
         new Thread(() -> {

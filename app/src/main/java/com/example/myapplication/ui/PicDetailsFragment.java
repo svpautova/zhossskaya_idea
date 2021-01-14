@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.ui;
 
 
 import android.annotation.SuppressLint;
@@ -9,12 +9,10 @@ import android.graphics.Bitmap;
 
 import android.graphics.drawable.BitmapDrawable;
 
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +34,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 
+import com.example.myapplication.R;
+import com.example.myapplication.utils.ThemederApp;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -43,7 +43,6 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import java.util.UUID;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
