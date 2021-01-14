@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.ui;
 
 import android.Manifest;
 import android.content.Context;
@@ -20,8 +20,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.utils.FavoritesPhotoRep;
+import com.example.myapplication.utils.IListener;
+import com.example.myapplication.R;
+
 import java.util.List;
-import java.util.Objects;
 
 public class FavoritesFragment extends Fragment{
     protected FavoritesPhotoRep model;

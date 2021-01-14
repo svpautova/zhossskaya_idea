@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -19,6 +19,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.myapplication.utils.IListener;
+import com.example.myapplication.R;
+import com.example.myapplication.utils.ThemederApp;
 import com.google.android.material.navigation.NavigationView;
 
 

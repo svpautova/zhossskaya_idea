@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.utils;
 
 public class WallpaperChangerConstants {
     public static int wallpaperRegime = -1;
