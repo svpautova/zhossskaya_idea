@@ -35,7 +35,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class AddPhotoFragment extends Fragment {
     private static final int PERMISSION_REQUEST_CODE = 0;
-    private static final String SaveUriTAG = "AddPhotoFragmentSaveUriTAG";
+    private static final String SAVE_URI_TAG = "AddPhotoFragmentSaveUriTAG";
     ImageView imageView;
     Uri imageUri;
 
@@ -53,8 +53,8 @@ public class AddPhotoFragment extends Fragment {
         buttonOpenGallery.setOnClickListener(mButtonClickListener);
         imageView = view.findViewById(R.id.picture_from_gallery);
         if(savedInstanceState!=null){
-            Log.d("onViewCreated", ""+savedInstanceState.getString(SaveUriTAG));
-            imageUri= Uri.parse(savedInstanceState.getString(SaveUriTAG));
+            Log.d("onViewCreated", ""+savedInstanceState.getString(SAVE_URI_TAG));
+            imageUri= Uri.parse(savedInstanceState.getString(SAVE_URI_TAG));
             Glide.with(imageView).load(imageUri).into(imageView);
 
         }
@@ -142,7 +142,7 @@ public class AddPhotoFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
         if (imageUri!=null){
-            savedInstanceState.putString(SaveUriTAG, String.valueOf(imageUri));
+            savedInstanceState.putString(SAVE_URI_TAG, String.valueOf(imageUri));
         }
     }
 }

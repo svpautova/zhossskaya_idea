@@ -17,8 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.room.Room;
 
 import com.example.myapplication.R;
-import com.example.myapplication.utils.AppDatabase;
-import com.example.myapplication.utils.ImageFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
