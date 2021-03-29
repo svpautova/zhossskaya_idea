@@ -1,14 +1,19 @@
 
 # Themeder
+This is app for automatic changing wallpaper. Tired of wallpaper on your desktop, but no time to look for a replacement? Our application is just for you!
 
-Приложение для автоматической смены обоев. Надоели обои на рабочем столе, но Вам некогда искать замену? Наше приложение именно для Вас!
+## Figma prototype
+https://www.figma.com/file/AXilPkRYCI0FmpIJE5JTn1/Untitled
 
-## Команда авторов
+## Demonstration
+https://drive.google.com/file/d/1CDpy45oE6yv1T_7UVjB75KVDXISQQ_OY/view
 
-- [Максим Овсянников](https://github.com/OvsyannikovMaksim)
-- [Василий Алексухин](https://github.com/valeksukhin)
-- [София Паутова](https://github.com/svpautova)
-- [Алишер Юлдашов](https://github.com/fuckinrobotics)
+## Team
+
+- [Maxim Ovsyannikov](https://github.com/OvsyannikovMaksim)
+- [Vasily Aleksukhin](https://github.com/valeksukhin)
+- [Sofia Pautova](https://github.com/svpautova)
+- [Alisher Yuldashov](https://github.com/fuckinrobotics)
 
 ```
 
